@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 80%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.9%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Spotify-like styles */
+.music-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 640px) {
+  .music-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+}
+
+.music-card {
+  transition: all 0.3s ease;
+}
+
+.music-card:hover {
+  transform: translateY(-5px);
+}
+
+.music-card.playing {
+  box-shadow: 0 0 0 2px hsl(var(--primary));
+}
+
+.player-progress {
+  height: 4px;
+  background: hsl(var(--secondary));
+  cursor: pointer;
+  position: relative;
+}
+
+.player-progress-filled {
+  background: hsl(var(--primary));
+  height: 100%;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+.player-progress:hover .player-progress-filled {
+  background: #1db954; /* Spotify green */
+}
+
+.player-controls button {
+  transition: all 0.2s ease;
+}
+
+.player-controls button:hover {
+  transform: scale(1.1);
+}
+
+/* Admin dashboard styles */
+.admin-section {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s ease;
+}
+
+.admin-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.admin-card {
+  transition: all 0.3s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.3);
+}
+
+.blur-content {
+  filter: blur(8px);
+  pointer-events: none;
+  user-select: none;
+}
