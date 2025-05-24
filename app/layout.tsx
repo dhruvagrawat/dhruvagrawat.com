@@ -1,7 +1,6 @@
 import type React from "react"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -19,9 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.className} bg-black text-white min-h-screen`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark">
-          <main className="min-h-screen">{children}</main>
-        </ThemeProvider>
+        <main className="min-h-screen">{children}</main>
       </body>
     </html>
   )

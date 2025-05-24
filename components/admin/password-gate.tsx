@@ -22,7 +22,6 @@ export function PasswordGate({ onAuthenticated, isAuthenticated }: PasswordGateP
     setIsLoading(true)
     setError("")
 
-    // Simple password check
     setTimeout(() => {
       if (password === "dhruvagrawat.com") {
         onAuthenticated()
@@ -37,7 +36,7 @@ export function PasswordGate({ onAuthenticated, isAuthenticated }: PasswordGateP
 
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center">
-      <div className="bg-zinc-900 p-8 rounded-lg w-full max-w-md">
+      <div className="bg-zinc-900 p-8 rounded-lg w-full max-w-md border border-zinc-800">
         <div className="flex items-center justify-center mb-6">
           <div className="bg-zinc-800 p-3 rounded-full">
             <Lock className="h-6 w-6 text-zinc-300" />

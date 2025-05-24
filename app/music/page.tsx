@@ -80,30 +80,6 @@ const mockMusicItems: MusicItem[] = [
     duration: 270,
     created_at: "2023-06-22T14:10:00Z",
   },
-  {
-    id: "7",
-    title: "Neon Lights",
-    slug: "neon-lights",
-    image_url: "/placeholder.svg?height=300&width=300&text=Neon+Lights",
-    tags: ["Synthwave", "Retro", "Electronic"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
-    album: "Retrowave",
-    duration: 225,
-    created_at: "2023-07-10T21:30:00Z",
-  },
-  {
-    id: "8",
-    title: "Cosmic Journey",
-    slug: "cosmic-journey",
-    image_url: "/placeholder.svg?height=300&width=300&text=Cosmic+Journey",
-    tags: ["Space", "Ambient", "Electronic"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
-    album: "Interstellar",
-    duration: 320,
-    created_at: "2023-08-05T23:15:00Z",
-  },
 ]
 
 export default function MusicPage() {
@@ -133,8 +109,7 @@ export default function MusicPage() {
       }
     }
 
-    // Comment out the actual fetch for now and use mock data
-    // fetchMusicItems()
+    // Use mock data for now
     setIsLoading(false)
   }, [])
 
@@ -152,7 +127,7 @@ export default function MusicPage() {
         {/* Tags filter */}
         <div className="flex flex-wrap gap-2 mb-8">
           <button
-            className={`px-3 py-1 rounded-full text-sm ${
+            className={`px-3 py-1 rounded-full text-sm transition-colors ${
               selectedTag === null ? "bg-white text-black" : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
             }`}
             onClick={() => setSelectedTag(null)}
@@ -162,7 +137,7 @@ export default function MusicPage() {
           {allTags.map((tag) => (
             <button
               key={tag}
-              className={`px-3 py-1 rounded-full text-sm ${
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
                 selectedTag === tag ? "bg-white text-black" : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
               }`}
               onClick={() => setSelectedTag(tag)}

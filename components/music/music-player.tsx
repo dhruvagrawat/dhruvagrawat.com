@@ -25,25 +25,20 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
   const [isShuffle, setIsShuffle] = useState(false)
 
   const audioRef = useRef<HTMLAudioElement>(null)
-  const progressRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const audio = audioRef.current
     if (!audio || !currentTrack) return
 
-    // Reset state when track changes
     setCurrentTime(0)
     setIsPlaying(false)
 
     const setAudioData = () => {
-      setDuration(audio.duration)
-      if (isPlaying) {
-        audio.play()
-      }
+      setDuration(audio.duration || 0)
     }
 
     const setAudioTime = () => {
-      setCurrentTime(audio.currentTime)
+      setCurrentTime(audio.currentTime || 0)
     }
 
     const handleEnded = () => {
@@ -55,20 +50,17 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
       }
     }
 
-    // Events
     audio.addEventListener("loadeddata", setAudioData)
     audio.addEventListener("timeupdate", setAudioTime)
     audio.addEventListener("ended", handleEnded)
 
-    // Cleanup
     return () => {
       audio.removeEventListener("loadeddata", setAudioData)
       audio.removeEventListener("timeupdate", setAudioTime)
       audio.removeEventListener("ended", handleEnded)
     }
-  }, [currentTrack, isPlaying, isRepeat])
+  }, [currentTrack, isRepeat])
 
-  // Format time in minutes and seconds
   const formatTime = (time: number) => {
     if (isNaN(time)) return "0:00"
     const minutes = Math.floor(time / 60)
@@ -90,21 +82,13 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const audio = audioRef.current
-    const progress = progressRef.current
-    if (!audio || !progress || !currentTrack) return
+    if (!audio || !currentTrack || !duration) return
 
-    const rect = progress.getBoundingClientRect()
+    const rect = e.currentTarget.getBoundingClientRect()
     const percent = (e.clientX - rect.left) / rect.width
-    audio.currentTime = percent * duration
-    setCurrentTime(percent * duration)
-  }
-
-  const handleTimeChange = (value: number[]) => {
-    const audio = audioRef.current
-    if (!audio || !currentTrack) return
-
-    audio.currentTime = value[0]
-    setCurrentTime(value[0])
+    const newTime = percent * duration
+    audio.currentTime = newTime
+    setCurrentTime(newTime)
   }
 
   const handleVolumeChange = (value: number[]) => {
@@ -114,12 +98,7 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
     const newVolume = value[0]
     setVolume(newVolume)
     audio.volume = newVolume
-
-    if (newVolume === 0) {
-      setIsMuted(true)
-    } else {
-      setIsMuted(false)
-    }
+    setIsMuted(newVolume === 0)
   }
 
   const toggleMute = () => {
@@ -142,7 +121,6 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
     let newIndex
 
     if (isShuffle) {
-      // Random track excluding current
       const availableIndices = Array.from({ length: playlist.length }, (_, i) => i).filter((i) => i !== currentIndex)
       newIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)]
     } else {
@@ -159,7 +137,6 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
     let newIndex
 
     if (isShuffle) {
-      // Random track excluding current
       const availableIndices = Array.from({ length: playlist.length }, (_, i) => i).filter((i) => i !== currentIndex)
       newIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)]
     } else {
@@ -171,7 +148,7 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
 
   if (!currentTrack) {
     return (
-      <div className="fixed bottom-0 left-0 right-0 h-20 bg-black border-t border-zinc-800 px-4 py-2 flex items-center justify-center text-zinc-400">
+      <div className="fixed bottom-0 left-0 right-0 h-20 bg-black border-t border-zinc-800 px-4 py-2 flex items-center justify-center text-zinc-400 z-50">
         Select a track to play
       </div>
     )
@@ -245,11 +222,13 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-400 w-8 text-right">{formatTime(currentTime)}</span>
           <div
-            className="player-progress flex-1 rounded-full overflow-hidden"
+            className="player-progress flex-1 rounded-full overflow-hidden cursor-pointer"
             onClick={handleProgressClick}
-            ref={progressRef}
           >
-            <div className="player-progress-filled" style={{ width: `${(currentTime / duration) * 100}%` }}></div>
+            <div
+              className="player-progress-filled"
+              style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
+            ></div>
           </div>
           <span className="text-xs text-zinc-400 w-8">{formatTime(duration)}</span>
         </div>
