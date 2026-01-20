@@ -1,19 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import { AdminTabs } from "@/components/admin/admin-tabs"
+import { EnhancedAdminDashboard } from "@/components/admin/enhanced-admin-dashboard"
 import { PasswordGate } from "@/components/admin/password-gate"
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-black">
       <PasswordGate onAuthenticated={() => setIsAuthenticated(true)} isAuthenticated={isAuthenticated} />
 
-      <div className={isAuthenticated ? "" : "blur-content"}>
-        <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
-        <AdminTabs />
+      <div className={`${!isAuthenticated ? "blur-sm pointer-events-none" : ""} container mx-auto px-4 py-12 max-w-7xl transition-all duration-300`}>
+        <EnhancedAdminDashboard />
       </div>
     </div>
   )
