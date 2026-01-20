@@ -17,13 +17,17 @@ export default function MusicPage() {
   useEffect(() => {
     async function fetchMusicItems() {
       try {
+        console.log("[v0] Fetching music from API...")
         const res = await fetch("/api/music")
         if (res.ok) {
           const data = await res.json()
+          console.log("[v0] Music fetched:", data)
           setMusicItems(data)
+        } else {
+          console.error("[v0] API error:", res.status)
         }
       } catch (error) {
-        console.error("Error:", error)
+        console.error("[v0] Error:", error)
       } finally {
         setIsLoading(false)
       }

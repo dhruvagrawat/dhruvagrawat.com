@@ -15,13 +15,17 @@ export default function ArticlesPage() {
   useEffect(() => {
     async function fetchArticles() {
       try {
+        console.log("[v0] Fetching articles from API...")
         const res = await fetch("/api/articles")
         if (res.ok) {
           const data = await res.json()
+          console.log("[v0] Articles fetched:", data)
           setArticles(data)
+        } else {
+          console.error("[v0] API error:", res.status)
         }
       } catch (error) {
-        console.error("Error fetching articles:", error)
+        console.error("[v0] Error fetching articles:", error)
       } finally {
         setIsLoading(false)
       }

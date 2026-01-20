@@ -15,13 +15,17 @@ export default function BlogsPage() {
   useEffect(() => {
     async function fetchBlogs() {
       try {
+        console.log("[v0] Fetching blogs from API...")
         const res = await fetch("/api/blogs")
         if (res.ok) {
           const data = await res.json()
+          console.log("[v0] Blogs fetched:", data)
           setBlogs(data)
+        } else {
+          console.error("[v0] API error:", res.status)
         }
       } catch (error) {
-        console.error("Error fetching blogs:", error)
+        console.error("[v0] Error fetching blogs:", error)
       } finally {
         setIsLoading(false)
       }

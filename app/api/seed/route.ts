@@ -36,7 +36,7 @@ export async function POST() {
         tags: ["Indian", "Vegetarian", "Curry"],
         cook_time: 45,
         servings: 4,
-        ingredients: JSON.stringify([
+        ingredients: [
           "500g paneer, cubed",
           "2 onions, finely chopped",
           "3 tomatoes, pureed",
@@ -46,15 +46,15 @@ export async function POST() {
           "1 tsp garam masala",
           "1/2 cup cream",
           "Salt to taste",
-        ]),
-        directions: JSON.stringify([
+        ],
+        directions: [
           "Heat butter in a pan and add the chopped onions. Sauté until golden brown.",
           "Add ginger-garlic paste and sauté for another minute.",
           "Add tomato puree, red chili powder, and salt. Cook until the oil separates.",
           "Add paneer cubes and gently mix.",
           "Pour in cream and simmer for 5 minutes.",
           "Sprinkle garam masala and serve hot with naan or rice.",
-        ]),
+        ],
       },
       {
         title: "Spaghetti Carbonara",
@@ -65,7 +65,7 @@ export async function POST() {
         tags: ["Italian", "Pasta", "Quick"],
         cook_time: 30,
         servings: 2,
-        ingredients: JSON.stringify([
+        ingredients: [
           "200g spaghetti",
           "100g pancetta or guanciale, diced",
           "2 large eggs",
@@ -73,8 +73,8 @@ export async function POST() {
           "50g Parmigiano Reggiano, grated",
           "Freshly ground black pepper",
           "Salt for pasta water",
-        ]),
-        directions: JSON.stringify([
+        ],
+        directions: [
           "Bring a large pot of salted water to boil and cook spaghetti according to package instructions.",
           "While pasta cooks, sauté pancetta in a large pan until crispy.",
           "In a bowl, whisk eggs and mix in the grated cheeses and black pepper.",
@@ -82,7 +82,7 @@ export async function POST() {
           "Remove pan from heat and quickly stir in the egg and cheese mixture, creating a creamy sauce.",
           "If needed, add a splash of reserved pasta water to loosen the sauce.",
           "Serve immediately with extra grated cheese and black pepper.",
-        ]),
+        ],
       },
       {
         title: "Chocolate Lava Cake",
@@ -93,7 +93,7 @@ export async function POST() {
         tags: ["Dessert", "Chocolate", "Indulgent"],
         cook_time: 15,
         servings: 2,
-        ingredients: JSON.stringify([
+        ingredients: [
           "100g dark chocolate (70% cocoa)",
           "100g butter",
           "2 eggs",
@@ -102,8 +102,8 @@ export async function POST() {
           "30g flour",
           "Pinch of salt",
           "Butter for greasing",
-        ]),
-        directions: JSON.stringify([
+        ],
+        directions: [
           "Preheat oven to 200°C and butter 2 ramekins.",
           "Melt chocolate and butter together over a double boiler.",
           "Whisk eggs, egg yolks, and sugar until pale and thick.",
@@ -111,7 +111,7 @@ export async function POST() {
           "Divide batter between ramekins.",
           "Bake for 12-14 minutes until edges are set but center is soft.",
           "Serve immediately with vanilla ice cream.",
-        ]),
+        ],
       },
     ]
 
