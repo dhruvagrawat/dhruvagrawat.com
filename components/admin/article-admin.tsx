@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PlusCircle, Pencil, Trash2, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -73,7 +73,7 @@ export function ArticleAdmin() {
   const [isLoading, setIsLoading] = useState(true)
 
   // Fetch articles from API on component mount
-  useState(() => {
+  useEffect(() => {
     fetchArticles()
   }, [])
 

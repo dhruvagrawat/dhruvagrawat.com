@@ -215,33 +215,26 @@ const mockRecipes: Recipe[] = [
 export default function RecipePage() {
   const [recipes, setRecipes] = useState<Recipe[]>(mockRecipes)
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(mockRecipes)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     async function fetchRecipes() {
       try {
-        const supabase = getSupabaseClient()
-        const { data, error } = await supabase.from("recipes").select("*")
-
-        if (error) {
-          console.error("Error fetching recipes:", error)
-          return
-        }
-
-        if (data) {
-          setRecipes(data)
-          setFilteredRecipes(data)
+        // Try to fetch from Supabase API
+        const res = await fetch("/api/recipes")
+        if (res.ok) {
+          const data = await res.json()
+          if (data && data.length > 0) {
+            setRecipes(data)
+            setFilteredRecipes(data)
+          }
         }
       } catch (error) {
-        console.error("Error:", error)
-      } finally {
-        setIsLoading(false)
+        console.error("Error fetching recipes:", error)
       }
     }
 
-    // Comment out the actual fetch for now and use mock data
-    // fetchRecipes()
-    setIsLoading(false)
+    fetchRecipes()
   }, [])
 
   const handleFilterChange = (filters: {

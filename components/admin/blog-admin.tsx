@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PlusCircle, Pencil, Trash2, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -73,7 +73,7 @@ export function BlogAdmin() {
   const [isLoading, setIsLoading] = useState(true)
 
   // Fetch blogs from API on component mount
-  useState(() => {
+  useEffect(() => {
     fetchBlogs()
   }, [])
 
@@ -209,7 +209,7 @@ export function BlogAdmin() {
 
   return (
     <div>
-      {isAddingNew ? (
+      {!isAddingNew ? (
         <div>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold">{editingBlog ? "Edit Blog" : "Add New Blog"}</h2>
@@ -337,46 +337,44 @@ export function BlogAdmin() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {blogs.length === 0 ? (
                 <p className="text-zinc-400 col-span-full">No blogs yet. Create one to get started.</p>
-              ) : (
-                blogs.map((blog) => (
-                  <Card key={blog.id} className="admin-card bg-zinc-900 border-zinc-800">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-lg">{blog.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pb-2">
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {blog.tags.slice(0, 3).map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                        {blog.tags.length > 3 && (
-                          <Badge variant="outline" className="text-xs">
-                            +{blog.tags.length - 3}
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-sm text-zinc-400 line-clamp-2">{blog.description}</p>
-                    </CardContent>
-                    <CardFooter className="flex justify-end gap-2">
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={`/blogs/${blog.slug}`} target="_blank" rel="noopener noreferrer">
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
-                        </a>
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(blog)}>
-                        <Pencil className="h-4 w-4 mr-1" />
-                        Edit
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(blog.id)}>
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Delete
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))
-              )}
+              ) : blogs.map((blog) => (
+                <Card key={blog.id} className="admin-card bg-zinc-900 border-zinc-800">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">{blog.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pb-2">
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {blog.tags.slice(0, 3).map((tag) => (
+                        <Badge key={tag} variant="secondary" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
+                      {blog.tags.length > 3 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{blog.tags.length - 3}
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-zinc-400 line-clamp-2">{blog.description}</p>
+                  </CardContent>
+                  <CardFooter className="flex justify-end gap-2">
+                    <Button variant="ghost" size="sm" asChild>
+                      <a href={`/blogs/${blog.slug}`} target="_blank" rel="noopener noreferrer">
+                        <Eye className="h-4 w-4 mr-1" />
+                        View
+                      </a>
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => handleEdit(blog)}>
+                      <Pencil className="h-4 w-4 mr-1" />
+                      Edit
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => handleDelete(blog.id)}>
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      Delete
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
             </div>
           )}
         </div>
