@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { PlusCircle, Pencil, Trash2, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,35 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import type { Blog } from "@/lib/types"
 
-// Mock data
-const mockBlogs: Blog[] = [
-  {
-    id: "1",
-    title: "The Art of Mindful Cooking",
-    slug: "art-of-mindful-cooking",
-    description:
-      "Discover how cooking can become a form of meditation and mindfulness practice, helping you to be present and find joy in the process.",
-    image_url: "/placeholder.svg?height=300&width=500&text=Mindful+Cooking",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-    author: "Dhruv Agarwat",
-    tags: ["Cooking", "Mindfulness", "Wellness"],
-    read_time: 5,
-    created_at: "2023-01-10T14:30:00Z",
-  },
-  {
-    id: "2",
-    title: "Exploring the Music of North India",
-    slug: "exploring-music-north-india",
-    description:
-      "A journey through the classical traditions of Hindustani music, exploring ragas, instruments, and the cultural significance.",
-    image_url: "/placeholder.svg?height=300&width=500&text=North+Indian+Music",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-    author: "Dhruv Agarwat",
-    tags: ["Music", "Culture", "India"],
-    read_time: 8,
-    created_at: "2023-02-15T10:45:00Z",
-  },
-]
+// Supabase will handle data fetching via API routes
 
 // Available tags for selection
 const availableTags = [
@@ -66,11 +37,59 @@ const availableTags = [
   "Film",
 ]
 
+// Mock data for demonstration purposes
+const mockBlogs: Blog[] = [
+  {
+    id: "1",
+    title: "Sample Blog 1",
+    slug: "sample-blog-1",
+    description: "This is a sample blog post.",
+    image_url: "/placeholder.svg?height=300&width=500",
+    content: "## Content of Sample Blog 1",
+    author: "Dhruv Agarwat",
+    tags: ["Cooking", "Mindfulness"],
+    read_time: 5,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "2",
+    title: "Sample Blog 2",
+    slug: "sample-blog-2",
+    description: "This is another sample blog post.",
+    image_url: "/placeholder.svg?height=300&width=500",
+    content: "## Content of Sample Blog 2",
+    author: "Dhruv Agarwat",
+    tags: ["Technology", "Web Development"],
+    read_time: 10,
+    created_at: new Date().toISOString(),
+  },
+]
+
 export function BlogAdmin() {
-  const [blogs, setBlogs] = useState<Blog[]>(mockBlogs)
+  const [blogs, setBlogs] = useState<Blog[]>([])
   const [isAddingNew, setIsAddingNew] = useState(false)
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Fetch blogs from API on component mount
+  useState(() => {
+    fetchBlogs()
+  }, [])
+
+  const fetchBlogs = async () => {
+    try {
+      setIsLoading(true)
+      const res = await fetch("/api/blogs")
+      if (!res.ok) throw new Error("Failed to fetch blogs")
+      const data = await res.json()
+      setBlogs(data)
+    } catch (error) {
+      console.error("Error fetching blogs:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   // Form state
   const [formData, setFormData] = useState<Partial<Blog>>({
@@ -118,42 +137,44 @@ export function BlogAdmin() {
     setIsSubmitting(true)
 
     try {
-      // Generate a slug from the title
       const slug =
         formData.title
           ?.toLowerCase()
           .replace(/\s+/g, "-")
           .replace(/[^\w-]+/g, "") || ""
 
-      const blogData: Blog = {
-        id: editingBlog?.id || `temp-${Date.now()}`,
+      const blogData = {
         title: formData.title || "Untitled Blog",
         slug,
         description: formData.description || "",
-        image_url: formData.image_url || "/placeholder.svg?height=300&width=500",
+        image_url: formData.image_url || "",
         content: formData.content || "",
-        author: formData.author || "Dhruv Agarwat",
+        author: formData.author || "",
         tags: formData.tags || [],
         read_time: Number(formData.read_time) || 5,
-        created_at: editingBlog?.created_at || new Date().toISOString(),
       }
-
-      // Simulate API call to Supabase
-      await new Promise((resolve) => setTimeout(resolve, 1000))
 
       if (editingBlog) {
-        // Update existing blog
-        setBlogs((prev) => prev.map((b) => (b.id === editingBlog.id ? blogData : b)))
-        console.log("Updated blog in Supabase:", blogData)
+        const res = await fetch(`/api/blogs/${editingBlog.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(blogData),
+        })
+        if (!res.ok) throw new Error("Failed to update blog")
       } else {
-        // Add new blog
-        setBlogs((prev) => [...prev, blogData])
-        console.log("Added new blog to Supabase:", blogData)
+        const res = await fetch("/api/blogs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(blogData),
+        })
+        if (!res.ok) throw new Error("Failed to create blog")
       }
 
+      await fetchBlogs()
       resetForm()
     } catch (error) {
       console.error("Error saving blog:", error)
+      alert("Error saving blog. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -177,69 +198,18 @@ export function BlogAdmin() {
     if (!confirm("Are you sure you want to delete this blog?")) return
 
     try {
-      // Simulate API call to Supabase
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setBlogs((prev) => prev.filter((blog) => blog.id !== id))
-      console.log("Deleted blog from Supabase:", id)
+      const res = await fetch(`/api/blogs/${id}`, { method: "DELETE" })
+      if (!res.ok) throw new Error("Failed to delete blog")
+      await fetchBlogs()
     } catch (error) {
       console.error("Error deleting blog:", error)
+      alert("Error deleting blog. Please try again.")
     }
   }
 
   return (
     <div>
-      {!isAddingNew ? (
-        <>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Blogs</h2>
-            <Button onClick={() => setIsAddingNew(true)}>
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add New Blog
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogs.map((blog) => (
-              <Card key={blog.id} className="admin-card bg-zinc-900 border-zinc-800">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{blog.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="pb-2">
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {blog.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                    {blog.tags.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{blog.tags.length - 3}
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="text-sm text-zinc-400 line-clamp-2">{blog.description}</p>
-                </CardContent>
-                <CardFooter className="flex justify-end gap-2">
-                  <Button variant="ghost" size="sm" asChild>
-                    <a href={`/blogs/${blog.slug}`} target="_blank" rel="noopener noreferrer">
-                      <Eye className="h-4 w-4 mr-1" />
-                      View
-                    </a>
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleEdit(blog)}>
-                    <Pencil className="h-4 w-4 mr-1" />
-                    Edit
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleDelete(blog.id)}>
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    Delete
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </>
-      ) : (
+      {isAddingNew ? (
         <div>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold">{editingBlog ? "Edit Blog" : "Add New Blog"}</h2>
@@ -348,6 +318,67 @@ export function BlogAdmin() {
               </Button>
             </div>
           </form>
+        </div>
+      ) : (
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Blogs</h2>
+            <Button onClick={() => setIsAddingNew(true)}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add New Blog
+            </Button>
+          </div>
+
+          {isLoading ? (
+            <div className="text-center py-8">
+              <p className="text-zinc-400">Loading blogs...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {blogs.length === 0 ? (
+                <p className="text-zinc-400 col-span-full">No blogs yet. Create one to get started.</p>
+              ) : (
+                blogs.map((blog) => (
+                  <Card key={blog.id} className="admin-card bg-zinc-900 border-zinc-800">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg">{blog.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pb-2">
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {blog.tags.slice(0, 3).map((tag) => (
+                          <Badge key={tag} variant="secondary" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                        {blog.tags.length > 3 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{blog.tags.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-zinc-400 line-clamp-2">{blog.description}</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-end gap-2">
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href={`/blogs/${blog.slug}`} target="_blank" rel="noopener noreferrer">
+                          <Eye className="h-4 w-4 mr-1" />
+                          View
+                        </a>
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleEdit(blog)}>
+                        <Pencil className="h-4 w-4 mr-1" />
+                        Edit
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(blog.id)}>
+                        <Trash2 className="h-4 w-4 mr-1" />
+                        Delete
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

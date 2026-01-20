@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { PlusCircle, Pencil, Trash2, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,35 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import type { Article } from "@/lib/types"
 
-// Mock data
-const mockArticles: Article[] = [
-  {
-    id: "1",
-    title: "The Future of Artificial Intelligence in Healthcare",
-    slug: "future-ai-healthcare",
-    description:
-      "Exploring how AI technologies are transforming diagnosis, treatment, and patient care in the medical field.",
-    image_url: "/placeholder.svg?height=300&width=500&text=AI+in+Healthcare",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-    author: "Dhruv Agarwat",
-    tags: ["Technology", "Healthcare", "AI"],
-    read_time: 12,
-    created_at: "2023-01-20T11:30:00Z",
-  },
-  {
-    id: "2",
-    title: "Understanding Quantum Computing: A Beginner's Guide",
-    slug: "quantum-computing-guide",
-    description:
-      "A simplified explanation of quantum computing principles and their potential impact on computational problems.",
-    image_url: "/placeholder.svg?height=300&width=500&text=Quantum+Computing",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-    author: "Dhruv Agarwat",
-    tags: ["Technology", "Quantum Computing", "Science"],
-    read_time: 15,
-    created_at: "2023-02-05T14:45:00Z",
-  },
-]
+// Supabase will handle data fetching via API routes
 
 // Available tags for selection
 const availableTags = [
@@ -66,11 +37,59 @@ const availableTags = [
   "Data Science",
 ]
 
+// Mock articles data
+const mockArticles: Article[] = [
+  {
+    id: "1",
+    title: "Introduction to AI",
+    slug: "introduction-to-ai",
+    description: "Learn the basics of Artificial Intelligence.",
+    image_url: "https://example.com/ai.jpg",
+    content: "# AI Basics\n...",
+    author: "John Doe",
+    tags: ["AI", "Technology"],
+    read_time: 15,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "2",
+    title: "Quantum Computing Explained",
+    slug: "quantum-computing-explained",
+    description: "Understand the fundamentals of Quantum Computing.",
+    image_url: "https://example.com/quantum.jpg",
+    content: "# Quantum Computing\n...",
+    author: "Jane Smith",
+    tags: ["Quantum Computing", "Science"],
+    read_time: 20,
+    created_at: new Date().toISOString(),
+  },
+]
+
 export function ArticleAdmin() {
-  const [articles, setArticles] = useState<Article[]>(mockArticles)
+  const [articles, setArticles] = useState<Article[]>([])
   const [isAddingNew, setIsAddingNew] = useState(false)
   const [editingArticle, setEditingArticle] = useState<Article | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Fetch articles from API on component mount
+  useState(() => {
+    fetchArticles()
+  }, [])
+
+  const fetchArticles = async () => {
+    try {
+      setIsLoading(true)
+      const res = await fetch("/api/articles")
+      if (!res.ok) throw new Error("Failed to fetch articles")
+      const data = await res.json()
+      setArticles(data)
+    } catch (error) {
+      console.error("Error fetching articles:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   // Form state
   const [formData, setFormData] = useState<Partial<Article>>({
@@ -118,42 +137,44 @@ export function ArticleAdmin() {
     setIsSubmitting(true)
 
     try {
-      // Generate a slug from the title
       const slug =
         formData.title
           ?.toLowerCase()
           .replace(/\s+/g, "-")
           .replace(/[^\w-]+/g, "") || ""
 
-      const articleData: Article = {
-        id: editingArticle?.id || `temp-${Date.now()}`,
+      const articleData = {
         title: formData.title || "Untitled Article",
         slug,
         description: formData.description || "",
-        image_url: formData.image_url || "/placeholder.svg?height=300&width=500",
+        image_url: formData.image_url || "",
         content: formData.content || "",
-        author: formData.author || "Dhruv Agarwat",
+        author: formData.author || "",
         tags: formData.tags || [],
         read_time: Number(formData.read_time) || 10,
-        created_at: editingArticle?.created_at || new Date().toISOString(),
       }
-
-      // Simulate API call to Supabase
-      await new Promise((resolve) => setTimeout(resolve, 1000))
 
       if (editingArticle) {
-        // Update existing article
-        setArticles((prev) => prev.map((a) => (a.id === editingArticle.id ? articleData : a)))
-        console.log("Updated article in Supabase:", articleData)
+        const res = await fetch(`/api/articles/${editingArticle.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(articleData),
+        })
+        if (!res.ok) throw new Error("Failed to update article")
       } else {
-        // Add new article
-        setArticles((prev) => [...prev, articleData])
-        console.log("Added new article to Supabase:", articleData)
+        const res = await fetch("/api/articles", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(articleData),
+        })
+        if (!res.ok) throw new Error("Failed to create article")
       }
 
+      await fetchArticles()
       resetForm()
     } catch (error) {
       console.error("Error saving article:", error)
+      alert("Error saving article. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -177,69 +198,18 @@ export function ArticleAdmin() {
     if (!confirm("Are you sure you want to delete this article?")) return
 
     try {
-      // Simulate API call to Supabase
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setArticles((prev) => prev.filter((article) => article.id !== id))
-      console.log("Deleted article from Supabase:", id)
+      const res = await fetch(`/api/articles/${id}`, { method: "DELETE" })
+      if (!res.ok) throw new Error("Failed to delete article")
+      await fetchArticles()
     } catch (error) {
       console.error("Error deleting article:", error)
+      alert("Error deleting article. Please try again.")
     }
   }
 
   return (
     <div>
-      {!isAddingNew ? (
-        <>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Articles</h2>
-            <Button onClick={() => setIsAddingNew(true)}>
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add New Article
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map((article) => (
-              <Card key={article.id} className="admin-card bg-zinc-900 border-zinc-800">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{article.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="pb-2">
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {article.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                    {article.tags.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{article.tags.length - 3}
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="text-sm text-zinc-400 line-clamp-2">{article.description}</p>
-                </CardContent>
-                <CardFooter className="flex justify-end gap-2">
-                  <Button variant="ghost" size="sm" asChild>
-                    <a href={`/articles/${article.slug}`} target="_blank" rel="noopener noreferrer">
-                      <Eye className="h-4 w-4 mr-1" />
-                      View
-                    </a>
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleEdit(article)}>
-                    <Pencil className="h-4 w-4 mr-1" />
-                    Edit
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleDelete(article.id)}>
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    Delete
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </>
-      ) : (
+      {isAddingNew ? (
         <div>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold">{editingArticle ? "Edit Article" : "Add New Article"}</h2>
@@ -348,6 +318,67 @@ export function ArticleAdmin() {
               </Button>
             </div>
           </form>
+        </div>
+      ) : (
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Articles</h2>
+            <Button onClick={() => setIsAddingNew(true)}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add New Article
+            </Button>
+          </div>
+
+          {isLoading ? (
+            <div className="text-center py-8">
+              <p className="text-zinc-400">Loading articles...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {articles.length === 0 ? (
+                <p className="text-zinc-400 col-span-full">No articles yet. Create one to get started.</p>
+              ) : (
+                articles.map((article) => (
+                  <Card key={article.id} className="admin-card bg-zinc-900 border-zinc-800">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg">{article.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pb-2">
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {article.tags.slice(0, 3).map((tag) => (
+                          <Badge key={tag} variant="outline" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                        {article.tags.length > 3 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{article.tags.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-zinc-400 line-clamp-2">{article.description}</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-end gap-2">
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href={`/articles/${article.slug}`} target="_blank" rel="noopener noreferrer">
+                          <Eye className="h-4 w-4 mr-1" />
+                          View
+                        </a>
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleEdit(article)}>
+                        <Pencil className="h-4 w-4 mr-1" />
+                        Edit
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(article.id)}>
+                        <Trash2 className="h-4 w-4 mr-1" />
+                        Delete
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
