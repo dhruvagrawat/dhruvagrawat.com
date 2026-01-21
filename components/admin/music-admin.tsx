@@ -293,7 +293,8 @@ export function MusicAdmin() {
             </div>
           )}
           {previewAudio && (
-            <div className="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-800 p-4 flex items-center gap-4">
+            <div className="fixed bottom-[88px] left-0 right-0 bg-zinc-900 border-t border-zinc-800 p-4 flex items-center gap-4 z-40">
+
               <Button variant="ghost" size="icon" onClick={() => setPreviewAudio(null)}>
                 <Music className="h-5 w-5" />
               </Button>

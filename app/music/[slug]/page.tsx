@@ -144,7 +144,14 @@ export default function MusicDetailPage({ params }: { params: { slug: string } }
           </div>
 
           {/* Audio Player */}
-          {musicItem.audio_url && <AudioPlayer audioUrl={musicItem.audio_url} title={musicItem.title} />}
+          {/* Audio Player */}
+          {musicItem.audio_url && (
+            <div className="fixed bottom-0 inset-x-0 pb-24 sm:pb-0 ...">
+
+              <AudioPlayer audioUrl={musicItem.audio_url} title={musicItem.title} />
+            </div>
+          )}
+
         </div>
       </div>
     </div>

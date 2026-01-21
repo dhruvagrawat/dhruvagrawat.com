@@ -13,6 +13,8 @@ export default function MusicPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [currentTrack, setCurrentTrack] = useState<MusicItem | null>(null)
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
+  const [shouldAutoPlay, setShouldAutoPlay] = useState(false)
+
 
   useEffect(() => {
     async function fetchMusicItems() {
@@ -50,9 +52,8 @@ export default function MusicPage() {
         {/* Tags filter */}
         <div className="flex flex-wrap gap-2 mb-8">
           <button
-            className={`px-3 py-1 rounded-full text-sm transition-colors ${
-              selectedTag === null ? "bg-white text-black" : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
-            }`}
+            className={`px-3 py-1 rounded-full text-sm transition-colors ${selectedTag === null ? "bg-white text-black" : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+              }`}
             onClick={() => setSelectedTag(null)}
           >
             All
@@ -60,9 +61,8 @@ export default function MusicPage() {
           {allTags.map((tag) => (
             <button
               key={tag}
-              className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                selectedTag === tag ? "bg-white text-black" : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
-              }`}
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${selectedTag === tag ? "bg-white text-black" : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                }`}
               onClick={() => setSelectedTag(tag)}
             >
               {tag}
@@ -95,11 +95,22 @@ export default function MusicPage() {
       </div>
 
       {/* Music Player */}
-      <MusicPlayer
-        currentTrack={currentTrack}
-        playlist={musicItems}
-        onTrackChange={(track) => setCurrentTrack(track)}
-      />
+      {/* Music Player */}
+      <div className="fixed bottom-0 inset-x-0 pb-24 sm:pb-0 ...">
+
+
+        <MusicPlayer
+          currentTrack={currentTrack}
+          playlist={musicItems}
+          autoPlay={shouldAutoPlay}
+          onTrackChange={(track) => {
+            setCurrentTrack(track)
+            setShouldAutoPlay(true)
+          }}
+        />
+
+      </div>
+
     </div>
   )
 }

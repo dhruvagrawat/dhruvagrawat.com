@@ -8,7 +8,7 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen ">
       <PasswordGate onAuthenticated={() => setIsAuthenticated(true)} isAuthenticated={isAuthenticated} />
 
       <div className={`${!isAuthenticated ? "blur-sm pointer-events-none" : ""} container mx-auto px-4 py-12 max-w-7xl transition-all duration-300`}>

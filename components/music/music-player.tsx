@@ -1,9 +1,16 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Repeat, Shuffle } from "lucide-react"
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  VolumeX,
+  Repeat,
+  Shuffle,
+} from "lucide-react"
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -13,9 +20,15 @@ interface MusicPlayerProps {
   currentTrack: MusicItem | null
   playlist: MusicItem[]
   onTrackChange: (track: MusicItem) => void
+  autoPlay?: boolean
 }
 
-export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlayerProps) {
+export function MusicPlayer({
+  currentTrack,
+  playlist,
+  onTrackChange,
+  autoPlay = false,
+}: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
@@ -26,22 +39,29 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
 
   const audioRef = useRef<HTMLAudioElement>(null)
 
+  /** LOAD + AUTOPLAY ON TRACK CHANGE */
   useEffect(() => {
     const audio = audioRef.current
     if (!audio || !currentTrack) return
 
+    audio.src = currentTrack.audio_url ?? ""
+    audio.load()
+
     setCurrentTime(0)
-    setIsPlaying(false)
 
-    const setAudioData = () => {
-      setDuration(audio.duration || 0)
+    if (autoPlay) {
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false))
+    } else {
+      setIsPlaying(false)
     }
 
-    const setAudioTime = () => {
-      setCurrentTime(audio.currentTime || 0)
-    }
+    const onLoaded = () => setDuration(audio.duration || 0)
+    const onTime = () => setCurrentTime(audio.currentTime || 0)
 
-    const handleEnded = () => {
+    const onEnded = () => {
       if (isRepeat) {
         audio.currentTime = 0
         audio.play()
@@ -50,55 +70,40 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
       }
     }
 
-    audio.addEventListener("loadeddata", setAudioData)
-    audio.addEventListener("timeupdate", setAudioTime)
-    audio.addEventListener("ended", handleEnded)
+    audio.addEventListener("loadedmetadata", onLoaded)
+    audio.addEventListener("timeupdate", onTime)
+    audio.addEventListener("ended", onEnded)
 
     return () => {
-      audio.removeEventListener("loadeddata", setAudioData)
-      audio.removeEventListener("timeupdate", setAudioTime)
-      audio.removeEventListener("ended", handleEnded)
+      audio.removeEventListener("loadedmetadata", onLoaded)
+      audio.removeEventListener("timeupdate", onTime)
+      audio.removeEventListener("ended", onEnded)
     }
-  }, [currentTrack, isRepeat])
-
-  const formatTime = (time: number) => {
-    if (isNaN(time)) return "0:00"
-    const minutes = Math.floor(time / 60)
-    const seconds = Math.floor(time % 60)
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`
-  }
+  }, [currentTrack, autoPlay, isRepeat])
 
   const togglePlay = () => {
     const audio = audioRef.current
-    if (!audio || !currentTrack) return
+    if (!audio) return
 
     if (isPlaying) {
       audio.pause()
+      setIsPlaying(false)
     } else {
       audio.play()
+      setIsPlaying(true)
     }
-    setIsPlaying(!isPlaying)
   }
 
-  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const audio = audioRef.current
-    if (!audio || !currentTrack || !duration) return
-
-    const rect = e.currentTarget.getBoundingClientRect()
-    const percent = (e.clientX - rect.left) / rect.width
-    const newTime = percent * duration
-    audio.currentTime = newTime
-    setCurrentTime(newTime)
+  const playPreviousTrack = () => {
+    if (!currentTrack || playlist.length === 0) return
+    const index = playlist.findIndex((t) => t.id === currentTrack.id)
+    onTrackChange(playlist[(index - 1 + playlist.length) % playlist.length])
   }
 
-  const handleVolumeChange = (value: number[]) => {
-    const audio = audioRef.current
-    if (!audio) return
-
-    const newVolume = value[0]
-    setVolume(newVolume)
-    audio.volume = newVolume
-    setIsMuted(newVolume === 0)
+  const playNextTrack = () => {
+    if (!currentTrack || playlist.length === 0) return
+    const index = playlist.findIndex((t) => t.id === currentTrack.id)
+    onTrackChange(playlist[(index + 1) % playlist.length])
   }
 
   const toggleMute = () => {
@@ -114,139 +119,142 @@ export function MusicPlayer({ currentTrack, playlist, onTrackChange }: MusicPlay
     }
   }
 
-  const playPreviousTrack = () => {
-    if (!currentTrack || playlist.length === 0) return
-
-    const currentIndex = playlist.findIndex((track) => track.id === currentTrack.id)
-    let newIndex
-
-    if (isShuffle) {
-      const availableIndices = Array.from({ length: playlist.length }, (_, i) => i).filter((i) => i !== currentIndex)
-      newIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)]
-    } else {
-      newIndex = currentIndex === 0 ? playlist.length - 1 : currentIndex - 1
-    }
-
-    onTrackChange(playlist[newIndex])
+  const formatTime = (time: number) => {
+    if (!time || isNaN(time)) return "0:00"
+    const m = Math.floor(time / 60)
+    const s = Math.floor(time % 60)
+    return `${m}:${s.toString().padStart(2, "0")}`
   }
 
-  const playNextTrack = () => {
-    if (!currentTrack || playlist.length === 0) return
-
-    const currentIndex = playlist.findIndex((track) => track.id === currentTrack.id)
-    let newIndex
-
-    if (isShuffle) {
-      const availableIndices = Array.from({ length: playlist.length }, (_, i) => i).filter((i) => i !== currentIndex)
-      newIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)]
-    } else {
-      newIndex = (currentIndex + 1) % playlist.length
-    }
-
-    onTrackChange(playlist[newIndex])
-  }
-
-  if (!currentTrack) {
-    return (
-      <div className="fixed bottom-0 left-0 right-0 h-20 bg-black border-t border-zinc-800 px-4 py-2 flex items-center justify-center text-zinc-400 z-50">
-        Select a track to play
-      </div>
-    )
-  }
+  if (!currentTrack) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 h-20 bg-black border-t border-zinc-800 px-4 py-2 flex items-center z-50">
-      <audio ref={audioRef} src={currentTrack.audio_url} preload="metadata" />
+    <div className="fixed bottom-0 left-0 right-0 z-30">
+      <div className="bg-black border-t border-zinc-800 px-4 py-3">
+        <audio ref={audioRef} preload="metadata" />
 
-      {/* Track Info */}
-      <div className="flex items-center w-1/4 min-w-[180px]">
-        <div className="relative h-12 w-12 mr-3 flex-shrink-0">
-          <Image
-            src={currentTrack.image_url || "/placeholder.svg?height=48&width=48"}
-            alt={currentTrack.title}
-            fill
-            className="object-cover rounded"
-          />
-        </div>
-        <div className="truncate">
-          <div className="text-sm font-medium truncate">{currentTrack.title}</div>
-          <div className="text-xs text-zinc-400 truncate">{currentTrack.artist}</div>
-        </div>
-      </div>
-
-      {/* Player Controls */}
-      <div className="flex-1 max-w-2xl mx-auto">
-        <div className="flex items-center justify-center gap-4 mb-1 player-controls">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-zinc-400 hover:text-white"
-            onClick={() => setIsShuffle(!isShuffle)}
-          >
-            <Shuffle className={`h-4 w-4 ${isShuffle ? "text-[#1DB954]" : ""}`} />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-zinc-400 hover:text-white"
-            onClick={playPreviousTrack}
-          >
-            <SkipBack className="h-4 w-4" />
-          </Button>
-          <Button
-            onClick={togglePlay}
-            variant="outline"
-            size="icon"
-            className="h-8 w-8 rounded-full bg-white text-black hover:bg-white hover:scale-105"
-          >
-            {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-zinc-400 hover:text-white"
-            onClick={playNextTrack}
-          >
-            <SkipForward className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-zinc-400 hover:text-white"
-            onClick={() => setIsRepeat(!isRepeat)}
-          >
-            <Repeat className={`h-4 w-4 ${isRepeat ? "text-[#1DB954]" : ""}`} />
-          </Button>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-zinc-400 w-8 text-right">{formatTime(currentTime)}</span>
-          <div
-            className="player-progress flex-1 rounded-full overflow-hidden cursor-pointer"
-            onClick={handleProgressClick}
-          >
-            <div
-              className="player-progress-filled"
-              style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
-            ></div>
+        {/* MOBILE */}
+        <div className="flex flex-col gap-3 md:hidden">
+          <div className="flex items-center gap-3">
+            <Image
+              src={currentTrack.image_url || "/placeholder.svg"}
+              alt={currentTrack.title}
+              width={48}
+              height={48}
+              className="rounded"
+            />
+            <div className="truncate">
+              <div className="text-sm font-medium truncate">{currentTrack.title}</div>
+              <div className="text-xs text-zinc-400 truncate">{currentTrack.artist}</div>
+            </div>
           </div>
-          <span className="text-xs text-zinc-400 w-8">{formatTime(duration)}</span>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs w-10 text-right">{formatTime(currentTime)}</span>
+            <Slider
+              value={[currentTime]}
+              max={duration || 0}
+              step={0.1}
+              onValueChange={(v) => {
+                const audio = audioRef.current
+                if (!audio) return
+                audio.currentTime = v[0]
+                setCurrentTime(v[0])
+              }}
+              className="flex-1"
+            />
+            <span className="text-xs w-10">{formatTime(duration)}</span>
+          </div>
+
+          <div className="flex justify-center gap-4">
+            <Button variant="ghost" size="icon" onClick={playPreviousTrack}>
+              <SkipBack />
+            </Button>
+            <Button variant="outline" size="icon" onClick={togglePlay}>
+              {isPlaying ? <Pause /> : <Play />}
+            </Button>
+            <Button variant="ghost" size="icon" onClick={playNextTrack}>
+              <SkipForward />
+            </Button>
+          </div>
+        </div>
+
+        {/* DESKTOP */}
+        <div className="hidden md:flex items-center">
+          <div className="flex items-center w-1/4 min-w-[180px]">
+            <Image
+              src={currentTrack.image_url || "/placeholder.svg"}
+              alt={currentTrack.title}
+              width={48}
+              height={48}
+              className="rounded mr-3"
+            />
+            <div className="truncate">
+              <div className="text-sm font-medium truncate">{currentTrack.title}</div>
+              <div className="text-xs text-zinc-400 truncate">{currentTrack.artist}</div>
+            </div>
+          </div>
+
+          <div className="flex-1 max-w-2xl mx-auto">
+            <div className="flex justify-center gap-4 mb-2">
+              <Button variant="ghost" size="icon" onClick={() => setIsShuffle(!isShuffle)}>
+                <Shuffle className={isShuffle ? "text-green-500" : ""} />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={playPreviousTrack}>
+                <SkipBack />
+              </Button>
+              <Button variant="outline" size="icon" onClick={togglePlay}>
+                {isPlaying ? <Pause /> : <Play />}
+              </Button>
+              <Button variant="ghost" size="icon" onClick={playNextTrack}>
+                <SkipForward />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setIsRepeat(!isRepeat)}>
+                <Repeat className={isRepeat ? "text-green-500" : ""} />
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs w-10 text-right">{formatTime(currentTime)}</span>
+              <Slider
+                value={[currentTime]}
+                max={duration || 0}
+                step={0.1}
+                onValueChange={(v) => {
+                  const audio = audioRef.current
+                  if (!audio) return
+                  audio.currentTime = v[0]
+                  setCurrentTime(v[0])
+                }}
+                className="flex-1"
+              />
+              <span className="text-xs w-10">{formatTime(duration)}</span>
+            </div>
+          </div>
+
+          <div className="w-1/4 min-w-[120px] flex justify-end items-center gap-2">
+            <Button variant="ghost" size="icon" onClick={toggleMute}>
+              {isMuted ? <VolumeX /> : <Volume2 />}
+            </Button>
+            <Slider
+              value={[isMuted ? 0 : volume]}
+              max={1}
+              step={0.01}
+              onValueChange={(v) => {
+                const audio = audioRef.current
+                if (!audio) return
+                audio.volume = v[0]
+                setVolume(v[0])
+                setIsMuted(v[0] === 0)
+              }}
+              className="w-24"
+            />
+          </div>
         </div>
       </div>
 
-      {/* Volume Control */}
-      <div className="w-1/4 min-w-[120px] flex items-center justify-end">
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-white" onClick={toggleMute}>
-          {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-        </Button>
-        <Slider
-          value={[isMuted ? 0 : volume]}
-          max={1}
-          step={0.01}
-          onValueChange={handleVolumeChange}
-          className="w-24"
-        />
-      </div>
+      {/* spacer for navbar */}
+      <div className="h-[12vh] sm:h-[7vh] bg-black" />
     </div>
   )
 }
