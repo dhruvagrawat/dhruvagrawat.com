@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PlusCircle, Pencil, Trash2, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,70 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { Recipe } from "@/lib/types"
 
-// Mock data
-const mockRecipes: Recipe[] = [
-  {
-    id: "1",
-    title: "Paneer Butter Masala",
-    slug: "paneer-butter-masala",
-    description: "A rich and creamy North Indian curry made with paneer cheese in a tomato-based sauce.",
-    image_url: "/placeholder.svg?height=300&width=500&text=Paneer+Butter+Masala",
-    tags: ["Indian", "Vegetarian", "Curry"],
-    category: "Indian",
-    cook_time: 45,
-    servings: 4,
-    ingredients: [
-      "500g paneer, cubed",
-      "2 onions, finely chopped",
-      "3 tomatoes, pureed",
-      "2 tbsp butter",
-      "1 tbsp ginger-garlic paste",
-      "1 tsp red chili powder",
-      "1 tsp garam masala",
-      "1/2 cup cream",
-      "Salt to taste",
-    ],
-    directions: [
-      "Heat butter in a pan and add the chopped onions. Sauté until golden brown.",
-      "Add ginger-garlic paste and sauté for another minute.",
-      "Add tomato puree, red chili powder, and salt. Cook until the oil separates.",
-      "Add paneer cubes and gently mix.",
-      "Pour in cream and simmer for 5 minutes.",
-      "Sprinkle garam masala and serve hot with naan or rice.",
-    ],
-    created_at: "2023-01-15T12:00:00Z",
-  },
-  {
-    id: "2",
-    title: "Spaghetti Carbonara",
-    slug: "spaghetti-carbonara",
-    description: "A classic Italian pasta dish with eggs, cheese, pancetta, and black pepper.",
-    image_url: "/placeholder.svg?height=300&width=500&text=Spaghetti+Carbonara",
-    tags: ["Italian", "Pasta", "Quick"],
-    category: "Italian",
-    cook_time: 30,
-    servings: 2,
-    ingredients: [
-      "200g spaghetti",
-      "100g pancetta or guanciale, diced",
-      "2 large eggs",
-      "50g Pecorino Romano, grated",
-      "50g Parmigiano Reggiano, grated",
-      "Freshly ground black pepper",
-      "Salt for pasta water",
-    ],
-    directions: [
-      "Bring a large pot of salted water to boil and cook spaghetti according to package instructions.",
-      "While pasta cooks, sauté pancetta in a large pan until crispy.",
-      "In a bowl, whisk eggs and mix in the grated cheeses and black pepper.",
-      "Drain pasta, reserving some pasta water, and immediately add to the pan with pancetta.",
-      "Remove pan from heat and quickly stir in the egg and cheese mixture, creating a creamy sauce.",
-      "If needed, add a splash of reserved pasta water to loosen the sauce.",
-      "Serve immediately with extra grated cheese and black pepper.",
-    ],
-    created_at: "2023-02-20T14:30:00Z",
-  },
-]
+// Supabase will handle data fetching via API routes
 
 // Available categories and tags for selection
 const availableCategories = ["Indian", "Italian", "Chinese", "Mexican", "Thai", "American", "French", "Japanese"]
@@ -105,11 +41,43 @@ const availableTags = [
   "Lamb",
 ]
 
+const mockRecipes: Recipe[] = [
+  {
+    id: "1",
+    title: "Mock Recipe 1",
+    slug: "mock-recipe-1",
+    description: "This is a mock recipe for demonstration purposes.",
+    image_url: "/placeholder.svg?height=300&width=500",
+    category: "Italian",
+    tags: ["Dinner", "Pasta"],
+    cook_time: 30,
+    servings: 4,
+    ingredients: ["Pasta", "Tomato Sauce", "Cheese"],
+    directions: ["Cook pasta", "Add tomato sauce", "Top with cheese"],
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "2",
+    title: "Mock Recipe 2",
+    slug: "mock-recipe-2",
+    description: "Another mock recipe for testing.",
+    image_url: "/placeholder.svg?height=300&width=500",
+    category: "Chinese",
+    tags: ["Lunch", "Rice"],
+    cook_time: 20,
+    servings: 2,
+    ingredients: ["Rice", "Chicken", "Vegetables"],
+    directions: ["Cook rice", "Add chicken and vegetables"],
+    created_at: new Date().toISOString(),
+  },
+]
+
 export function RecipeAdmin() {
-  const [recipes, setRecipes] = useState<Recipe[]>(mockRecipes)
+  const [recipes, setRecipes] = useState<Recipe[]>([])
   const [isAddingNew, setIsAddingNew] = useState(false)
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   // Form state
   const [formData, setFormData] = useState<Partial<Recipe>>({
@@ -123,6 +91,25 @@ export function RecipeAdmin() {
     ingredients: [""],
     directions: [""],
   })
+
+  // Fetch recipes from API on component mount
+  useEffect(() => {
+    fetchRecipes()
+  }, [])
+
+  const fetchRecipes = async () => {
+    try {
+      setIsLoading(true)
+      const res = await fetch("/api/recipes")
+      if (!res.ok) throw new Error("Failed to fetch recipes")
+      const data = await res.json()
+      setRecipes(data)
+    } catch (error) {
+      console.error("Error fetching recipes:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const resetForm = () => {
     setFormData({
@@ -211,44 +198,46 @@ export function RecipeAdmin() {
     setIsSubmitting(true)
 
     try {
-      // Generate a slug from the title
       const slug =
         formData.title
           ?.toLowerCase()
           .replace(/\s+/g, "-")
           .replace(/[^\w-]+/g, "") || ""
 
-      const recipeData: Recipe = {
-        id: editingRecipe?.id || `temp-${Date.now()}`,
+      const recipeData = {
         title: formData.title || "Untitled Recipe",
         slug,
         description: formData.description || "",
-        image_url: formData.image_url || "/placeholder.svg?height=300&width=500",
+        image_url: formData.image_url || "",
         category: formData.category || "Uncategorized",
         tags: formData.tags || [],
         cook_time: Number(formData.cook_time) || 0,
         servings: Number(formData.servings) || 0,
         ingredients: (formData.ingredients || []).filter((i) => i.trim() !== ""),
         directions: (formData.directions || []).filter((d) => d.trim() !== ""),
-        created_at: editingRecipe?.created_at || new Date().toISOString(),
       }
-
-      // Simulate API call to Supabase
-      await new Promise((resolve) => setTimeout(resolve, 1000))
 
       if (editingRecipe) {
-        // Update existing recipe
-        setRecipes((prev) => prev.map((r) => (r.id === editingRecipe.id ? recipeData : r)))
-        console.log("Updated recipe in Supabase:", recipeData)
+        const res = await fetch(`/api/recipes/${editingRecipe.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(recipeData),
+        })
+        if (!res.ok) throw new Error("Failed to update recipe")
       } else {
-        // Add new recipe
-        setRecipes((prev) => [...prev, recipeData])
-        console.log("Added new recipe to Supabase:", recipeData)
+        const res = await fetch("/api/recipes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(recipeData),
+        })
+        if (!res.ok) throw new Error("Failed to create recipe")
       }
 
+      await fetchRecipes()
       resetForm()
     } catch (error) {
       console.error("Error saving recipe:", error)
+      alert("Error saving recipe. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -274,12 +263,12 @@ export function RecipeAdmin() {
     if (!confirm("Are you sure you want to delete this recipe?")) return
 
     try {
-      // Simulate API call to Supabase
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setRecipes((prev) => prev.filter((recipe) => recipe.id !== id))
-      console.log("Deleted recipe from Supabase:", id)
+      const res = await fetch(`/api/recipes/${id}`, { method: "DELETE" })
+      if (!res.ok) throw new Error("Failed to delete recipe")
+      await fetchRecipes()
     } catch (error) {
       console.error("Error deleting recipe:", error)
+      alert("Error deleting recipe. Please try again.")
     }
   }
 
@@ -295,46 +284,48 @@ export function RecipeAdmin() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recipes.map((recipe) => (
-              <Card key={recipe.id} className="admin-card bg-zinc-900 border-zinc-800">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{recipe.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="pb-2">
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {recipe.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                    {recipe.tags.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{recipe.tags.length - 3}
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="text-sm text-zinc-400 line-clamp-2">{recipe.description}</p>
-                </CardContent>
-                <CardFooter className="flex justify-end gap-2">
-                  <Button variant="ghost" size="sm" asChild>
-                    <a href={`/resipy/${recipe.slug}`} target="_blank" rel="noopener noreferrer">
-                      <Eye className="h-4 w-4 mr-1" />
-                      View
-                    </a>
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleEdit(recipe)}>
-                    <Pencil className="h-4 w-4 mr-1" />
-                    Edit
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleDelete(recipe.id)}>
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    Delete
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="text-center py-8">
+              <p className="text-zinc-400">Loading recipes...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {recipes.length === 0 ? (
+                <p className="text-zinc-400 col-span-full">No recipes yet. Create one to get started.</p>
+              ) : recipes.map((recipe) => (
+                <Card key={recipe.id} className="admin-card bg-zinc-900 border-zinc-800">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">{recipe.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pb-2">
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {recipe.tags.slice(0, 3).map((tag) => (
+                        <Badge key={tag} variant="secondary" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
+                      {recipe.tags.length > 3 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{recipe.tags.length - 3}
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-zinc-400 line-clamp-2">{recipe.description}</p>
+                  </CardContent>
+                  <CardFooter className="flex justify-end gap-2">
+                    <Button variant="ghost" size="sm" onClick={() => handleEdit(recipe)}>
+                      <Pencil className="h-4 w-4 mr-1" />
+                      Edit
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => handleDelete(recipe.id)}>
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      Delete
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          )}
         </>
       ) : (
         <div>

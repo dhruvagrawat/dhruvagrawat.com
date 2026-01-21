@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div>{/* Empty home page as requested */}</div>
+  return <div className="min-h-screen">{/* Empty home page as requested */}</div>
 }

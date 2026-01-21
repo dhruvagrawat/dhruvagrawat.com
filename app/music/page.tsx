@@ -6,108 +6,10 @@ import type { MusicItem } from "@/lib/types"
 import { MusicCard } from "@/components/music/music-card"
 import { MusicPlayer } from "@/components/music/music-player"
 
-// Mock data for initial render
-const mockMusicItems: MusicItem[] = [
-  {
-    id: "1",
-    title: "Midnight Serenity",
-    slug: "midnight-serenity",
-    image_url: "/placeholder.svg?height=300&width=300&text=Midnight+Serenity",
-    tags: ["Lofi", "Instrumental", "Relaxing"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    album: "Midnight Sessions",
-    duration: 180,
-    created_at: "2023-01-05T20:30:00Z",
-  },
-  {
-    id: "2",
-    title: "Urban Dreams",
-    slug: "urban-dreams",
-    image_url: "/placeholder.svg?height=300&width=300&text=Urban+Dreams",
-    tags: ["Electronic", "Ambient", "Chill"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-    album: "City Lights",
-    duration: 210,
-    created_at: "2023-02-12T15:45:00Z",
-  },
-  {
-    id: "3",
-    title: "Rainy Day",
-    slug: "rainy-day",
-    image_url: "/placeholder.svg?height=300&width=300&text=Rainy+Day",
-    tags: ["Piano", "Instrumental", "Melancholic"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-    album: "Weather Moods",
-    duration: 195,
-    created_at: "2023-03-20T18:15:00Z",
-  },
-  {
-    id: "4",
-    title: "Morning Meditation",
-    slug: "morning-meditation",
-    image_url: "/placeholder.svg?height=300&width=300&text=Morning+Meditation",
-    tags: ["Ambient", "Meditation", "Peaceful"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-    album: "Mindful Moments",
-    duration: 300,
-    created_at: "2023-04-08T07:30:00Z",
-  },
-  {
-    id: "5",
-    title: "Sunset Groove",
-    slug: "sunset-groove",
-    image_url: "/placeholder.svg?height=300&width=300&text=Sunset+Groove",
-    tags: ["Jazz", "Funk", "Upbeat"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-    album: "Evening Sessions",
-    duration: 240,
-    created_at: "2023-05-15T19:20:00Z",
-  },
-  {
-    id: "6",
-    title: "Forest Whispers",
-    slug: "forest-whispers",
-    image_url: "/placeholder.svg?height=300&width=300&text=Forest+Whispers",
-    tags: ["Nature", "Ambient", "Relaxing"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
-    album: "Natural Sounds",
-    duration: 270,
-    created_at: "2023-06-22T14:10:00Z",
-  },
-  {
-    id: "7",
-    title: "Neon Lights",
-    slug: "neon-lights",
-    image_url: "/placeholder.svg?height=300&width=300&text=Neon+Lights",
-    tags: ["Synthwave", "Retro", "Electronic"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
-    album: "Retrowave",
-    duration: 225,
-    created_at: "2023-07-10T21:30:00Z",
-  },
-  {
-    id: "8",
-    title: "Cosmic Journey",
-    slug: "cosmic-journey",
-    image_url: "/placeholder.svg?height=300&width=300&text=Cosmic+Journey",
-    tags: ["Space", "Ambient", "Electronic"],
-    artist: "Dhruv Agarwat",
-    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
-    album: "Interstellar",
-    duration: 320,
-    created_at: "2023-08-05T23:15:00Z",
-  },
-]
+// All data fetched from Supabase
 
 export default function MusicPage() {
-  const [musicItems, setMusicItems] = useState<MusicItem[]>(mockMusicItems)
+  const [musicItems, setMusicItems] = useState<MusicItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [currentTrack, setCurrentTrack] = useState<MusicItem | null>(null)
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
@@ -115,27 +17,23 @@ export default function MusicPage() {
   useEffect(() => {
     async function fetchMusicItems() {
       try {
-        const supabase = getSupabaseClient()
-        const { data, error } = await supabase.from("music").select("*").order("created_at", { ascending: false })
-
-        if (error) {
-          console.error("Error fetching music items:", error)
-          return
-        }
-
-        if (data) {
+        console.log("[v0] Fetching music from API...")
+        const res = await fetch("/api/music")
+        if (res.ok) {
+          const data = await res.json()
+          console.log("[v0] Music fetched:", data)
           setMusicItems(data)
+        } else {
+          console.error("[v0] API error:", res.status)
         }
       } catch (error) {
-        console.error("Error:", error)
+        console.error("[v0] Error:", error)
       } finally {
         setIsLoading(false)
       }
     }
 
-    // Comment out the actual fetch for now and use mock data
-    // fetchMusicItems()
-    setIsLoading(false)
+    fetchMusicItems()
   }, [])
 
   // Get all unique tags from music items
@@ -152,7 +50,7 @@ export default function MusicPage() {
         {/* Tags filter */}
         <div className="flex flex-wrap gap-2 mb-8">
           <button
-            className={`px-3 py-1 rounded-full text-sm ${
+            className={`px-3 py-1 rounded-full text-sm transition-colors ${
               selectedTag === null ? "bg-white text-black" : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
             }`}
             onClick={() => setSelectedTag(null)}
@@ -162,7 +60,7 @@ export default function MusicPage() {
           {allTags.map((tag) => (
             <button
               key={tag}
-              className={`px-3 py-1 rounded-full text-sm ${
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
                 selectedTag === tag ? "bg-white text-black" : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
               }`}
               onClick={() => setSelectedTag(tag)}

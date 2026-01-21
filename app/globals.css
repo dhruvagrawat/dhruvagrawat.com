@@ -41,7 +41,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-white;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -53,16 +53,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+  background: #000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted));
+  background: #333;
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground));
+  background: #555;
 }
 
 /* Spotify-like styles */
@@ -88,25 +88,27 @@
 }
 
 .music-card.playing {
-  box-shadow: 0 0 0 2px hsl(var(--primary));
+  box-shadow: 0 0 0 2px #1db954;
 }
 
 .player-progress {
   height: 4px;
-  background: hsl(var(--secondary));
+  background: #333;
   cursor: pointer;
   position: relative;
+  border-radius: 2px;
 }
 
 .player-progress-filled {
-  background: hsl(var(--primary));
+  background: #1db954;
   height: 100%;
   width: 0%;
   transition: width 0.1s linear;
+  border-radius: 2px;
 }
 
 .player-progress:hover .player-progress-filled {
-  background: #1db954; /* Spotify green */
+  background: #1ed760;
 }
 
 .player-controls button {
@@ -135,7 +137,7 @@
 
 .admin-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px -15px rgba(255, 255, 255, 0.1);
 }
 
 .blur-content {
