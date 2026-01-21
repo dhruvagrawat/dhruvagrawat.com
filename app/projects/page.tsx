@@ -35,14 +35,14 @@ export default function ProjectsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <p className="text-zinc-400">Loading projects...</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-black py-12 px-4">
+    <div className="min-h-screen py-12 px-4">
       <div className="container mx-auto max-w-6xl">
         <h1 className="text-4xl font-bold text-white mb-12">Projects</h1>
 
