@@ -51,3 +51,33 @@ export interface MusicItem {
   duration?: number
   created_at: string
 }
+
+export interface PhotoItem {
+  id: string
+  title: string
+  description: string
+  image_url: string
+  location: string
+  tags: string[]
+  camera?: string
+  lens?: string
+  created_at: string
+}
+
+export interface Project {
+  id: string
+  title: string
+  slug: string
+  description: string
+  image_url: string
+  details?: string
+  technologies: string[]
+  gallery_urls?: string[]
+  github_url?: string
+  live_url?: string
+  status?: string
+  start_date?: string
+  end_date?: string
+  team_size?: number
+  created_at: string
+}
