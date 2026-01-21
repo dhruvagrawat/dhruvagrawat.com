@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -11,6 +10,8 @@ interface PasswordGateProps {
   onAuthenticated: () => void
   isAuthenticated: boolean
 }
+
+const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
 
 export function PasswordGate({ onAuthenticated, isAuthenticated }: PasswordGateProps) {
   const [password, setPassword] = useState("")
@@ -23,13 +24,15 @@ export function PasswordGate({ onAuthenticated, isAuthenticated }: PasswordGateP
     setError("")
 
     setTimeout(() => {
-      if (password === "dhruvagrawat.com") {
+      if (!ADMIN_PASSWORD) {
+        setError("Admin password not configured")
+      } else if (password === ADMIN_PASSWORD) {
         onAuthenticated()
       } else {
         setError("Incorrect password")
       }
       setIsLoading(false)
-    }, 1000)
+    }, 800)
   }
 
   if (isAuthenticated) return null
@@ -42,7 +45,9 @@ export function PasswordGate({ onAuthenticated, isAuthenticated }: PasswordGateP
             <Lock className="h-6 w-6 text-zinc-300" />
           </div>
         </div>
+
         <h2 className="text-xl font-bold text-center mb-6">Admin Access</h2>
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <Input
@@ -54,6 +59,7 @@ export function PasswordGate({ onAuthenticated, isAuthenticated }: PasswordGateP
             />
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
           </div>
+
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Verifying..." : "Unlock Admin Panel"}
           </Button>
