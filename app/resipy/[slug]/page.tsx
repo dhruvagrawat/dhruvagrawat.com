@@ -5,7 +5,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Clock, Users } from "lucide-react"
 
-import { getSupabaseClient } from "@/lib/supabase/client"
 import type { Recipe } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { RecipeCard } from "@/components/recipe/recipe-card"

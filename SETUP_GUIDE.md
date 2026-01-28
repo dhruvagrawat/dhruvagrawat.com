@@ -72,7 +72,7 @@ The admin dashboard features:
 ## Database Schema
 
 ### Recipes Table
-```
+\`\`\`
 id: UUID (Primary Key)
 title: Text
 slug: Text (Unique)
@@ -85,10 +85,10 @@ servings: Integer
 ingredients: JSONB (Array)
 directions: JSONB (Array)
 created_at: Timestamp
-```
+\`\`\`
 
 ### Blogs Table
-```
+\`\`\`
 id: UUID (Primary Key)
 title: Text
 slug: Text (Unique)
@@ -99,10 +99,10 @@ author: Text
 tags: Array
 read_time: Integer (minutes)
 created_at: Timestamp
-```
+\`\`\`
 
 ### Articles Table
-```
+\`\`\`
 id: UUID (Primary Key)
 title: Text
 slug: Text (Unique)
@@ -113,10 +113,10 @@ author: Text
 tags: Array
 read_time: Integer (minutes)
 created_at: Timestamp
-```
+\`\`\`
 
 ### Music Table
-```
+\`\`\`
 id: UUID (Primary Key)
 title: Text
 slug: Text (Unique)
@@ -127,7 +127,7 @@ audio_url: Text
 album: Text
 duration: Integer (seconds)
 created_at: Timestamp
-```
+\`\`\`
 
 ## API Endpoints
 
@@ -184,7 +184,7 @@ All endpoints are protected and use Supabase authentication:
 
 ## File Structure
 
-```
+\`\`\`
 /app
   /api
     /recipes/[id]/route.ts
@@ -213,4 +213,4 @@ All endpoints are protected and use Supabase authentication:
 
 /public/images
   (Generated images for all content)
-```
+\`\`\`

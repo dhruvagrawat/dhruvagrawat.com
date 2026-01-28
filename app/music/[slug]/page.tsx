@@ -5,7 +5,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Music } from "lucide-react"
 
-import { getSupabaseClient } from "@/lib/supabase/client"
 import type { MusicItem } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { AudioPlayer } from "@/components/music/audio-player"
@@ -144,14 +143,11 @@ export default function MusicDetailPage({ params }: { params: { slug: string } }
           </div>
 
           {/* Audio Player */}
-          {/* Audio Player */}
           {musicItem.audio_url && (
             <div className="fixed bottom-0 inset-x-0 pb-24 sm:pb-0 ...">
-
               <AudioPlayer audioUrl={musicItem.audio_url} title={musicItem.title} />
             </div>
           )}
-
         </div>
       </div>
     </div>

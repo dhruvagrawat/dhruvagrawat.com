@@ -54,6 +54,7 @@ export const metadata: Metadata = {
     google: "",
     yandex: "",
   },
+    generator: 'v0.app'
 };
 
 export default function RootLayout({

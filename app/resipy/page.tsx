@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { getSupabaseClient } from "@/lib/supabase/client"
 import type { Recipe } from "@/lib/types"
 
 import { RecipeCarousel } from "@/components/recipe/recipe-carousel"

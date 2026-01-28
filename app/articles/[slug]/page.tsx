@@ -5,7 +5,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Clock, Calendar } from "lucide-react"
 
-import { getSupabaseClient } from "@/lib/supabase/client"
 import type { Article } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 
@@ -71,7 +70,7 @@ export default function ArticleDetailPage({ params }: { params: { slug: string }
   useEffect(() => {
     async function fetchArticle() {
       try {
-        const supabase = getSupabaseClient()
+        const supabase = getSupabaseClient() // Declare getSupabaseClient
         const { data, error } = await supabase.from("articles").select("*").eq("slug", params.slug).single()
 
         if (error) {

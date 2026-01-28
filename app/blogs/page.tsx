@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { getSupabaseClient } from "@/lib/supabase/client"
 import type { Blog } from "@/lib/types"
 
 import { BlogCard } from "@/components/blog/blog-card"
