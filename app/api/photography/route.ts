@@ -1,105 +1,19 @@
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
+import fs from "fs"
+import path from "path"
+
+const EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp", "avif", "gif", "bmp", "tiff", "svg"])
 
 export async function GET() {
-  const cookieStore = await cookies()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
+  const dir = path.join(process.cwd(), "public", "photography")
 
-  try {
-    const { data, error } = await supabase
-      .from("photography")
-      .select("*")
-      .order("created_at", { ascending: false })
-
-    if (error) throw error
-    return NextResponse.json(data || [])
-  } catch (error) {
-    console.error("Error fetching photography:", error)
-    return NextResponse.json([], { status: 500 })
+  if (!fs.existsSync(dir)) {
+    return NextResponse.json([])
   }
-}
 
-export async function POST(request: NextRequest) {
-  const cookieStore = await cookies()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
+  const files = fs
+    .readdirSync(dir)
+    .filter((f) => !f.startsWith(".") && EXTENSIONS.has(f.split(".").pop()?.toLowerCase() ?? ""))
 
-  try {
-    const body = await request.json()
-    const { data, error } = await supabase
-      .from("photography")
-      .insert([body])
-      .select()
-
-    if (error) throw error
-    return NextResponse.json(data?.[0])
-  } catch (error) {
-    console.error("Error creating photography:", error)
-    return NextResponse.json({ error: "Failed to create" }, { status: 500 })
-  }
-}
-
-export async function DELETE(request: NextRequest) {
-  const cookieStore = await cookies()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
-
-  try {
-    const { searchParams } = new URL(request.url)
-    const id = searchParams.get("id")
-
-    if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 })
-
-    const { error } = await supabase.from("photography").delete().eq("id", id)
-
-    if (error) throw error
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error("Error deleting photography:", error)
-    return NextResponse.json({ error: "Failed to delete" }, { status: 500 })
-  }
+  return NextResponse.json(files)
 }

@@ -102,21 +102,15 @@ function DesktopNavbar() {
 /* ===================== MOBILE ===================== */
 
 function MobileNavbar() {
-  const [open, setOpen] = useState<
-    null | "content" | "creative" | "social"
-  >(null);
+  const [open, setOpen] = useState<null | "content" | "creative" | "social">(null);
 
   const contentLinks = DATA.navbar.filter((i) =>
     ["Blogs", "Articles"].includes(i.label)
   );
-
   const creativeLinks = DATA.navbar.filter((i) =>
     ["Music", "Photography", "Resipy"].includes(i.label)
   );
-
-  const socials = Object.entries(DATA.contact.social).filter(
-    ([_, s]) => s.navbar
-  );
+  const socials = Object.entries(DATA.contact.social).filter(([_, s]) => s.navbar);
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
@@ -132,22 +126,14 @@ function MobileNavbar() {
             <div className="flex items-end gap-4 rounded-full border bg-card/90 backdrop-blur-xl px-4 py-3 shadow-lg">
               {open === "content" &&
                 contentLinks.map((item) => (
-                  <MobileItem
-                    key={item.href}
-                    href={item.href}
-                    label={item.label}
-                  >
+                  <MobileItem key={item.href} href={item.href} label={item.label}>
                     <item.icon className="h-5 w-5" />
                   </MobileItem>
                 ))}
 
               {open === "creative" &&
                 creativeLinks.map((item) => (
-                  <MobileItem
-                    key={item.href}
-                    href={item.href}
-                    label={item.label}
-                  >
+                  <MobileItem key={item.href} href={item.href} label={item.label}>
                     <item.icon className="h-5 w-5" />
                   </MobileItem>
                 ))}
@@ -156,18 +142,13 @@ function MobileNavbar() {
                 socials.map(([name, social]) => {
                   const Icon = social.icon;
                   return (
-                    <MobileItem
-                      key={name}
-                      href={social.url}
-                      label={name}
-                      external
-                    >
+                    <MobileItem key={name} href={social.url} label={name} external>
                       <Icon className="h-5 w-5" />
                     </MobileItem>
                   );
                 })}
 
-              {/* Close button – uniform item */}
+              {/* Close button */}
               <button
                 onClick={() => setOpen(null)}
                 className="flex flex-col items-center gap-1 text-xs text-muted-foreground"
@@ -182,7 +163,6 @@ function MobileNavbar() {
         )}
       </AnimatePresence>
 
-
       {/* Base bar */}
       <div className="flex items-end gap-4 rounded-full border bg-card/90 backdrop-blur-xl px-4 py-3 shadow-lg">
         <MobileButton
@@ -190,21 +170,18 @@ function MobileNavbar() {
           label="Home"
           onClick={() => (window.location.href = "/")}
         />
-
         <MobileButton
           icon={<Folder className="h-5 w-5" />}
           label="Content"
           active={open === "content"}
           onClick={() => setOpen(open === "content" ? null : "content")}
         />
-
         <MobileButton
           icon={<Sparkles className="h-5 w-5" />}
           label="Creative"
           active={open === "creative"}
           onClick={() => setOpen(open === "creative" ? null : "creative")}
         />
-
         <MobileButton
           icon={<Share2 className="h-5 w-5" />}
           label="Social"
@@ -212,9 +189,8 @@ function MobileNavbar() {
           onClick={() => setOpen(open === "social" ? null : "social")}
         />
 
-        <MobileButton icon={<SunMoon className="h-5 w-5" />} label="Theme">
-          <ModeToggle />
-        </MobileButton>
+        {/* Theme — rendered as a div wrapper, NOT a button, to avoid nesting <button> inside <button> */}
+        <MobileThemeButton label="Theme" />
       </div>
     </div>
   );
@@ -227,13 +203,11 @@ function MobileButton({
   label,
   onClick,
   active,
-  children,
 }: {
-  icon?: React.ReactNode;
+  icon: React.ReactNode;
   label: string;
   onClick?: () => void;
   active?: boolean;
-  children?: React.ReactNode;
 }) {
   return (
     <button
@@ -244,10 +218,23 @@ function MobileButton({
       )}
     >
       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted">
-        {children ?? icon}
+        {icon}
       </div>
       <span>{label}</span>
     </button>
+  );
+}
+
+// Separate component for the theme toggle — uses a div instead of button
+// to avoid wrapping ModeToggle's <button> inside another <button>
+function MobileThemeButton({ label }: { label: string }) {
+  return (
+    <div className="flex flex-col items-center gap-1 text-xs text-muted-foreground">
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted">
+        <ModeToggle />
+      </div>
+      <span>{label}</span>
+    </div>
   );
 }
 
