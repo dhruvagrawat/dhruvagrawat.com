@@ -253,7 +253,7 @@ export default function PhotographyPage() {
           ))}
         </div>
       </div>
-
+      {/* testing login accont */}
       {/* Lightbox */}
       {selectedPhoto && (
         <div
