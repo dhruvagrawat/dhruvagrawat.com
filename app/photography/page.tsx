@@ -156,6 +156,7 @@ export default function PhotographyPage() {
           transition: opacity 0.4s ease;
         }
         .pg-skeleton.hidden-skel { opacity: 0; pointer-events: none; }
+        @media (max-width: 639px) { .pg-grid { gap: 1px !important; padding: 0 !important; } .pg-item { margin-bottom: 1px; } }
 
         .pg-item {
           cursor: pointer;
@@ -207,13 +208,13 @@ export default function PhotographyPage() {
       `}</style>
 
       <div className="min-h-screen py-14 w-full">
-        <div className="px-4 mb-10">
+        <div className="px-3 sm:px-4 mb-10">
           <h1 className="text-4xl font-bold text-white">Photography</h1>
           <p className="text-zinc-500 text-sm mt-1">{photos.length} images</p>
         </div>
 
         {/* JS-distributed columns: renders left-to-right reading order, no grid gaps */}
-        <div ref={containerRef} className="w-full px-4 flex" style={{ gap: 4, alignItems: 'flex-start' }}>
+        <div ref={containerRef} className="w-full px-0 sm:px-4 flex pg-grid" style={{ gap: 4, alignItems: 'flex-start' }}>
           {columns.map((colPhotos, colIdx) => (
             <div key={colIdx} className="flex-1 flex flex-col" style={{ gap: 0 }}>
               {colPhotos.map((photo) => (
@@ -253,7 +254,7 @@ export default function PhotographyPage() {
           ))}
         </div>
       </div>
-      {/* testing login accont */}
+
       {/* Lightbox */}
       {selectedPhoto && (
         <div
