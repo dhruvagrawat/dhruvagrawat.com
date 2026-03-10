@@ -138,8 +138,6 @@ export default function PhotographyPage() {
 
         /* Card */
         .pg-item {
-          break-inside: avoid;
-          margin-bottom: 4px;
           cursor: pointer;
           opacity: 0;
           transform: translateY(14px);
@@ -200,10 +198,10 @@ export default function PhotographyPage() {
           <p className="text-zinc-500 text-sm mt-1">{photos.length} images</p>
         </div>
 
-        {/* Masonry grid — 2 / 3 / 4 cols */}
+        {/* CSS Grid — left-to-right, top-to-bottom flow */}
         <div
-          className="w-full px-4 columns-2 sm:columns-3 lg:columns-4"
-          style={{ columnGap: 4 }}
+          className="w-full px-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+          style={{ gap: 4 }}
         >
           {photos.map((photo, idx) => (
             <div
@@ -211,6 +209,7 @@ export default function PhotographyPage() {
               ref={(el) => { if (el) itemRefs.current.set(photo.id, el) }}
               data-photoid={photo.id}
               className={`pg-item${revealedIds.has(photo.id) ? ' revealed' : ''}`}
+              style={{ transitionDelay: revealedIds.has(photo.id) ? `${(idx % 4) * 80}ms` : '0ms' }}
               onClick={() => setSelectedIdx(idx)}
             >
               <div className="pg-item-inner">
