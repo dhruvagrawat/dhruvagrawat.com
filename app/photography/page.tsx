@@ -8,13 +8,13 @@ interface PhotoItem {
   src: string
   title: string
   filename: string
-  aspectRatio: number  // locked in before image loads — prevents layout shift
+  aspectRatio: number
   imgLoaded: boolean
+  globalIdx: number
 }
 
 const EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'bmp', 'tiff', 'svg'])
 
-// Deterministic aspect ratio seed from filename so skeleton shape is stable
 function seedAspect(filename: string): number {
   let h = 0
   for (let i = 0; i < filename.length; i++) h = (Math.imul(31, h) + filename.charCodeAt(i)) | 0
@@ -22,12 +22,36 @@ function seedAspect(filename: string): number {
   return ratios[Math.abs(h) % ratios.length]
 }
 
+// Distribute photos into N columns left-to-right by index
+// col 0 gets: 0, N, 2N...   col 1 gets: 1, N+1, 2N+1...  etc.
+// This means reading left→right you see photos in order, tight with no gaps
+function distributeToColumns(photos: PhotoItem[], numCols: number): PhotoItem[][] {
+  const cols: PhotoItem[][] = Array.from({ length: numCols }, () => [])
+  photos.forEach((photo, i) => {
+    cols[i % numCols].push(photo)
+  })
+  return cols
+}
+
 export default function PhotographyPage() {
   const [photos, setPhotos] = useState<PhotoItem[]>([])
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set())
+  const [numCols, setNumCols] = useState(4)
+  const containerRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+
+  // Responsive column count
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth
+      setNumCols(w < 640 ? 2 : w < 1024 ? 3 : 4)
+    }
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
 
   useEffect(() => {
     fetch('/api/photography')
@@ -42,18 +66,18 @@ export default function PhotographyPage() {
           src: `/photography/${filename}`,
           title: filename.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
           filename,
-          aspectRatio: seedAspect(filename), // stable placeholder shape
+          aspectRatio: seedAspect(filename),
           imgLoaded: false,
+          globalIdx: i,
         }))
         setPhotos(items)
-        // Reveal first 8 immediately (above fold)
-        setRevealedIds(new Set(items.slice(0, 8).map((p) => p.id)))
+        setRevealedIds(new Set(items.slice(0, 12).map((p) => p.id)))
       })
       .catch(console.error)
       .finally(() => setIsLoading(false))
   }, [])
 
-  // Scroll-reveal: mandatory 1s suspense before showing each item
+  // Scroll-reveal with 1s mandatory suspense
   useEffect(() => {
     if (photos.length === 0) return
     const observer = new IntersectionObserver(
@@ -76,8 +100,6 @@ export default function PhotographyPage() {
     return () => observer.disconnect()
   }, [photos])
 
-  // Update true aspect ratio once image loads — but layout won't shift because
-  // the container is already sized via padding-bottom trick
   const handleImgLoad = (id: string, e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget
     const ar = img.naturalWidth / img.naturalHeight || 1
@@ -86,7 +108,6 @@ export default function PhotographyPage() {
     )
   }
 
-  // Keyboard nav
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (selectedIdx === null) return
@@ -99,6 +120,7 @@ export default function PhotographyPage() {
   }, [selectedIdx, photos.length])
 
   const selectedPhoto = selectedIdx !== null ? photos[selectedIdx] : null
+  const columns = distributeToColumns(photos, numCols)
 
   if (isLoading) {
     return (
@@ -121,7 +143,6 @@ export default function PhotographyPage() {
   return (
     <>
       <style>{`
-        /* Skeleton shimmer */
         @keyframes shimmer {
           0%   { background-position: -200% 0; }
           100% { background-position:  200% 0; }
@@ -136,28 +157,23 @@ export default function PhotographyPage() {
         }
         .pg-skeleton.hidden-skel { opacity: 0; pointer-events: none; }
 
-        /* Card */
         .pg-item {
           cursor: pointer;
           opacity: 0;
           transform: translateY(14px);
           transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1),
                       transform 0.55s cubic-bezier(0.22,1,0.36,1);
+          margin-bottom: 4px;
         }
         .pg-item.revealed { opacity: 1; transform: none; }
 
-        /* Inner: padding-bottom trick locks height before image loads */
         .pg-item-inner {
           position: relative;
           overflow: hidden;
           border-radius: 2px;
           background: #1c1c1e;
         }
-        .pg-aspect-box {
-          width: 100%;
-          height: 0;
-          /* padding-bottom set inline per photo */
-        }
+        .pg-aspect-box { width: 100%; height: 0; }
         .pg-item-inner img {
           position: absolute;
           inset: 0;
@@ -166,8 +182,7 @@ export default function PhotographyPage() {
           object-fit: cover;
           display: block;
           opacity: 0;
-          transition: opacity 0.5s ease,
-                      transform 0.5s cubic-bezier(0.22,1,0.36,1);
+          transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1);
         }
         .pg-item-inner img.loaded { opacity: 1; }
         .pg-item:hover .pg-item-inner img { transform: scale(1.04); }
@@ -185,11 +200,10 @@ export default function PhotographyPage() {
         }
         .pg-item:hover .pg-overlay { opacity: 1; }
 
-        /* Lightbox */
         .lb-fade { animation: lbFade 0.25s ease forwards; }
         .lb-img  { animation: lbImg 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
-        @keyframes lbFade { from { opacity:0 } to { opacity:1 } }
-        @keyframes lbImg  { from { opacity:0; transform:scale(0.96) } to { opacity:1; transform:scale(1) } }
+        @keyframes lbFade { from{opacity:0} to{opacity:1} }
+        @keyframes lbImg  { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
       `}</style>
 
       <div className="min-h-screen py-14 w-full">
@@ -198,43 +212,43 @@ export default function PhotographyPage() {
           <p className="text-zinc-500 text-sm mt-1">{photos.length} images</p>
         </div>
 
-        {/* CSS Grid — left-to-right, top-to-bottom flow */}
-        <div
-          className="w-full px-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
-          style={{ gap: 4 }}
-        >
-          {photos.map((photo, idx) => (
-            <div
-              key={photo.id}
-              ref={(el) => { if (el) itemRefs.current.set(photo.id, el) }}
-              data-photoid={photo.id}
-              className={`pg-item${revealedIds.has(photo.id) ? ' revealed' : ''}`}
-              style={{ transitionDelay: revealedIds.has(photo.id) ? `${(idx % 4) * 80}ms` : '0ms' }}
-              onClick={() => setSelectedIdx(idx)}
-            >
-              <div className="pg-item-inner">
-                {/* Aspect-ratio box: locks height from the start — zero reflow */}
+        {/* JS-distributed columns: renders left-to-right reading order, no grid gaps */}
+        <div ref={containerRef} className="w-full px-4 flex" style={{ gap: 4, alignItems: 'flex-start' }}>
+          {columns.map((colPhotos, colIdx) => (
+            <div key={colIdx} className="flex-1 flex flex-col" style={{ gap: 0 }}>
+              {colPhotos.map((photo) => (
                 <div
-                  className="pg-aspect-box"
-                  style={{ paddingBottom: `${(1 / photo.aspectRatio) * 100}%` }}
-                />
-                {/* Shimmer skeleton — hides once image is loaded */}
-                <div className={`pg-skeleton${photo.imgLoaded ? ' hidden-skel' : ''}`} />
-                {/* Actual image */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={photo.src}
-                  alt={photo.title}
-                  loading="lazy"
-                  onLoad={(e) => handleImgLoad(photo.id, e)}
-                  className={photo.imgLoaded ? 'loaded' : ''}
-                />
-                <div className="pg-overlay">
-                  <p className="text-white text-xs capitalize truncate w-full tracking-wide">
-                    {photo.title}
-                  </p>
+                  key={photo.id}
+                  ref={(el) => { if (el) itemRefs.current.set(photo.id, el) }}
+                  data-photoid={photo.id}
+                  className={`pg-item${revealedIds.has(photo.id) ? ' revealed' : ''}`}
+                  style={{
+                    transitionDelay: revealedIds.has(photo.id) ? `${colIdx * 80}ms` : '0ms',
+                  }}
+                  onClick={() => setSelectedIdx(photo.globalIdx)}
+                >
+                  <div className="pg-item-inner">
+                    <div
+                      className="pg-aspect-box"
+                      style={{ paddingBottom: `${(1 / photo.aspectRatio) * 100}%` }}
+                    />
+                    <div className={`pg-skeleton${photo.imgLoaded ? ' hidden-skel' : ''}`} />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photo.src}
+                      alt={photo.title}
+                      loading="lazy"
+                      onLoad={(e) => handleImgLoad(photo.id, e)}
+                      className={photo.imgLoaded ? 'loaded' : ''}
+                    />
+                    <div className="pg-overlay">
+                      <p className="text-white text-xs capitalize truncate w-full tracking-wide">
+                        {photo.title}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           ))}
         </div>
@@ -249,7 +263,7 @@ export default function PhotographyPage() {
         >
           {selectedIdx! > 0 && (
             <button
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-white/40 hover:text-white transition-colors p-2 rounded-full hover:bg-white/8 border-0 bg-transparent cursor-pointer"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-white/40 hover:text-white transition-colors p-2 rounded-full border-0 bg-transparent cursor-pointer"
               onClick={(e) => { e.stopPropagation(); setSelectedIdx((i) => (i ?? 1) - 1) }}
             >
               <ChevronLeft className="w-7 h-7" />
@@ -257,7 +271,7 @@ export default function PhotographyPage() {
           )}
           {selectedIdx! < photos.length - 1 && (
             <button
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-white/40 hover:text-white transition-colors p-2 rounded-full hover:bg-white/8 border-0 bg-transparent cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-white/40 hover:text-white transition-colors p-2 rounded-full border-0 bg-transparent cursor-pointer"
               onClick={(e) => { e.stopPropagation(); setSelectedIdx((i) => (i ?? 0) + 1) }}
             >
               <ChevronRight className="w-7 h-7" />
@@ -296,10 +310,8 @@ export default function PhotographyPage() {
                 alt={selectedPhoto.title}
                 className="lb-img rounded object-contain"
                 style={{
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                  width: 'auto',
-                  height: 'auto',
+                  maxWidth: '100%', maxHeight: '100%',
+                  width: 'auto', height: 'auto',
                   boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
                 }}
               />
