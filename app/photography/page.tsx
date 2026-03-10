@@ -8,9 +8,19 @@ interface PhotoItem {
   src: string
   title: string
   filename: string
+  aspectRatio: number  // locked in before image loads — prevents layout shift
+  imgLoaded: boolean
 }
 
 const EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'bmp', 'tiff', 'svg'])
+
+// Deterministic aspect ratio seed from filename so skeleton shape is stable
+function seedAspect(filename: string): number {
+  let h = 0
+  for (let i = 0; i < filename.length; i++) h = (Math.imul(31, h) + filename.charCodeAt(i)) | 0
+  const ratios = [0.75, 0.8, 1.0, 1.25, 1.33, 1.5, 1.6, 1.78]
+  return ratios[Math.abs(h) % ratios.length]
+}
 
 export default function PhotographyPage() {
   const [photos, setPhotos] = useState<PhotoItem[]>([])
@@ -27,21 +37,23 @@ export default function PhotographyPage() {
         const filtered = filenames.filter((f) =>
           EXTENSIONS.has(f.split('.').pop()?.toLowerCase() ?? '')
         )
-        const items = filtered.map((filename, i) => ({
+        const items: PhotoItem[] = filtered.map((filename, i) => ({
           id: String(i),
           src: `/photography/${filename}`,
           title: filename.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
           filename,
+          aspectRatio: seedAspect(filename), // stable placeholder shape
+          imgLoaded: false,
         }))
         setPhotos(items)
-        // reveal first 6 immediately
-        setRevealedIds(new Set(items.slice(0, 6).map((p) => p.id)))
+        // Reveal first 8 immediately (above fold)
+        setRevealedIds(new Set(items.slice(0, 8).map((p) => p.id)))
       })
       .catch(console.error)
       .finally(() => setIsLoading(false))
   }, [])
 
-  // Scroll-reveal with mandatory 1s suspense
+  // Scroll-reveal: mandatory 1s suspense before showing each item
   useEffect(() => {
     if (photos.length === 0) return
     const observer = new IntersectionObserver(
@@ -64,7 +76,17 @@ export default function PhotographyPage() {
     return () => observer.disconnect()
   }, [photos])
 
-  // Keyboard nav for lightbox
+  // Update true aspect ratio once image loads — but layout won't shift because
+  // the container is already sized via padding-bottom trick
+  const handleImgLoad = (id: string, e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget
+    const ar = img.naturalWidth / img.naturalHeight || 1
+    setPhotos((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, aspectRatio: ar, imgLoaded: true } : p))
+    )
+  }
+
+  // Keyboard nav
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (selectedIdx === null) return
@@ -89,7 +111,9 @@ export default function PhotographyPage() {
   if (photos.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-zinc-500 text-sm">No photos found in <code className="text-zinc-300">public/photography/</code></p>
+        <p className="text-zinc-500 text-sm">
+          No photos found in <code className="text-zinc-300">public/photography/</code>
+        </p>
       </div>
     )
   }
@@ -97,33 +121,59 @@ export default function PhotographyPage() {
   return (
     <>
       <style>{`
+        /* Skeleton shimmer */
+        @keyframes shimmer {
+          0%   { background-position: -200% 0; }
+          100% { background-position:  200% 0; }
+        }
+        .pg-skeleton {
+          background: linear-gradient(90deg, #1c1c1e 25%, #2c2c2e 50%, #1c1c1e 75%);
+          background-size: 200% 100%;
+          animation: shimmer 1.6s ease-in-out infinite;
+          position: absolute;
+          inset: 0;
+          transition: opacity 0.4s ease;
+        }
+        .pg-skeleton.hidden-skel { opacity: 0; pointer-events: none; }
+
+        /* Card */
         .pg-item {
           break-inside: avoid;
           margin-bottom: 4px;
           cursor: pointer;
           opacity: 0;
-          transform: translateY(16px);
-          transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1),
-                      transform 0.6s cubic-bezier(0.22,1,0.36,1);
+          transform: translateY(14px);
+          transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1),
+                      transform 0.55s cubic-bezier(0.22,1,0.36,1);
         }
-        .pg-item.revealed {
-          opacity: 1;
-          transform: none;
-        }
+        .pg-item.revealed { opacity: 1; transform: none; }
+
+        /* Inner: padding-bottom trick locks height before image loads */
         .pg-item-inner {
           position: relative;
           overflow: hidden;
           border-radius: 2px;
-          background: #111;
-          line-height: 0;
+          background: #1c1c1e;
+        }
+        .pg-aspect-box {
+          width: 100%;
+          height: 0;
+          /* padding-bottom set inline per photo */
         }
         .pg-item-inner img {
+          position: absolute;
+          inset: 0;
           width: 100%;
-          height: auto;
+          height: 100%;
+          object-fit: cover;
           display: block;
-          transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+          opacity: 0;
+          transition: opacity 0.5s ease,
+                      transform 0.5s cubic-bezier(0.22,1,0.36,1);
         }
+        .pg-item-inner img.loaded { opacity: 1; }
         .pg-item:hover .pg-item-inner img { transform: scale(1.04); }
+
         .pg-overlay {
           position: absolute;
           inset: 0;
@@ -132,12 +182,14 @@ export default function PhotographyPage() {
           transition: opacity 0.3s ease;
           display: flex;
           align-items: flex-end;
-          padding: 12px;
+          padding: 10px;
+          pointer-events: none;
         }
         .pg-item:hover .pg-overlay { opacity: 1; }
 
+        /* Lightbox */
         .lb-fade { animation: lbFade 0.25s ease forwards; }
-        .lb-img  { animation: lbImg  0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
+        .lb-img  { animation: lbImg 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
         @keyframes lbFade { from { opacity:0 } to { opacity:1 } }
         @keyframes lbImg  { from { opacity:0; transform:scale(0.96) } to { opacity:1; transform:scale(1) } }
       `}</style>
@@ -148,7 +200,7 @@ export default function PhotographyPage() {
           <p className="text-zinc-500 text-sm mt-1">{photos.length} images</p>
         </div>
 
-        {/* Responsive columns — 2 mobile, 3 tablet, 4 desktop */}
+        {/* Masonry grid — 2 / 3 / 4 cols */}
         <div
           className="w-full px-4 columns-2 sm:columns-3 lg:columns-4"
           style={{ columnGap: 4 }}
@@ -162,8 +214,22 @@ export default function PhotographyPage() {
               onClick={() => setSelectedIdx(idx)}
             >
               <div className="pg-item-inner">
+                {/* Aspect-ratio box: locks height from the start — zero reflow */}
+                <div
+                  className="pg-aspect-box"
+                  style={{ paddingBottom: `${(1 / photo.aspectRatio) * 100}%` }}
+                />
+                {/* Shimmer skeleton — hides once image is loaded */}
+                <div className={`pg-skeleton${photo.imgLoaded ? ' hidden-skel' : ''}`} />
+                {/* Actual image */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={photo.src} alt={photo.title} loading="lazy" />
+                <img
+                  src={photo.src}
+                  alt={photo.title}
+                  loading="lazy"
+                  onLoad={(e) => handleImgLoad(photo.id, e)}
+                  className={photo.imgLoaded ? 'loaded' : ''}
+                />
                 <div className="pg-overlay">
                   <p className="text-white text-xs capitalize truncate w-full tracking-wide">
                     {photo.title}
@@ -175,14 +241,13 @@ export default function PhotographyPage() {
         </div>
       </div>
 
-      {/* Lightbox — pb-24 keeps it above the navbar */}
+      {/* Lightbox */}
       {selectedPhoto && (
         <div
           className="lb-fade fixed inset-0 z-50 flex items-center justify-center"
           style={{ background: 'rgba(0,0,0,0.96)' }}
           onClick={() => setSelectedIdx(null)}
         >
-          {/* Prev */}
           {selectedIdx! > 0 && (
             <button
               className="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-white/40 hover:text-white transition-colors p-2 rounded-full hover:bg-white/8 border-0 bg-transparent cursor-pointer"
@@ -191,8 +256,6 @@ export default function PhotographyPage() {
               <ChevronLeft className="w-7 h-7" />
             </button>
           )}
-
-          {/* Next */}
           {selectedIdx! < photos.length - 1 && (
             <button
               className="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-white/40 hover:text-white transition-colors p-2 rounded-full hover:bg-white/8 border-0 bg-transparent cursor-pointer"
@@ -206,7 +269,6 @@ export default function PhotographyPage() {
             className="flex flex-col w-full h-full px-14 pt-5 pb-28"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Top bar */}
             <div className="flex items-center justify-between flex-shrink-0 mb-3">
               <div>
                 <p className="text-zinc-600 text-xs tracking-widest uppercase">
@@ -227,7 +289,6 @@ export default function PhotographyPage() {
               </div>
             </div>
 
-            {/* Image — pb-28 on container already gives navbar clearance */}
             <div className="flex-1 min-h-0 flex items-center justify-center overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -245,10 +306,9 @@ export default function PhotographyPage() {
               />
             </div>
 
-            {/* Bottom actions — sits above navbar thanks to pb-28 */}
             <div className="flex-shrink-0 mt-3 flex items-center justify-between flex-wrap gap-2">
               <p className="text-zinc-700 text-xs tracking-widest uppercase hidden sm:block">
-                ← → to navigate · esc to close
+                ← → navigate · esc close
               </p>
               <div className="flex gap-2 ml-auto">
                 <a
