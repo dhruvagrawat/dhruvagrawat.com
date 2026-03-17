@@ -52,6 +52,7 @@ export default function Page() {
 
             <BlurFade delay={BLUR_FADE_DELAY} className="order-1 md:order-2">
               <Avatar className="size-24 md:size-32 border rounded-full shadow-lg ring-4 ring-muted">
+              haven't finished this yet please don't judge :) ... the photography section is compelete do chcek that out from the bottom nav bar *wink wink***
                 <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
                 <AvatarFallback>{DATA.initials}</AvatarFallback>
               </Avatar>
