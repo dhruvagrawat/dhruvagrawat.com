@@ -34,6 +34,7 @@ export default function Page() {
     <main className="min-h-dvh flex flex-col gap-14 relative">
       {/* HERO */}
       <section id="hero">
+                 haven't finished this yet please don't judge :) ... the photography section is compelete do chcek that out from the bottom nav bar *wink wink***
         <div className="mx-auto w-full max-w-4xl space-y-8">
           <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
             <div className="gap-2 flex flex-col order-2 md:order-1">
@@ -52,7 +53,7 @@ export default function Page() {
 
             <BlurFade delay={BLUR_FADE_DELAY} className="order-1 md:order-2">
               <Avatar className="size-24 md:size-32 border rounded-full shadow-lg ring-4 ring-muted">
-              haven't finished this yet please don't judge :) ... the photography section is compelete do chcek that out from the bottom nav bar *wink wink***
+     
                 <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
                 <AvatarFallback>{DATA.initials}</AvatarFallback>
               </Avatar>
