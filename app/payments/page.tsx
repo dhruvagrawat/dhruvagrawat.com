@@ -197,8 +197,8 @@ function WiseCard() {
             name="Wise"
             badge="International"
             inactive
-            openHref="https://wise.com/pay/me/dhruvx"
-            shareText={`Wise Payment Details\nTag: @dhruvx\nLink: https://wise.com/pay/me/dhruvx`}
+        // openHref="https://wise.com/pay/me/dhruvx"
+        // shareText={`Wise Payment Details\nTag: @dhruvx\nLink: https://wise.com/pay/me/dhruvx`}
         >
             <QRBlock src="/payments/wise.png" />
             <CopyField label="Wise Tag" value="@dhruvx" />
