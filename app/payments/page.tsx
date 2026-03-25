@@ -196,7 +196,7 @@ function WiseCard() {
             logo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWHA_A4OzmbA3zAo3r908So-vG-6U4us_Qew&s"
             name="Wise"
             badge="International"
-            recommended
+            inactive
             openHref="https://wise.com/pay/me/dhruvx"
             shareText={`Wise Payment Details\nTag: @dhruvx\nLink: https://wise.com/pay/me/dhruvx`}
         >
