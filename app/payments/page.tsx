@@ -402,10 +402,11 @@ export default function Page() {
                 <div>
                     <SectionHeader label="Global Payments" count={4} />
                     <div className="grid md:grid-cols-2 gap-3 items-start">
-                        <WiseCard />
+
                         <InfinityUSDCard />
                         <InfinitySwiftCard />
                         <PaypalCard />
+                        <WiseCard />
                     </div>
                 </div>
 
