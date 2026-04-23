@@ -196,17 +196,15 @@ function WiseCard() {
             logo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWHA_A4OzmbA3zAo3r908So-vG-6U4us_Qew&s"
             name="Wise"
             badge="International"
-            inactive
-        // openHref="https://wise.com/pay/me/dhruvx"
-        // shareText={`Wise Payment Details\nTag: @dhruvx\nLink: https://wise.com/pay/me/dhruvx`}
+            openHref="https://wise.com/pay/business/dhruv16"
+            shareText={`Wise Payment Details\nTag: @dhruv16\nLink: https://wise.com/pay/business/dhruv16`}
         >
             <QRBlock src="/payments/wise.png" />
-            <CopyField label="Wise Tag" value="@dhruvx" />
-            <CopyField label="Payment Link" value="https://wise.com/pay/me/dhruvx" />
+            <CopyField label="Wise Tag" value="@dhruv16" />
+            <CopyField label="Payment Link" value="https://wise.com/pay/business/dhruv16" />
         </PayCard>
     )
 }
-
 function InfinityUSDCard() {
     return (
         <PayCard
@@ -403,10 +401,10 @@ export default function Page() {
                     <SectionHeader label="Global Payments" count={4} />
                     <div className="grid md:grid-cols-2 gap-3 items-start">
 
+                        <WiseCard />
                         <InfinityUSDCard />
                         <InfinitySwiftCard />
                         <PaypalCard />
-                        <WiseCard />
                     </div>
                 </div>
 
