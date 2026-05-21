@@ -1,14 +1,18 @@
 import { createClient } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
+
+export const dynamic = "force-dynamic"
 
 export async function GET() {
   try {
-    const { data, error } = await supabase.from("music").select("*").order("created_at", { ascending: false })
+    const { data, error } = await getSupabase().from("music").select("*").order("created_at", { ascending: false })
     if (error) throw error
     return NextResponse.json(data)
   } catch (error) {
@@ -19,7 +23,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { data, error } = await supabase.from("music").insert([body]).select()
+    const { data, error } = await getSupabase().from("music").insert([body]).select()
     if (error) throw error
     return NextResponse.json(data[0], { status: 201 })
   } catch (error) {

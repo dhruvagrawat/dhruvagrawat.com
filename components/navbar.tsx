@@ -105,7 +105,7 @@ function MobileNavbar() {
   const [open, setOpen] = useState<null | "content" | "creative" | "social">(null);
 
   const contentLinks = DATA.navbar.filter((i) =>
-    ["Blogs", "Articles"].includes(i.label)
+    ["Blogs", "Articles", "Tools"].includes(i.label)
   );
   const creativeLinks = DATA.navbar.filter((i) =>
     ["Music", "Photography", "Resipy"].includes(i.label)

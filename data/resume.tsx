@@ -7,6 +7,7 @@ import {
   Music,
   FileText,
   FolderGit2,
+  Wrench,
 } from "lucide-react";
 
 import { ReactLight } from "@/components/ui/svgs/reactLight";
@@ -51,11 +52,12 @@ export const DATA = {
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
     { href: "/blogs", icon: NotebookPen, label: "Blogs" },
+    { href: "/articles", icon: FileText, label: "Articles" },
     { href: "/resipy", icon: BookOpenCheck, label: "Resipy" },
     { href: "/photography", icon: Camera, label: "Photography" },
     { href: "/music", icon: Music, label: "Music" },
-    { href: "/articles", icon: FileText, label: "Articles" },
     { href: "/projects", icon: FolderGit2, label: "Projects" },
+    { href: "/tools", icon: Wrench, label: "Tools" },
   ],
 
   contact: {
