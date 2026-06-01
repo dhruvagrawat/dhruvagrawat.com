@@ -32,3 +32,30 @@ export type RecipeMeta = {
   coverImage?: string
   ingredients: string[]
 }
+
+export type MusicMeta = {
+  slug: string
+  title: string
+  artist?: string
+  album?: string
+  tags: string[]
+  duration?: number
+  coverImage?: string
+  audioUrl?: string
+  date: string
+}
+
+export type ProjectMeta = {
+  slug: string
+  title: string
+  description: string
+  details?: string
+  coverImage?: string
+  technologies: string[]
+  githubUrl?: string
+  liveUrl?: string
+  status?: string
+  startDate?: string
+  teamSize?: number
+  galleryUrls?: string[]
+}

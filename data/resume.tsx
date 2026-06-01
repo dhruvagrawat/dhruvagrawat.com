@@ -7,7 +7,7 @@ import {
   Music,
   FileText,
   FolderGit2,
-  Wrench,
+  LayoutGrid,
 } from "lucide-react";
 
 import { ReactLight } from "@/components/ui/svgs/reactLight";
@@ -57,7 +57,7 @@ export const DATA = {
     { href: "/photography", icon: Camera, label: "Photography" },
     { href: "/music", icon: Music, label: "Music" },
     { href: "/projects", icon: FolderGit2, label: "Projects" },
-    { href: "/tools", icon: Wrench, label: "Tools" },
+    { href: "/tools", icon: LayoutGrid, label: "More" },
   ],
 
   contact: {

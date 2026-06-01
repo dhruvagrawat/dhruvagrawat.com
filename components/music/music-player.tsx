@@ -14,12 +14,12 @@ import {
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import type { MusicItem } from "@/lib/types"
+import type { MusicMeta } from "@/content/types"
 
 interface MusicPlayerProps {
-  currentTrack: MusicItem | null
-  playlist: MusicItem[]
-  onTrackChange: (track: MusicItem) => void
+  currentTrack: MusicMeta | null
+  playlist: MusicMeta[]
+  onTrackChange: (track: MusicMeta) => void
   autoPlay?: boolean
 }
 
@@ -39,28 +39,22 @@ export function MusicPlayer({
 
   const audioRef = useRef<HTMLAudioElement>(null)
 
-  /** LOAD + AUTOPLAY ON TRACK CHANGE */
   useEffect(() => {
     const audio = audioRef.current
     if (!audio || !currentTrack) return
 
-    audio.src = currentTrack.audio_url ?? ""
+    audio.src = currentTrack.audioUrl ?? ""
     audio.load()
-
     setCurrentTime(0)
 
     if (autoPlay) {
-      audio
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => setIsPlaying(false))
+      audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false))
     } else {
       setIsPlaying(false)
     }
 
     const onLoaded = () => setDuration(audio.duration || 0)
     const onTime = () => setCurrentTime(audio.currentTime || 0)
-
     const onEnded = () => {
       if (isRepeat) {
         audio.currentTime = 0
@@ -84,39 +78,27 @@ export function MusicPlayer({
   const togglePlay = () => {
     const audio = audioRef.current
     if (!audio) return
-
-    if (isPlaying) {
-      audio.pause()
-      setIsPlaying(false)
-    } else {
-      audio.play()
-      setIsPlaying(true)
-    }
+    if (isPlaying) { audio.pause(); setIsPlaying(false) }
+    else { audio.play(); setIsPlaying(true) }
   }
 
   const playPreviousTrack = () => {
     if (!currentTrack || playlist.length === 0) return
-    const index = playlist.findIndex((t) => t.id === currentTrack.id)
+    const index = playlist.findIndex((t) => t.slug === currentTrack.slug)
     onTrackChange(playlist[(index - 1 + playlist.length) % playlist.length])
   }
 
   const playNextTrack = () => {
     if (!currentTrack || playlist.length === 0) return
-    const index = playlist.findIndex((t) => t.id === currentTrack.id)
+    const index = playlist.findIndex((t) => t.slug === currentTrack.slug)
     onTrackChange(playlist[(index + 1) % playlist.length])
   }
 
   const toggleMute = () => {
     const audio = audioRef.current
     if (!audio) return
-
-    if (isMuted) {
-      audio.volume = volume
-      setIsMuted(false)
-    } else {
-      audio.volume = 0
-      setIsMuted(true)
-    }
+    if (isMuted) { audio.volume = volume; setIsMuted(false) }
+    else { audio.volume = 0; setIsMuted(true) }
   }
 
   const formatTime = (time: number) => {
@@ -137,7 +119,7 @@ export function MusicPlayer({
         <div className="flex flex-col gap-3 md:hidden">
           <div className="flex items-center gap-3">
             <Image
-              src={currentTrack.image_url || "/placeholder.svg"}
+              src={currentTrack.coverImage || "/placeholder.svg"}
               alt={currentTrack.title}
               width={48}
               height={48}
@@ -167,15 +149,11 @@ export function MusicPlayer({
           </div>
 
           <div className="flex justify-center gap-4">
-            <Button variant="ghost" size="icon" onClick={playPreviousTrack}>
-              <SkipBack />
-            </Button>
+            <Button variant="ghost" size="icon" onClick={playPreviousTrack}><SkipBack /></Button>
             <Button variant="outline" size="icon" onClick={togglePlay}>
               {isPlaying ? <Pause /> : <Play />}
             </Button>
-            <Button variant="ghost" size="icon" onClick={playNextTrack}>
-              <SkipForward />
-            </Button>
+            <Button variant="ghost" size="icon" onClick={playNextTrack}><SkipForward /></Button>
           </div>
         </div>
 
@@ -183,7 +161,7 @@ export function MusicPlayer({
         <div className="hidden md:flex items-center">
           <div className="flex items-center w-1/4 min-w-[180px]">
             <Image
-              src={currentTrack.image_url || "/placeholder.svg"}
+              src={currentTrack.coverImage || "/placeholder.svg"}
               alt={currentTrack.title}
               width={48}
               height={48}
@@ -200,15 +178,11 @@ export function MusicPlayer({
               <Button variant="ghost" size="icon" onClick={() => setIsShuffle(!isShuffle)}>
                 <Shuffle className={isShuffle ? "text-green-500" : ""} />
               </Button>
-              <Button variant="ghost" size="icon" onClick={playPreviousTrack}>
-                <SkipBack />
-              </Button>
+              <Button variant="ghost" size="icon" onClick={playPreviousTrack}><SkipBack /></Button>
               <Button variant="outline" size="icon" onClick={togglePlay}>
                 {isPlaying ? <Pause /> : <Play />}
               </Button>
-              <Button variant="ghost" size="icon" onClick={playNextTrack}>
-                <SkipForward />
-              </Button>
+              <Button variant="ghost" size="icon" onClick={playNextTrack}><SkipForward /></Button>
               <Button variant="ghost" size="icon" onClick={() => setIsRepeat(!isRepeat)}>
                 <Repeat className={isRepeat ? "text-green-500" : ""} />
               </Button>

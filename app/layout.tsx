@@ -23,17 +23,38 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(DATA.url),
   title: {
-    default: DATA.name,
+    default: `${DATA.name} — Full-Stack Engineer & Freelancer`,
     template: `%s | ${DATA.name}`,
   },
-  description: DATA.description,
+  description: DATA.summary,
+  keywords: [
+    "Dhruv Agrawat", "Full-Stack Engineer", "Freelancer", "Next.js", "React",
+    "TypeScript", "Node.js", "Web Development", "India", "Portfolio",
+  ],
+  authors: [{ name: DATA.name, url: DATA.url }],
+  creator: DATA.name,
   openGraph: {
-    title: `${DATA.name}`,
-    description: DATA.description,
+    title: `${DATA.name} — Full-Stack Engineer & Freelancer`,
+    description: DATA.summary,
     url: DATA.url,
-    siteName: `${DATA.name}`,
+    siteName: DATA.name,
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/me.png",
+        width: 400,
+        height: 400,
+        alt: DATA.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${DATA.name} — Full-Stack Engineer`,
+    description: DATA.description,
+    creator: "@DhruvAgrawat",
+    images: ["/me.png"],
   },
   robots: {
     index: true,
@@ -46,9 +67,8 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  twitter: {
-    title: `${DATA.name}`,
-    card: "summary_large_image",
+  alternates: {
+    canonical: DATA.url,
   },
   verification: {
     google: "",
@@ -72,7 +92,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <TooltipProvider delayDuration={0}>
-            <div className="absolute inset-0 top-0 left-0 right-0 h-[100px] overflow-hidden z-0">
+            <div className="absolute inset-0 top-0 left-0 right-0 h-25 overflow-hidden z-0">
               <FlickeringGrid
                 className="h-full w-full"
                 squareSize={2}

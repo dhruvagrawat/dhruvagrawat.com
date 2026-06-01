@@ -2,10 +2,10 @@
 
 import Image from "next/image"
 import { Play } from "lucide-react"
-import type { MusicItem } from "@/lib/types"
+import type { MusicMeta } from "@/content/types"
 
 interface MusicCardProps {
-  music: MusicItem
+  music: MusicMeta
   isPlaying: boolean
   onClick: () => void
 }
@@ -20,7 +20,7 @@ export function MusicCard({ music, isPlaying, onClick }: MusicCardProps) {
     >
       <div className="relative aspect-square group">
         <Image
-          src={music.image_url || "/placeholder.svg?height=300&width=300"}
+          src={music.coverImage || "/placeholder.svg?height=300&width=300"}
           alt={music.title}
           fill
           className="object-cover"
