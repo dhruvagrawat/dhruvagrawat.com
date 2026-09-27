@@ -1,10 +1,8 @@
-import type { Metadata } from "next"
+import { toolMetadata } from "@/lib/tools"
+import { ToolLayout } from "@/components/tools/tool-seo"
 
-export const metadata: Metadata = {
-  title: "IP Info",
-  description: "Your current IP address, ISP, location, and timezone — no account needed.",
-}
+export const metadata = toolMetadata("ip")
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return <ToolLayout slug="ip">{children}</ToolLayout>
 }

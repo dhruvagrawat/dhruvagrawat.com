@@ -58,9 +58,30 @@ function EducationRow({
   );
 }
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: DATA.name,
+  url: DATA.url,
+  image: DATA.avatarUrl,
+  jobTitle: "Full-Stack Software Engineer",
+  description: DATA.description,
+  email: `mailto:${DATA.contact.email}`,
+  address: { "@type": "PostalAddress", addressLocality: "New Delhi", addressCountry: "IN" },
+  alumniOf: DATA.education.map((e) => ({ "@type": "EducationalOrganization", name: e.school })),
+  knowsAbout: DATA.skills.map((s) => s.name),
+  sameAs: Object.values(DATA.contact.social)
+    .filter((s) => s.url.startsWith("http"))
+    .map((s) => s.url),
+};
+
 export default function Page() {
   return (
     <main className="min-h-dvh flex flex-col gap-14 relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }}
+      />
       <TimeTravelButton />
       {/* HERO */}
       <section id="hero">
@@ -68,12 +89,14 @@ export default function Page() {
           <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
             <div className="gap-2 flex flex-col order-2 md:order-1">
               <BlurFadeText
+                as="h1"
                 delay={BLUR_FADE_DELAY}
                 className="text-4xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
                 yOffset={8}
                 text={`Hi, I'm ${DATA.name.split(" ")[0]}`}
               />
               <BlurFadeText
+                as="p"
                 className="text-muted-foreground max-w-[600px] md:text-lg lg:text-xl"
                 delay={BLUR_FADE_DELAY}
                 text={DATA.description}

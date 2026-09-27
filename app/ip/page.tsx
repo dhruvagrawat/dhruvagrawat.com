@@ -49,16 +49,19 @@ export default function IpPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch("http://ip-api.com/json/?fields=query,city,regionName,country,countryCode,isp,org,timezone,lat,lon,zip")
-      .then((r) => r.json())
-      .then(setData)
+    fetch("/api/ip", { cache: "no-store" })
+      .then(async (r) => {
+        const json = await r.json()
+        if (!r.ok || json.error) throw new Error(json.error)
+        setData(json)
+      })
       .catch(() => setError("Could not fetch IP info"))
       .finally(() => setLoading(false))
   }, [])
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-lg">
-      <h1 className="text-3xl font-bold mb-2">IP Info</h1>
+      <h1 className="text-3xl font-bold mb-2">What&apos;s My IP Address?</h1>
       <p className="text-muted-foreground mb-8">Your current network information — no account needed.</p>
 
       {loading && (
@@ -72,12 +75,20 @@ export default function IpPage() {
       {data && (
         <div className="rounded-2xl border bg-card px-5 py-2">
           <Field icon={Globe} label="IP Address" value={data.query} />
-          <Field icon={MapPin} label="Location" value={`${data.city}, ${data.regionName}, ${data.country} (${data.countryCode})`} />
+          <Field
+            icon={MapPin}
+            label="Location"
+            value={[data.city, data.regionName, data.country].filter(Boolean).join(", ") || "—"}
+          />
           <Field icon={MapPin} label="Postal Code" value={data.zip || "—"} />
-          <Field icon={MapPin} label="Coordinates" value={`${data.lat.toFixed(4)}, ${data.lon.toFixed(4)}`} />
-          <Field icon={Building2} label="ISP" value={data.isp} />
-          <Field icon={Wifi} label="Organisation" value={data.org || data.isp} />
-          <Field icon={Clock} label="Timezone" value={data.timezone} />
+          <Field
+            icon={MapPin}
+            label="Coordinates"
+            value={Number.isFinite(data.lat) && Number.isFinite(data.lon) ? `${data.lat.toFixed(4)}, ${data.lon.toFixed(4)}` : "—"}
+          />
+          <Field icon={Building2} label="ISP" value={data.isp || "—"} />
+          <Field icon={Wifi} label="Organisation" value={data.org || data.isp || "—"} />
+          <Field icon={Clock} label="Timezone" value={data.timezone || "—"} />
         </div>
       )}
 

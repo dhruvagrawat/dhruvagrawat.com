@@ -2,7 +2,7 @@ import { allProjects } from "@/content/projects"
 import { ProjectsGridClient } from "@/components/project/projects-grid-client"
 
 export const metadata = {
-  title: "Projects | Dhruv Agrawat",
+  title: "Projects",
   description: "Things I've built — side projects, freelance work, and startup experiments.",
 }
 

@@ -2,7 +2,7 @@ import { allBlogs } from "@/content/blogs"
 import { BlogCard } from "@/components/blog/blog-card"
 
 export const metadata = {
-  title: "Blogs | Dhruv Agrawat",
+  title: "Blogs",
   description: "Thoughts on software, startups, and building things.",
 }
 

@@ -6,8 +6,9 @@ import { ArrowLeftRight, Plus, X, Percent, RefreshCw, ChevronDown } from 'lucide
 /* ═══════════════════════════════════════════
    CONSTANTS
 ═══════════════════════════════════════════ */
-const API_KEY = '847bffe2231a058e954b5247'
-const API_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`
+// Free, key-less endpoint (updated daily). The old keyed endpoint exposed an API key
+// in the browser and stops working once its monthly quota runs out.
+const API_URL = 'https://open.er-api.com/v6/latest/USD'
 
 const POPULAR_CURRENCIES = [
     { code: 'USD', name: 'US Dollar', flag: '🇺🇸', symbol: '$' },
@@ -315,7 +316,7 @@ export default function Page() {
             const res = await fetch(API_URL)
             const data = await res.json()
             if (data.result === 'success') {
-                setRates(data.conversion_rates)
+                setRates(data.rates ?? data.conversion_rates)
                 setLast(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }))
                 setError(false)
             } else { setError(true) }

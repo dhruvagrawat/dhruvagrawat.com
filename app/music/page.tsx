@@ -2,7 +2,7 @@ import { allMusic } from "@/content/music"
 import { MusicPageClient } from "@/components/music/music-page-client"
 
 export const metadata = {
-  title: "Music | Dhruv Agrawat",
+  title: "Music",
   description: "Original music and tracks I've produced.",
 }
 
