@@ -103,9 +103,14 @@ export function TrailGallery() {
             <h2 id="trail-title" className="font-display text-4xl leading-none sm:text-6xl">
               When I&apos;m not <span className="italic">shipping</span>, I&apos;m walking uphill.
             </h2>
-            <a href="/photography" className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-              All photographs <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </a>
+            <div className="flex flex-wrap gap-5">
+              <a href="/travel" className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                Travel journal &amp; globe <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </a>
+              <a href="/photography" className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                All photographs <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </a>
+            </div>
           </div>
         </div>
 

@@ -118,30 +118,32 @@ export function CurtainImage({
   className?: string
   imgClassName?: string
 }) {
+  // Observe an unclipped wrapper: a fully clipped element never counts as "in view".
   const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.15 })
   const reduce = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
   const y = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["-8%", "8%"])
   return (
-    <motion.div
-      ref={ref}
-      className={cn("relative overflow-hidden", className)}
-      initial={reduce ? false : { clipPath: "inset(100% 0% 0% 0%)" }}
-      whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 1.2, ease: EASE }}
-    >
-      <motion.img
-        src={src}
-        srcSet={srcSmall ? `${srcSmall} 800w, ${src} 1600w` : undefined}
-        sizes="(max-width: 768px) 90vw, 50vw"
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        className={cn("h-[116%] w-full object-cover will-change-transform", imgClassName)}
-        style={{ y, filter: "var(--photo-filter)" }}
-      />
-    </motion.div>
+    <div ref={ref} className={cn("relative", className)}>
+      <motion.div
+        className="absolute inset-0 overflow-hidden rounded-[inherit]"
+        initial={reduce ? false : { clipPath: "inset(100% 0% 0% 0%)" }}
+        animate={inView || reduce ? { clipPath: "inset(0% 0% 0% 0%)" } : undefined}
+        transition={{ duration: 1.2, ease: EASE }}
+      >
+        <motion.img
+          src={src}
+          srcSet={srcSmall ? `${srcSmall} 800w, ${src} 1600w` : undefined}
+          sizes="(max-width: 768px) 90vw, 70vw"
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          className={cn("h-[116%] w-full object-cover will-change-transform", imgClassName)}
+          style={{ y, filter: "var(--photo-filter)" }}
+        />
+      </motion.div>
+    </div>
   )
 }
 
