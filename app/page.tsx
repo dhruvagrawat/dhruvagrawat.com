@@ -1,257 +1,258 @@
 /* eslint-disable @next/next/no-img-element */
-import BlurFade from "@/components/magicui/blur-fade";
-import BlurFadeText from "@/components/magicui/blur-fade-text";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DATA } from "@/data/resume";
-import Link from "next/link";
-import ContactSection from "@/components/section/contact-section";
-import HackathonsSection from "@/components/section/hackathons-section";
-import ProjectsSection from "@/components/section/projects-section";
-import WorkSection from "@/components/section/work-section";
-import { ArrowUpRight } from "lucide-react";
-import TimeTravelButton from "@/components/time-travel-button";
+import { ArrowUpRight, MapPin } from "lucide-react"
+import { DATA } from "@/data/resume"
+import TimeTravelButton from "@/components/time-travel-button"
+import HackathonsSection from "@/components/section/hackathons-section"
+import { SummitHero } from "@/components/summit/hero"
+import { Kicker, Rise, SmoothScroll, WordsReveal, CurtainImage } from "@/components/summit/motion"
+import { TrailNav } from "@/components/summit/trail-nav"
+import { SummitContact, ToolsTeaser, TrailGallery, WorkTrail } from "@/components/summit/sections"
 
-// Lightweight inline markdown renderer to avoid depending on `react-markdown` typings
-function SimpleMarkdown({ children }: { children: string }) {
-  return (
-    <div>
-      {children.split("\n\n").map((para, idx) => (
-        <p key={idx} className="m-0">
-          {para.split("\n").reduce((acc: any[], line, i) => {
-            if (i > 0) acc.push(<br key={i} />);
-            acc.push(line);
-            return acc;
-          }, [])}
-        </p>
-      ))}
-    </div>
-  );
+export const metadata = {
+  alternates: { canonical: "/" },
 }
 
-const BLUR_FADE_DELAY = 0.04;
+const firstWorkYear = Math.min(...DATA.work.map((w) => Number(w.start.match(/\d{4}/)?.[0] ?? 9999)))
+const yearsExp = new Date().getFullYear() - firstWorkYear
 
-function initialsOf(name: string) {
-  return name
-    .split(/\s+/)
-    .filter((w) => /^[A-Za-z]/.test(w) && w[0] === w[0].toUpperCase())
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("");
-}
-
-const rowClass = "flex items-center gap-x-3 justify-between group";
-
-// Only wrap the row in a link when there's somewhere to go — an empty href
-// with target="_blank" just opens a blank copy of the page.
-function EducationRow({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
-  if (!href) return <div className={rowClass}>{children}</div>;
-  return (
-    <Link href={href} target="_blank" rel="noopener noreferrer" className={rowClass}>
-      {children}
-    </Link>
-  );
-}
-
-const personJsonLd = {
+/* ---------- Structured data: who this is, for search engines and AI assistants ---------- */
+const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: DATA.name,
-  url: DATA.url,
-  image: DATA.avatarUrl,
-  jobTitle: "Full-Stack Software Engineer",
-  description: DATA.description,
-  email: `mailto:${DATA.contact.email}`,
-  address: { "@type": "PostalAddress", addressLocality: "New Delhi", addressCountry: "IN" },
-  alumniOf: DATA.education.map((e) => ({ "@type": "EducationalOrganization", name: e.school })),
-  knowsAbout: DATA.skills.map((s) => s.name),
-  sameAs: Object.values(DATA.contact.social)
-    .filter((s) => s.url.startsWith("http"))
-    .map((s) => s.url),
-};
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${DATA.url}/#website`,
+      url: DATA.url,
+      name: DATA.name,
+      description: DATA.description,
+      inLanguage: "en",
+      publisher: { "@id": `${DATA.url}/#person` },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${DATA.url}/#profile`,
+      url: DATA.url,
+      name: `${DATA.name} — Full-Stack Software Engineer`,
+      isPartOf: { "@id": `${DATA.url}/#website` },
+      mainEntity: { "@id": `${DATA.url}/#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${DATA.url}/#person`,
+      name: DATA.name,
+      url: DATA.url,
+      image: DATA.avatarUrl,
+      jobTitle: "Full-Stack Software Engineer",
+      description: DATA.summary,
+      email: `mailto:${DATA.contact.email}`,
+      address: { "@type": "PostalAddress", addressLocality: "New Delhi", addressCountry: "IN" },
+      worksFor: { "@type": "Organization", name: DATA.work[0].company },
+      alumniOf: DATA.education.map((e) => ({ "@type": "EducationalOrganization", name: e.school })),
+      knowsAbout: DATA.skills.map((s) => s.name),
+      sameAs: Object.values(DATA.contact.social)
+        .filter((s) => s.url.startsWith("http"))
+        .map((s) => s.url),
+    },
+  ],
+}
+
+function Section({
+  id,
+  camp,
+  label,
+  title,
+  italicLast,
+  children,
+  className = "",
+}: {
+  id: string
+  camp: string
+  label: string
+  title: string
+  italicLast?: boolean
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <section id={id} aria-labelledby={`${id}-title`} className={`mx-auto w-full max-w-5xl scroll-mt-8 px-6 py-24 sm:py-32 ${className}`}>
+      <Kicker camp={camp} label={label} />
+      <WordsReveal id={`${id}-title`} text={title} italicLast={italicLast} className="mb-12 max-w-3xl text-4xl leading-[1.02] sm:text-6xl" />
+      {children}
+    </section>
+  )
+}
 
 export default function Page() {
+  const facts: [string, React.ReactNode][] = [
+    ["Role", "Full-stack software engineer & freelancer"],
+    ["Based in", DATA.location],
+    ["Experience", `${yearsExp}+ years building for startups, agencies and clients`],
+    ["Shipped", "30+ custom web applications"],
+    ["Currently", `Co-founder at ${DATA.work[0].company}`],
+    ["Focus", "React, Next.js, Node.js, PostgreSQL"],
+    ["Contact", <a key="e" href={`mailto:${DATA.contact.email}`} className="text-primary underline-offset-4 hover:underline">{DATA.contact.email}</a>],
+  ]
+
   return (
-    <main className="min-h-dvh flex flex-col gap-14 relative">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }}
-      />
+    <div className="relative -mx-6 -mb-24 -mt-12 sm:-mt-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <SmoothScroll />
+      <TrailNav />
       <TimeTravelButton />
-      {/* HERO */}
-      <section id="hero">
-        <div className="mx-auto w-full max-w-4xl space-y-8">
-          <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
-            <div className="gap-2 flex flex-col order-2 md:order-1">
-              <BlurFadeText
-                as="h1"
-                delay={BLUR_FADE_DELAY}
-                className="text-4xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
-                yOffset={8}
-                text={`Hi, I'm ${DATA.name.split(" ")[0]}`}
-              />
-              <BlurFadeText
-                as="p"
-                className="text-muted-foreground max-w-[600px] md:text-lg lg:text-xl"
-                delay={BLUR_FADE_DELAY}
-                text={DATA.description}
-              />
-            </div>
 
-            <BlurFade delay={BLUR_FADE_DELAY} className="order-1 md:order-2">
-              <Avatar className="size-24 md:size-32 border rounded-full shadow-lg ring-4 ring-muted">
-                <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
-                <AvatarFallback>{DATA.initials}</AvatarFallback>
-              </Avatar>
-            </BlurFade>
-          </div>
-        </div>
-      </section>
+      <main>
+        <SummitHero />
 
-      {/* ABOUT */}
-      <section id="about">
-        <div className="mx-auto w-full max-w-4xl flex flex-col gap-y-4">
-          <BlurFade delay={BLUR_FADE_DELAY * 3}>
-            <h2 className="text-xl font-bold">About</h2>
-          </BlurFade>
-
-          <BlurFade delay={BLUR_FADE_DELAY * 4}>
-            <div className="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
-              <SimpleMarkdown>{DATA.summary}</SimpleMarkdown>
-            </div>
-          </BlurFade>
-        </div>
-      </section>
-
-      {/* WORK */}
-      <section id="work">
-        <div className="mx-auto w-full max-w-4xl flex flex-col gap-y-6">
-          <BlurFade delay={BLUR_FADE_DELAY * 5}>
-            <h2 className="text-xl font-bold">Work Experience</h2>
-          </BlurFade>
-
-          <BlurFade delay={BLUR_FADE_DELAY * 6}>
-            <WorkSection />
-          </BlurFade>
-        </div>
-      </section>
-
-      {/* EDUCATION */}
-      <section id="education">
-        <div className="mx-auto w-full max-w-4xl flex flex-col gap-y-6">
-          <BlurFade delay={BLUR_FADE_DELAY * 7}>
-            <h2 className="text-xl font-bold">Education</h2>
-          </BlurFade>
-
-          <div className="flex flex-col gap-8">
-            {DATA.education.map((education, index) => (
-              <BlurFade
-                key={education.school}
-                delay={BLUR_FADE_DELAY * 8 + index * 0.05}
-              >
-                <EducationRow href={education.href}>
-                  <div className="flex items-center gap-x-3 flex-1 min-w-0">
-                    {education.logoUrl ? (
-                      <img
-                        src={education.logoUrl}
-                        alt={education.school}
-                        className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
-                      />
-                    ) : (
-                      <div className="size-8 md:size-10 border rounded-full shadow ring-2 ring-border bg-muted flex-none flex items-center justify-center text-[10px] md:text-xs font-semibold text-muted-foreground">
-                        {initialsOf(education.school)}
-                      </div>
-                    )}
-
-                    <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                      <div className="font-semibold leading-none flex items-center gap-2">
-                        {education.school}
-                        {education.href && (
-                        <ArrowUpRight
-                          className="h-3.5 w-3.5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
-                          aria-hidden
-                        />
-                        )}
-                      </div>
-                      <div className="font-sans text-sm text-muted-foreground">
-                        {education.degree}
-                      </div>
+        {/* ───────────── Base camp · About ───────────── */}
+        <Section id="about" className="!pt-6 sm:!pt-10" camp="Base camp" label="About" title="I build web products that hold up when real people use them." italicLast>
+          <div className="grid gap-12 md:grid-cols-[1fr_17rem] md:gap-16">
+            <div className="space-y-6">
+              <Rise>
+                <p className="text-xl leading-relaxed text-foreground/90 sm:text-2xl">{DATA.description}</p>
+              </Rise>
+              <Rise delay={0.08}>
+                <p className="text-[17px] leading-relaxed text-muted-foreground">{DATA.summary}</p>
+              </Rise>
+              {/* Quick facts — plain, scannable text for people, search engines and AI assistants alike */}
+              <Rise delay={0.12}>
+                <dl className="mt-4 grid gap-x-8 border-t pt-6 sm:grid-cols-2">
+                  {facts.map(([k, v]) => (
+                    <div key={k} className="flex gap-4 border-b py-3 text-sm">
+                      <dt className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground pt-0.5">{k}</dt>
+                      <dd>{v}</dd>
                     </div>
-                  </div>
+                  ))}
+                </dl>
+              </Rise>
+            </div>
 
-                  <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none">
-                    <span>
-                      {education.start} - {education.end}
-                    </span>
-                  </div>
-                </EducationRow>
-              </BlurFade>
-            ))}
+            <Rise delay={0.15} className="mx-auto w-56 md:mx-0 md:w-full">
+              <figure className="rotate-[2.5deg] rounded-sm bg-card p-3 pb-4 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.35)] ring-1 ring-border transition-transform duration-500 hover:rotate-0">
+                <img
+                  src={`${DATA.avatarUrl}?size=460`}
+                  alt={`Portrait of ${DATA.name}`}
+                  width={460}
+                  height={460}
+                  loading="lazy"
+                  className="aspect-square w-full bg-muted object-cover"
+                />
+                <figcaption className="mt-3 flex items-center justify-between font-mono text-[11px] text-muted-foreground">
+                  <span>{DATA.name}</span>
+                  <span className="flex items-center gap-1"><MapPin className="size-3" /> Delhi</span>
+                </figcaption>
+              </figure>
+            </Rise>
           </div>
-        </div>
-      </section>
+        </Section>
 
-      {/* SKILLS */}
-      <section id="skills">
-        <div className="mx-auto w-full max-w-4xl flex flex-col gap-y-4">
-          <BlurFade delay={BLUR_FADE_DELAY * 9}>
-            <h2 className="text-xl font-bold">Skills</h2>
-          </BlurFade>
+        {/* ───────────── Camp I · Work ───────────── */}
+        <Section id="work" camp="Camp I" label="Work" title="Where I've been working." italicLast>
+          <WorkTrail />
+        </Section>
 
-          <div className="flex flex-wrap gap-2">
-            {DATA.skills.map((skill, id) => (
-              <BlurFade
-                key={skill.name}
-                delay={BLUR_FADE_DELAY * 10 + id * 0.05}
-              >
-                <div className="border bg-background border-border ring-2 ring-border/20 rounded-xl h-8 w-fit px-4 flex items-center gap-2">
-                  {skill.icon && (
-                    <skill.icon className="size-4 rounded overflow-hidden object-contain" />
-                  )}
-                  <span className="text-foreground text-sm font-medium">
-                    {skill.name}
+        {/* ───────────── Camp II · The trail (photos) ───────────── */}
+        <TrailGallery />
+
+        {/* ───────────── Camp III · Projects ───────────── */}
+        <Section id="projects" camp="Camp III" label="Projects" title="A few things I've built." italicLast>
+          <ol className="grid gap-5">
+            {DATA.projects.map((p, i) => (
+              <li key={p.title}>
+                <Rise delay={i * 0.06}>
+                  <article className="group grid gap-4 rounded-3xl border bg-card p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_60px_-30px_rgba(0,0,0,0.35)] sm:grid-cols-[5rem_1fr_auto] sm:items-start sm:p-8">
+                    <span className="font-display text-5xl leading-none text-primary/80">{String(i + 1).padStart(2, "0")}</span>
+                    <div>
+                      <h3 className="font-display text-3xl leading-tight">{p.title}</h3>
+                      <p className="mt-2 max-w-2xl text-muted-foreground">{p.description}</p>
+                      <ul className="mt-4 flex flex-wrap gap-2" aria-label="Built with">
+                        {p.technologies.map((t) => (
+                          <li key={t} className="rounded-full border px-3 py-1 font-mono text-[11px] text-muted-foreground">
+                            {t}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <time className="font-mono text-xs text-muted-foreground">{p.dates}</time>
+                  </article>
+                </Rise>
+              </li>
+            ))}
+          </ol>
+          <Rise delay={0.2} className="mt-8">
+            <a href="/projects" className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+              All projects <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          </Rise>
+        </Section>
+
+        {/* ───────────── Camp IV · Skills, education, tools ───────────── */}
+        <section id="skills" aria-labelledby="skills-title" className="scroll-mt-8 py-24 sm:py-32">
+          <div className="mx-auto max-w-5xl px-6">
+            <Kicker camp="Camp IV" label="Skills" />
+            <WordsReveal id="skills-title" text="The kit I carry." italicLast className="mb-12 text-4xl leading-[1.02] sm:text-6xl" />
+          </div>
+
+          {/* two rows of skills gliding in opposite directions */}
+          <div className="pause-on-hover space-y-3 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]" aria-label="Skills">
+            {[0, 1].map((row) => (
+              <div key={row} className={`flex w-max gap-3 ${row ? "animate-marquee-reverse" : "animate-marquee"}`} aria-hidden={row === 1}>
+                {[...DATA.skills, ...DATA.skills, ...DATA.skills, ...DATA.skills].map((s, i) => (
+                  <span key={i} className="flex items-center gap-2.5 rounded-full border bg-card px-5 py-2.5 text-sm font-medium">
+                    <s.icon className="size-5" />
+                    {s.name}
                   </span>
-                </div>
-              </BlurFade>
+                ))}
+              </div>
             ))}
           </div>
-        </div>
-      </section>
+          <ul className="sr-only">
+            {DATA.skills.map((s) => (
+              <li key={s.name}>{s.name}</li>
+            ))}
+          </ul>
 
-      {/* PROJECTS */}
-      <section id="projects">
-        <div className="mx-auto w-full max-w-4xl">
-          <BlurFade delay={BLUR_FADE_DELAY * 11}>
-            <ProjectsSection />
-          </BlurFade>
-        </div>
-      </section>
+          <div className="mx-auto mt-20 grid max-w-5xl gap-16 px-6 md:grid-cols-[1fr_1.4fr]">
+            <div>
+              <h3 className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Education</h3>
+              <ul className="space-y-6">
+                {DATA.education.map((e, i) => (
+                  <Rise key={e.school} delay={i * 0.06}>
+                    <li>
+                      <p className="font-display text-2xl leading-tight">{e.school}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {e.degree} · <time>{e.start}</time>–<time>{e.end}</time>
+                      </p>
+                    </li>
+                  </Rise>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Free tools I&apos;ve built</h3>
+              <ToolsTeaser />
+            </div>
+          </div>
 
-      {/* HACKATHONS — only rendered once there are entries in DATA.hackathons */}
-      {DATA.hackathons.length > 0 && (
-        <section id="hackathons">
-          <div className="mx-auto w-full max-w-4xl">
-            <BlurFade delay={BLUR_FADE_DELAY * 13}>
+          {DATA.hackathons.length > 0 && (
+            <div className="mx-auto mt-24 max-w-4xl px-6">
               <HackathonsSection />
-            </BlurFade>
+            </div>
+          )}
+
+          {/* one more photo before the summit */}
+          <div className="mx-auto mt-24 max-w-5xl px-6">
+            <CurtainImage
+              src="/summit/g5-1600.webp"
+              srcSmall="/summit/g5-800.webp"
+              alt="Cloud pouring over dark forested ridges"
+              className="aspect-[21/9] rounded-3xl"
+            />
           </div>
         </section>
-      )}
 
-      {/* CONTACT */}
-      <section id="contact">
-        <div className="mx-auto w-full max-w-2xl">
-          <BlurFade delay={BLUR_FADE_DELAY * 16}>
-            <ContactSection />
-          </BlurFade>
-        </div>
-      </section>
-    </main>
-
-  );
+        {/* ───────────── Summit · Contact ───────────── */}
+        <SummitContact />
+      </main>
+    </div>
+  )
 }
