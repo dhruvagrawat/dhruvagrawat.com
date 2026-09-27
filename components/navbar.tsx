@@ -108,7 +108,7 @@ function MobileNavbar() {
     ["Blogs", "Articles", "More"].includes(i.label)
   );
   const creativeLinks = DATA.navbar.filter((i) =>
-    ["Music", "Photography", "Resipy"].includes(i.label)
+    ["Music", "Photography", "Resipy", "Go Back in Time"].includes(i.label)
   );
   const socials = Object.entries(DATA.contact.social).filter(([_, s]) => s.navbar);
 
@@ -133,7 +133,11 @@ function MobileNavbar() {
 
               {open === "creative" &&
                 creativeLinks.map((item) => (
-                  <MobileItem key={item.href} href={item.href} label={item.label}>
+                  <MobileItem
+                    key={item.href}
+                    href={item.href}
+                    label={item.label === "Go Back in Time" ? "1999" : item.label}
+                  >
                     <item.icon className="h-5 w-5" />
                   </MobileItem>
                 ))}

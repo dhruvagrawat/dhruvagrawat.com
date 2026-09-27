@@ -8,6 +8,7 @@ import {
   FileText,
   FolderGit2,
   LayoutGrid,
+  History,
 } from "lucide-react";
 
 import { ReactLight } from "@/components/ui/svgs/reactLight";
@@ -15,12 +16,10 @@ import { NextjsIconDark } from "@/components/ui/svgs/nextjsIconDark";
 import { Typescript } from "@/components/ui/svgs/typescript";
 import { Nodejs } from "@/components/ui/svgs/nodejs";
 import { Python } from "@/components/ui/svgs/python";
-import { Golang } from "@/components/ui/svgs/golang";
 import { Postgresql } from "@/components/ui/svgs/postgresql";
 import { Docker } from "@/components/ui/svgs/docker";
-import { Kubernetes } from "@/components/ui/svgs/kubernetes";
 import { Java } from "@/components/ui/svgs/java";
-import { Csharp } from "@/components/ui/svgs/csharp";
+import { Cplusplus } from "@/components/ui/svgs/cplusplus";
 
 export const DATA = {
   name: "Dhruv Agrawat",
@@ -33,9 +32,10 @@ export const DATA = {
     "Full-Stack Software Engineer, Freelancer, and Startup Builder focused on building scalable web products.",
 
   summary:
-    "I am a Full-Stack Software Engineer with 2.5+ years of hands-on experience building web applications, automation tools, and startup products. I’ve worked across freelance, startup, and agency environments, contributing to scalable systems using React, Next.js, Node.js, and modern cloud tooling. I also co-founded a tech agency and actively mentor developers.",
+    "I am a Full-Stack Software Engineer with 3+ years of hands-on experience building web applications, automation tools, and startup products. I’ve worked across freelance, startup, and agency environments, contributing to scalable systems using React, Next.js, Node.js, and modern cloud tooling. I also co-founded a tech agency and actively mentor developers.",
 
-  avatarUrl: "/me.png",
+  // Served from GitHub until a local /public/me.png is added.
+  avatarUrl: "https://github.com/dhruvagrawat.png",
 
   skills: [
     { name: "React", icon: ReactLight },
@@ -46,7 +46,7 @@ export const DATA = {
     { name: "PostgreSQL", icon: Postgresql },
     { name: "Docker", icon: Docker },
     { name: "Java", icon: Java },
-    { name: "C++", icon: Csharp },
+    { name: "C++", icon: Cplusplus },
   ],
 
   navbar: [
@@ -58,6 +58,7 @@ export const DATA = {
     { href: "/music", icon: Music, label: "Music" },
     { href: "/projects", icon: FolderGit2, label: "Projects" },
     { href: "/tools", icon: LayoutGrid, label: "More" },
+    { href: "/1999", icon: History, label: "Go Back in Time" },
   ],
 
   contact: {

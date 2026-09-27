@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/me.png",
+        url: DATA.avatarUrl,
         width: 400,
         height: 400,
         alt: DATA.name,
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     title: `${DATA.name} — Full-Stack Engineer`,
     description: DATA.description,
     creator: "@DhruvAgrawat",
-    images: ["/me.png"],
+    images: [DATA.avatarUrl],
   },
   robots: {
     index: true,
