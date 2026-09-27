@@ -9,6 +9,7 @@ import {
   FolderGit2,
   LayoutGrid,
   History,
+  Globe2,
 } from "lucide-react";
 
 import { ReactLight } from "@/components/ui/svgs/reactLight";
@@ -55,6 +56,7 @@ export const DATA = {
     { href: "/articles", icon: FileText, label: "Articles" },
     { href: "/resipy", icon: BookOpenCheck, label: "Resipy" },
     { href: "/photography", icon: Camera, label: "Photography" },
+    { href: "/travel", icon: Globe2, label: "Travel" },
     { href: "/music", icon: Music, label: "Music" },
     { href: "/projects", icon: FolderGit2, label: "Projects" },
     { href: "/tools", icon: LayoutGrid, label: "More" },

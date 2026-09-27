@@ -108,7 +108,7 @@ function MobileNavbar() {
     ["Blogs", "Articles", "More"].includes(i.label)
   );
   const creativeLinks = DATA.navbar.filter((i) =>
-    ["Music", "Photography", "Resipy", "Go Back in Time"].includes(i.label)
+    ["Music", "Photography", "Travel", "Resipy", "Go Back in Time"].includes(i.label)
   );
   const socials = Object.entries(DATA.contact.social).filter(([_, s]) => s.navbar);
 
