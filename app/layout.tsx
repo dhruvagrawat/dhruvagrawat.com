@@ -4,14 +4,21 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Instrument_Sans, Instrument_Serif, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
-const geist = Geist({
+const sans = Instrument_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const serif = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -26,7 +33,8 @@ export const metadata: Metadata = {
     default: `${DATA.name} — Full-Stack Engineer & Freelancer`,
     template: `%s | ${DATA.name}`,
   },
-  description: DATA.summary,
+  description:
+    "Dhruv Agrawat is a full-stack software engineer and freelancer in New Delhi building fast, scalable web products with React, Next.js and Node.js — plus 25 free online tools.",
   keywords: [
     "Dhruv Agrawat", "Full-Stack Engineer", "Freelancer", "Next.js", "React",
     "TypeScript", "Node.js", "Web Development", "India", "Portfolio",
@@ -35,26 +43,18 @@ export const metadata: Metadata = {
   creator: DATA.name,
   openGraph: {
     title: `${DATA.name} — Full-Stack Engineer & Freelancer`,
-    description: DATA.summary,
+    description:
+      "Full-stack software engineer and freelancer in New Delhi. Work, projects, trek photography and free web tools.",
     url: DATA.url,
     siteName: DATA.name,
     locale: "en_US",
     type: "website",
-    images: [
-      {
-        url: DATA.avatarUrl,
-        width: 400,
-        height: 400,
-        alt: DATA.name,
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${DATA.name} — Full-Stack Engineer`,
     description: DATA.description,
     creator: "@DhruvAgrawat",
-    images: [DATA.avatarUrl],
   },
   robots: {
     index: true,
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: DATA.url,
+    types: { "text/markdown": "/llms.txt" },
   },
   verification: {
     google: "",
@@ -86,23 +86,13 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased relative",
-          geist.variable,
+          sans.variable,
+          serif.variable,
           geistMono.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="light">
+        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
           <TooltipProvider delayDuration={0}>
-            <div className="absolute inset-0 top-0 left-0 right-0 h-25 overflow-hidden z-0">
-              <FlickeringGrid
-                className="h-full w-full"
-                squareSize={2}
-                gridGap={2}
-                style={{
-                  maskImage: "linear-gradient(to bottom, black, transparent)",
-                  WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
-                }}
-              />
-            </div>
             <div className="relative z-10  mx-auto py-12 pb-24 sm:py-24 px-6">
               {children}
             </div>

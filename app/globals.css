@@ -48,213 +48,182 @@
 }
 
 
+/* ─────────────────────────────────────────────────────────────
+   "Summit" theme — warm paper, ink, glacier blue.
+   Dark mode = the same mountain at night.
+   ───────────────────────────────────────────────────────────── */
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.958 0.011 85);          /* paper */
+  --foreground: oklch(0.21 0.012 262);           /* ink */
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card: oklch(0.984 0.006 85);
+  --card-foreground: oklch(0.21 0.012 262);
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --popover: oklch(0.984 0.006 85);
+  --popover-foreground: oklch(0.21 0.012 262);
 
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.47 0.105 248);              /* glacier */
+  --primary-foreground: oklch(0.985 0.004 85);
 
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.925 0.014 85);
+  --secondary-foreground: oklch(0.21 0.012 262);
 
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted: oklch(0.93 0.012 85);
+  --muted-foreground: oklch(0.48 0.015 262);
 
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent: oklch(0.92 0.03 240);
+  --accent-foreground: oklch(0.3 0.08 250);
 
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.577 0.2 27);
 
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.21 0.012 262 / 12%);
+  --input: oklch(0.21 0.012 262 / 16%);
+  --ring: oklch(0.47 0.105 248 / 55%);
 
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --chart-1: oklch(0.47 0.105 248);
+  --chart-2: oklch(0.62 0.12 160);
+  --chart-3: oklch(0.7 0.13 60);
+  --chart-4: oklch(0.55 0.09 300);
+  --chart-5: oklch(0.6 0.15 30);
 
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.975 0.008 85);
+  --sidebar-foreground: oklch(0.21 0.012 262);
+  --sidebar-primary: oklch(0.47 0.105 248);
+  --sidebar-primary-foreground: oklch(0.985 0.004 85);
+  --sidebar-accent: oklch(0.93 0.012 85);
+  --sidebar-accent-foreground: oklch(0.21 0.012 262);
+  --sidebar-border: oklch(0.21 0.012 262 / 12%);
+  --sidebar-ring: oklch(0.47 0.105 248 / 55%);
+
+  /* mountain scene */
+  --ridge-far: oklch(0.72 0.045 245 / 0.72);
+  --ridge-mid: oklch(0.5 0.06 250 / 0.92);
+  --ridge-shade: oklch(0.82 0.025 245);
+  --ridge-snow: oklch(0.97 0.01 240 / 0.85);
+  --mist: oklch(0.99 0.004 85);
+  --photo-filter: none;
+  --grain-opacity: 0.045;
 }
 
 .dark {
-  --background: oklch(0.18 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: oklch(0.175 0.016 258);          /* night */
+  --foreground: oklch(0.94 0.012 85);
 
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.018 258);
+  --card-foreground: oklch(0.94 0.012 85);
 
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.018 258);
+  --popover-foreground: oklch(0.94 0.012 85);
 
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: oklch(0.78 0.09 238);               /* moonlit glacier */
+  --primary-foreground: oklch(0.18 0.02 258);
 
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.25 0.018 258);
+  --secondary-foreground: oklch(0.94 0.012 85);
 
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  --muted: oklch(0.25 0.018 258);
+  --muted-foreground: oklch(0.72 0.015 258);
 
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --accent: oklch(0.3 0.04 250);
+  --accent-foreground: oklch(0.94 0.012 85);
 
   --destructive: oklch(0.704 0.191 22.216);
 
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.78 0.09 238 / 55%);
 
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.78 0.09 238);
+  --chart-2: oklch(0.72 0.13 160);
+  --chart-3: oklch(0.8 0.13 70);
+  --chart-4: oklch(0.7 0.12 300);
+  --chart-5: oklch(0.7 0.16 30);
 
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar: oklch(0.21 0.018 258);
+  --sidebar-foreground: oklch(0.94 0.012 85);
+  --sidebar-primary: oklch(0.78 0.09 238);
+  --sidebar-primary-foreground: oklch(0.18 0.02 258);
+  --sidebar-accent: oklch(0.25 0.018 258);
+  --sidebar-accent-foreground: oklch(0.94 0.012 85);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.78 0.09 238 / 55%);
+
+  --ridge-far: oklch(0.34 0.04 255 / 0.8);
+  --ridge-mid: oklch(0.24 0.03 258 / 0.95);
+  --ridge-shade: oklch(0.3 0.03 255);
+  --ridge-snow: oklch(0.55 0.03 245 / 0.6);
+  --mist: oklch(0.6 0.02 250);
+  --photo-filter: brightness(0.5) saturate(0.75) hue-rotate(8deg);
+  --grain-opacity: 0.06;
 }
 
+@theme inline {
+  --font-display: var(--font-serif), "Instrument Serif", Georgia, "Times New Roman", serif;
+}
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--border);
   }
-
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    background: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "ss01", "cv11";
+  }
+  /* Page titles everywhere use the display serif */
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400 !important;
+    letter-spacing: -0.015em;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 25%, transparent);
   }
 }
 
-
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #000;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-
-.music-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 24px;
-}
-
-@media (max-width: 640px) {
-  .music-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 16px;
-  }
-}
-
-.music-card {
-  transition: all 0.3s ease;
-}
-
-.music-card:hover {
-  transform: translateY(-5px);
-}
-
-.music-card.playing {
-  box-shadow: 0 0 0 2px #1db954;
-}
-
-.player-progress {
-  height: 4px;
-  background: #333;
-  border-radius: 2px;
-}
-
-.player-progress-filled {
-  background: #1db954;
-  height: 100%;
-  transition: width 0.1s linear;
-}
-
-.player-controls button:hover {
-  transform: scale(1.1);
-}
-
-
-.admin-section {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.5s ease;
-}
-
-.admin-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.admin-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px -15px rgba(255, 255, 255, 0.1);
-}
-
-.blur-content {
-  filter: blur(8px);
+/* Paper grain over the whole site — tiny SVG noise, no network request */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
   pointer-events: none;
-  user-select: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+.dark body::after {
+  mix-blend-mode: screen;
 }
 
-
-@layer base {
-
-  .shiki,
-  .shiki span {
-    background: transparent;
-  }
-
-  .prose pre {
-    @apply bg-transparent font-mono;
-  }
-
-  .prose code {
-    @apply border rounded-md px-1.5 py-0.5 bg-muted/60 dark:bg-muted/40 text-[13px] font-mono;
-  }
-
-  .prose a {
-    @apply text-primary underline underline-offset-4;
-  }
-
-  .prose blockquote {
-    @apply border-l-4 border-amber-500 pl-4 italic bg-muted/50 rounded-md;
-  }
+/* Clouds drifting on their own, independent of scroll */
+@keyframes drift {
+  from { transform: translate3d(-4%, 0, 0); }
+  to   { transform: translate3d(4%, 0, 0); }
 }
+.animate-drift { animation: drift 22s ease-in-out infinite alternate; }
+.animate-drift-slow { animation: drift 38s ease-in-out infinite alternate-reverse; }
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.animate-marquee { animation: marquee 40s linear infinite; }
+.animate-marquee-reverse { animation: marquee 46s linear infinite reverse; }
+.pause-on-hover:hover .animate-marquee,
+.pause-on-hover:hover .animate-marquee-reverse { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift, .animate-drift-slow, .animate-marquee, .animate-marquee-reverse { animation: none; }
+}
+
+/* Lenis smooth scrolling */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
