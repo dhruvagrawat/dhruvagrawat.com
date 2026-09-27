@@ -2,6 +2,18 @@ import type { Metadata } from "next"
 import {
   Activity,
   ArrowLeftRight,
+  CaseSensitive,
+  Cake,
+  Diff,
+  FileKey,
+  ImageDown,
+  Landmark,
+  Link2,
+  Percent,
+  PiggyBank,
+  Receipt,
+  Regex,
+  Ruler,
   Binary,
   Braces,
   Clock,
@@ -25,7 +37,7 @@ import { DATA } from "@/data/resume"
    JSON-LD, the FAQ + "related tools" blocks, and the sitemap.
    ========================================================= */
 
-export type ToolCategory = "Live Data" | "Developer" | "Utilities" | "Services"
+export type ToolCategory = "Live Data" | "Calculators" | "Developer" | "Utilities" | "Services"
 
 export interface ToolDef {
   slug: string
@@ -49,12 +61,13 @@ export interface ToolDef {
 
 export const CATEGORY_INFO: Record<ToolCategory, string> = {
   "Live Data": "Real-time information pulled from the internet",
+  Calculators: "Money, maths and everyday calculators — instant results, no sign-up",
   Developer: "Everyday developer utilities — everything runs in your browser",
   Utilities: "Handy tools that run entirely in your browser — no server needed",
   Services: "My service info and monitoring",
 }
 
-export const CATEGORY_ORDER: ToolCategory[] = ["Live Data", "Developer", "Utilities", "Services"]
+export const CATEGORY_ORDER: ToolCategory[] = ["Live Data", "Calculators", "Developer", "Utilities", "Services"]
 
 export const TOOLS: ToolDef[] = [
   /* ---------------- Live data ---------------- */
@@ -120,6 +133,108 @@ export const TOOLS: ToolDef[] = [
       { q: "What is a public IP address?", a: "It's the address the rest of the internet sees when you connect — usually assigned by your ISP to your router, and shared by every device on your network." },
       { q: "How accurate is the location?", a: "IP location is approximate — usually the right city or region, but it can point to your ISP's nearest hub instead of your exact address." },
       { q: "Is my IP stored?", a: "No. It's looked up once to show you the result and isn't logged." },
+    ],
+  },
+
+  /* ---------------- Calculators ---------------- */
+  {
+    slug: "emi-calculator",
+    label: "EMI Calculator",
+    title: "EMI Calculator — Home, Car & Personal Loan EMI with Amortization",
+    description:
+      "Calculate your monthly loan EMI, total interest and total payment for home, car or personal loans. See a year-by-year amortization schedule and principal vs interest split.",
+    blurb: "Monthly EMI, total interest and a full amortization schedule.",
+    keywords: ["emi calculator", "loan emi calculator", "home loan emi", "car loan emi", "personal loan calculator", "amortization schedule"],
+    category: "Calculators",
+    icon: Landmark,
+    isNew: true,
+    faq: [
+      { q: "How is EMI calculated?", a: "EMI = P × r × (1 + r)^n ÷ ((1 + r)^n − 1), where P is the loan amount, r is the monthly interest rate (annual rate ÷ 12 ÷ 100) and n is the number of monthly instalments." },
+      { q: "Does a longer tenure reduce my cost?", a: "It lowers the monthly EMI but increases the total interest you pay. The calculator shows both so you can compare." },
+      { q: "Does this include processing fees or insurance?", a: "No — it covers principal and interest only. Lenders may add processing fees, GST on fees and optional insurance." },
+    ],
+  },
+  {
+    slug: "sip-calculator",
+    label: "SIP Calculator",
+    title: "SIP Calculator — Mutual Fund SIP Returns with Step-Up",
+    description:
+      "Estimate the future value of a monthly SIP in mutual funds. Add an annual step-up, see invested amount vs estimated returns, and a year-by-year growth table.",
+    blurb: "Future value of a monthly SIP, with optional annual step-up.",
+    keywords: ["sip calculator", "mutual fund calculator", "sip return calculator", "step up sip calculator", "investment calculator"],
+    category: "Calculators",
+    icon: PiggyBank,
+    isNew: true,
+    faq: [
+      { q: "How does the SIP calculator work?", a: "Each monthly instalment is compounded at the expected annual return (converted to a monthly rate) until the end of the period, assuming you invest at the start of each month." },
+      { q: "What is a step-up SIP?", a: "Increasing your monthly SIP by a fixed percentage every year — for example 10% — usually in line with salary hikes. It can grow the final corpus considerably." },
+      { q: "Are the returns guaranteed?", a: "No. Mutual fund returns vary with the market; this is an estimate based on a constant rate of return, not financial advice." },
+    ],
+  },
+  {
+    slug: "gst-calculator",
+    label: "GST Calculator",
+    title: "GST Calculator India — Add or Remove GST (5%, 18%, 40%)",
+    description:
+      "Add GST to a price or remove GST from an inclusive amount with the current slabs (0.25%, 3%, 5%, 18%, 40%) or any custom rate. Shows CGST, SGST and IGST split instantly.",
+    blurb: "Add or remove GST with CGST / SGST / IGST split.",
+    keywords: ["gst calculator", "gst calculator india", "reverse gst calculator", "gst inclusive calculator", "cgst sgst calculator", "18% gst"],
+    category: "Calculators",
+    icon: Receipt,
+    isNew: true,
+    faq: [
+      { q: "What are the current GST rates?", a: "Since 22 September 2025 (GST 2.0), most goods and services fall under 5% or 18%, with 40% for luxury and sin goods. Special rates of 3% (gold, silver) and 0.25% (rough diamonds) still apply, and some essentials are exempt." },
+      { q: "How do I remove GST from an inclusive price?", a: "Base price = inclusive price × 100 ÷ (100 + GST rate). For 18% GST, ₹1,180 inclusive means a ₹1,000 base price and ₹180 GST." },
+      { q: "When is it CGST + SGST vs IGST?", a: "Sales within the same state are split equally into CGST and SGST. Sales between states (and imports) attract IGST at the full rate." },
+    ],
+  },
+  {
+    slug: "percentage-calculator",
+    label: "Percentage Calculator",
+    title: "Percentage Calculator — % of a Number, % Change & More",
+    description:
+      "Work out X% of a number, what percent one number is of another, percentage increase or decrease, and discounts — all on one page with the formula shown.",
+    blurb: "% of a number, % change, discounts — with formulas.",
+    keywords: ["percentage calculator", "percent of a number", "percentage increase calculator", "percentage change", "discount calculator"],
+    category: "Calculators",
+    icon: Percent,
+    isNew: true,
+    faq: [
+      { q: "How do I calculate percentage change?", a: "Percentage change = (new − old) ÷ old × 100. A rise from 80 to 100 is a 25% increase." },
+      { q: "How do I find what percent X is of Y?", a: "Divide X by Y and multiply by 100. For example, 45 of 60 is 45 ÷ 60 × 100 = 75%." },
+    ],
+  },
+  {
+    slug: "age-calculator",
+    label: "Age Calculator",
+    title: "Age Calculator — Exact Age in Years, Months & Days",
+    description:
+      "Find your exact age in years, months and days from your date of birth, plus total days, weeks and hours lived, and a countdown to your next birthday.",
+    blurb: "Exact age in years, months and days, plus next birthday.",
+    keywords: ["age calculator", "date of birth calculator", "how old am i", "age in days", "birthday countdown"],
+    category: "Calculators",
+    icon: Cake,
+    isNew: true,
+    faq: [
+      { q: "How is age calculated?", a: "By counting full years, then full months, then remaining days between your date of birth and the chosen date — the same way age is counted on official forms." },
+      { q: "Can I calculate age on a past or future date?", a: "Yes. Change the 'age on' date to find someone's age on any day, such as an exam cut-off date." },
+      { q: "What about birthdays on 29 February?", a: "In non-leap years the next birthday is counted as 1 March." },
+    ],
+  },
+  {
+    slug: "unit-converter",
+    label: "Unit Converter",
+    title: "Unit Converter — Length, Weight, Temperature, Area & More",
+    description:
+      "Convert between metric and imperial units for length, weight, temperature, area, volume, speed and digital storage. Fast, accurate and works offline once loaded.",
+    blurb: "Length, weight, temperature, area, volume, speed and data.",
+    keywords: ["unit converter", "cm to inches", "kg to lbs", "celsius to fahrenheit", "km to miles", "sq ft to sq m", "mb to gb"],
+    category: "Calculators",
+    icon: Ruler,
+    isNew: true,
+    faq: [
+      { q: "Which units are supported?", a: "Length, weight, temperature, area, volume, speed and digital storage — with common metric, imperial and US units in each." },
+      { q: "Is 1 GB 1000 MB or 1024 MB?", a: "Both are used. The converter lists decimal units (KB, MB, GB = powers of 1000) and binary units (KiB, MiB, GiB = powers of 1024) separately." },
     ],
   },
 
@@ -209,6 +324,72 @@ export const TOOLS: ToolDef[] = [
     ],
   },
 
+  {
+    slug: "jwt-decoder",
+    label: "JWT Decoder",
+    title: "JWT Decoder — Decode JSON Web Tokens Online",
+    description:
+      "Paste a JWT to decode its header and payload, see issued-at and expiry times in your time zone, and check whether the token has expired. Decoded locally — tokens never leave your browser.",
+    blurb: "Decode JWT header & payload, check expiry. Nothing is uploaded.",
+    keywords: ["jwt decoder", "decode jwt", "jwt parser", "json web token decoder", "jwt expiry checker"],
+    category: "Developer",
+    icon: FileKey,
+    isNew: true,
+    faq: [
+      { q: "Is it safe to paste my token here?", a: "Decoding happens entirely in your browser — the token is never sent anywhere. Still, treat production tokens like passwords and avoid sharing them." },
+      { q: "Does this verify the signature?", a: "No. It decodes the header and payload, which are only Base64URL-encoded. Verifying the signature requires the secret or public key and should happen on your server." },
+      { q: "What do exp, iat and nbf mean?", a: "exp is the expiry time, iat is when the token was issued, and nbf is 'not before'. All are Unix timestamps in seconds; the decoder shows them as readable dates." },
+    ],
+  },
+  {
+    slug: "url-encoder",
+    label: "URL Encoder / Decoder",
+    title: "URL Encode & Decode Online — Percent-Encoding and Query Parser",
+    description:
+      "Percent-encode or decode URLs and query strings, and break any URL into protocol, host, path and a readable table of query parameters.",
+    blurb: "Percent-encode / decode and parse query parameters.",
+    keywords: ["url encoder", "url decoder", "urlencode online", "percent encoding", "query string parser"],
+    category: "Developer",
+    icon: Link2,
+    isNew: true,
+    faq: [
+      { q: "What's the difference between encodeURI and encodeURIComponent?", a: "encodeURIComponent escapes everything that isn't safe inside a single query value (including / ? & =). encodeURI keeps those characters so a full URL stays usable." },
+      { q: "Why do spaces become %20 or +?", a: "%20 is standard percent-encoding. + means a space only in HTML form data (application/x-www-form-urlencoded); the decoder handles both." },
+    ],
+  },
+  {
+    slug: "regex-tester",
+    label: "Regex Tester",
+    title: "Regex Tester — Test JavaScript Regular Expressions Live",
+    description:
+      "Write a regular expression and see every match highlighted live, with capture groups, named groups, flags and a replace preview. Uses the JavaScript regex engine.",
+    blurb: "Live match highlighting, groups and replace preview.",
+    keywords: ["regex tester", "regular expression tester", "regex online", "javascript regex", "regex checker"],
+    category: "Developer",
+    icon: Regex,
+    isNew: true,
+    faq: [
+      { q: "Which regex flavour is used?", a: "JavaScript (ECMAScript), the same engine your browser and Node.js use. Most syntax also works in Python, Java and PCRE, but lookbehind and named-group syntax can differ." },
+      { q: "What do the flags mean?", a: "g finds all matches, i ignores case, m makes ^ and $ match at line breaks, s lets . match newlines, and u enables full Unicode." },
+    ],
+  },
+  {
+    slug: "diff-checker",
+    label: "Diff Checker",
+    title: "Diff Checker — Compare Two Texts and Find Differences",
+    description:
+      "Paste two versions of text or code and see added and removed lines highlighted side by side. Ignore whitespace or case. Runs in your browser — nothing is uploaded.",
+    blurb: "Compare two texts line by line with highlighted changes.",
+    keywords: ["diff checker", "text compare", "compare two texts", "diff tool online", "code compare"],
+    category: "Developer",
+    icon: Diff,
+    isNew: true,
+    faq: [
+      { q: "How does the comparison work?", a: "It finds the longest common sequence of lines between the two texts, then marks everything else as added or removed — the same idea behind git diff." },
+      { q: "Is there a size limit?", a: "It comfortably handles a few thousand lines. Very large files are better compared with git diff or a desktop tool." },
+    ],
+  },
+
   /* ---------------- Utilities ---------------- */
   {
     slug: "word-counter",
@@ -272,6 +453,40 @@ export const TOOLS: ToolDef[] = [
     faq: [
       { q: "Are the passwords really random?", a: "Yes. They use crypto.getRandomValues, the browser's cryptographically secure random number generator." },
       { q: "How long should a password be?", a: "At least 16 characters for important accounts. Length matters more than symbols — and use a password manager so you don't have to remember them." },
+    ],
+  },
+
+  {
+    slug: "case-converter",
+    label: "Case Converter",
+    title: "Case Converter — UPPER, lower, Title, camelCase, snake_case",
+    description:
+      "Convert text to UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, kebab-case and CONSTANT_CASE in one click.",
+    blurb: "UPPER, lower, Title, camelCase, snake_case and more.",
+    keywords: ["case converter", "uppercase to lowercase", "title case converter", "camelcase converter", "snake case converter"],
+    category: "Utilities",
+    icon: CaseSensitive,
+    isNew: true,
+    faq: [
+      { q: "What's the difference between Title Case and Sentence case?", a: "Title Case capitalises the main words, as in headlines; Sentence case only capitalises the first word of each sentence (and proper nouns)." },
+      { q: "When do developers use camelCase vs snake_case?", a: "camelCase is common in JavaScript and Java, snake_case in Python and databases, kebab-case in URLs and CSS, and CONSTANT_CASE for constants." },
+    ],
+  },
+  {
+    slug: "image-compressor",
+    label: "Image Compressor",
+    title: "Image Compressor — Compress & Resize JPG, PNG, WebP Online",
+    description:
+      "Shrink image file sizes and resize photos in your browser. Convert to JPEG, WebP or PNG, adjust quality, and compare before and after — images are never uploaded.",
+    blurb: "Compress, resize and convert images — never uploaded.",
+    keywords: ["image compressor", "compress jpg", "reduce image size", "resize image", "png to webp", "compress image to 100kb"],
+    category: "Utilities",
+    icon: ImageDown,
+    isNew: true,
+    faq: [
+      { q: "Are my images uploaded?", a: "No. Compression uses your browser's canvas, so photos never leave your device — safe for personal documents." },
+      { q: "Which format gives the smallest file?", a: "WebP is usually 25–35% smaller than JPEG at similar quality. Use PNG only for graphics that need transparency or sharp edges." },
+      { q: "How do I get under a size limit like 100 KB?", a: "Lower the quality slider and reduce the maximum width until the 'after' size is below the limit — the new size updates instantly." },
     ],
   },
 
