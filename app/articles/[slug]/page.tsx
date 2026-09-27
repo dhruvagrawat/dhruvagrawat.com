@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const loader = articleRegistry[slug]
   if (!loader) return {}
   const { metadata } = await loader()
-  return { title: `${metadata.title} | Dhruv Agrawat`, description: metadata.description }
+  return { title: metadata.title, description: metadata.description }
 }
 
 export default async function ArticleDetailPage({ params }: { params: Promise<{ slug: string }> }) {

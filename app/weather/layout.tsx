@@ -1,10 +1,8 @@
-import type { Metadata } from "next"
+import { toolMetadata } from "@/lib/tools"
+import { ToolLayout } from "@/components/tools/tool-seo"
 
-export const metadata: Metadata = {
-  title: "Weather",
-  description: "Real-time weather for any city — powered by Open-Meteo, always free, no API key.",
-}
+export const metadata = toolMetadata("weather")
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return <ToolLayout slug="weather">{children}</ToolLayout>
 }

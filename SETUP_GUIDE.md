@@ -214,3 +214,13 @@ All endpoints are protected and use Supabase authentication:
 /public/images
   (Generated images for all content)
 ```
+
+## Status page (/status)
+
+1. Run `scripts/05-status-tables.sql` in the Supabase SQL editor and add your services to `status_services`.
+2. Set these environment variables in Vercel:
+   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` — to read the status data
+   - `SUPABASE_SERVICE_ROLE_KEY` — lets the site run and save checks
+   - `STATUS_PRIVATE_PASSWORD` — password for the private "Client Services" section (checked on the server; private services are never sent to the browser without it)
+   - `CRON_SECRET` (optional) — protects `/api/status/check`
+3. Checks run automatically whenever someone opens /status and the last check is over 5 minutes old, plus once a day through the Vercel cron in `vercel.json`.

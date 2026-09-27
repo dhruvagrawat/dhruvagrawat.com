@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { RefreshCw, Copy, Check, ShieldCheck, ShieldAlert, ShieldX } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
@@ -41,7 +41,12 @@ function strength(pw: string): { label: string; score: number } {
 export default function PasswordPage() {
   const [length, setLength] = useState(20)
   const [opts, setOpts] = useState({ upper: true, lower: true, nums: true, syms: false })
-  const [password, setPassword] = useState(() => generate(20, { upper: true, lower: true, nums: true, syms: false }))
+  // Generated after mount — generating during render gives the server and browser
+  // different random passwords (hydration mismatch).
+  const [password, setPassword] = useState("")
+  useEffect(() => {
+    setPassword(generate(20, { upper: true, lower: true, nums: true, syms: false }))
+  }, [])
   const [copied, setCopied] = useState(false)
 
   const regen = useCallback(() => setPassword(generate(length, opts)), [length, opts])

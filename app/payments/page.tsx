@@ -125,10 +125,17 @@ function PayCard({
         <div className="self-start rounded-xl border border-white/8 bg-white/4 backdrop-blur-sm overflow-hidden">
 
             {/* Header */}
-            <button
-                type="button"
-                className={`w-full flex items-center gap-3 px-4 py-3.5 text-left ${inactive ? 'cursor-default' : 'hover:bg-white/4 transition-colors'}`}
+            {/* div, not <button>: it contains the Open/Share buttons, and buttons can't be nested */}
+            <div
+                role="button"
+                tabIndex={inactive ? -1 : 0}
+                aria-expanded={inactive ? undefined : open}
+                className={`w-full flex items-center gap-3 px-4 py-3.5 text-left ${inactive ? 'cursor-default' : 'cursor-pointer hover:bg-white/4 transition-colors'}`}
                 onClick={() => !inactive && setOpen(o => !o)}
+                onKeyDown={(e) => {
+                    if (inactive || e.target !== e.currentTarget) return
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(o => !o) }
+                }}
             >
                 {/* Logo */}
                 <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center overflow-hidden shrink-0">
@@ -169,7 +176,7 @@ function PayCard({
                         className={`text-zinc-600 transition-transform duration-200 shrink-0 ml-1 ${open ? 'rotate-180' : ''}`}
                     />
                 )}
-            </button>
+            </div>
 
             {/* Expanded body */}
             {open && (

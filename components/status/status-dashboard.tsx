@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { CheckCircle2, XCircle, AlertCircle, Lock, RefreshCw, Eye, EyeOff } from "lucide-react"
+import { CheckCircle2, XCircle, AlertCircle, Lock, RefreshCw, Eye, EyeOff, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -14,6 +14,7 @@ interface HistoryEntry {
   status: CheckStatus
   response_time_ms: number | null
   status_code: number | null
+  error_message?: string | null
   checked_at: string
 }
 
@@ -25,12 +26,7 @@ interface Service {
   description: string | null
   is_private: boolean
   type: string
-  latest: {
-    status: CheckStatus
-    response_time_ms: number | null
-    status_code: number | null
-    checked_at: string
-  } | null
+  latest: HistoryEntry | null
   history: HistoryEntry[]
   uptimePct: number | null
 }
@@ -40,19 +36,38 @@ interface Service {
 function statusColor(s: CheckStatus | undefined) {
   if (s === "up") return "bg-emerald-500"
   if (s === "degraded") return "bg-amber-400"
-  return "bg-red-500"
+  if (s === "down") return "bg-red-500"
+  return "bg-muted"
 }
 
+// `undefined` means no check has run yet — shown as "Pending", never as "Down".
 function statusLabel(s: CheckStatus | undefined) {
   if (s === "up") return "Operational"
   if (s === "degraded") return "Degraded"
-  return "Down"
+  if (s === "down") return "Down"
+  return "Pending"
 }
 
 function StatusIcon({ status, size = 18 }: { status: CheckStatus | undefined; size?: number }) {
   if (status === "up") return <CheckCircle2 size={size} className="text-emerald-500 shrink-0" />
   if (status === "degraded") return <AlertCircle size={size} className="text-amber-400 shrink-0" />
-  return <XCircle size={size} className="text-red-500 shrink-0" />
+  if (status === "down") return <XCircle size={size} className="text-red-500 shrink-0" />
+  return <Clock size={size} className="text-muted-foreground shrink-0" />
+}
+
+function badgeClass(s: CheckStatus | undefined) {
+  if (s === "up") return "bg-emerald-500/10 text-emerald-500"
+  if (s === "degraded") return "bg-amber-400/10 text-amber-500"
+  if (s === "down") return "bg-red-500/10 text-red-500"
+  return "bg-muted text-muted-foreground"
+}
+
+interface StatusResponse {
+  services: Service[]
+  privateCount: number
+  privateUnlocked: boolean
+  privateConfigured: boolean
+  canCheck: boolean
 }
 
 interface TooltipState {
@@ -91,8 +106,8 @@ function BarTooltip({ state }: { state: TooltipState }) {
             {entry.status_code ? <span className="ml-1 opacity-60">· HTTP {entry.status_code}</span> : null}
           </p>
         )}
-        {(entry as any).error_message && (
-          <p className="mt-1 text-amber-400 wrap-break-word">{(entry as any).error_message}</p>
+        {entry.error_message && (
+          <p className="mt-1 text-amber-400 wrap-break-word">{entry.error_message}</p>
         )}
       </div>
       {/* arrow */}
@@ -106,7 +121,7 @@ function HistoryBar({ history }: { history: HistoryEntry[] }) {
   const slots = 30
   const padded: (HistoryEntry | null)[] = [
     ...Array(Math.max(0, slots - history.length)).fill(null),
-    ...history.slice(0, slots),
+    ...history.slice(-slots), // history is oldest → newest, so newest ends up on the right
   ]
 
   return (
@@ -176,13 +191,7 @@ function ServiceRow({ svc }: { svc: Service }) {
           )}
           <Badge
             variant="outline"
-            className={`text-xs px-2 py-0.5 border-0 ${
-              svc.latest?.status === "up"
-                ? "bg-emerald-500/10 text-emerald-500"
-                : svc.latest?.status === "degraded"
-                ? "bg-amber-400/10 text-amber-400"
-                : "bg-red-500/10 text-red-500"
-            }`}
+            className={`text-xs px-2 py-0.5 border-0 ${badgeClass(svc.latest?.status)}`}
           >
             {statusLabel(svc.latest?.status)}
           </Badge>
@@ -193,7 +202,9 @@ function ServiceRow({ svc }: { svc: Service }) {
 
       {svc.latest && (
         <div className="flex justify-between mt-1">
-          <span className="text-xs text-muted-foreground">30 checks</span>
+          <span className="text-xs text-muted-foreground">
+            Last {Math.min(30, svc.history.length)} checks
+          </span>
           <span className="text-xs text-muted-foreground">{timeAgo(svc.latest.checked_at)}</span>
         </div>
       )}
@@ -204,9 +215,16 @@ function ServiceRow({ svc }: { svc: Service }) {
 // ── Group section ────────────────────────────────────────────────────────────
 
 function ServiceGroup({ name, services }: { name: string; services: Service[] }) {
-  const allUp = services.every((s) => s.latest?.status === "up")
-  const anyDown = services.some((s) => s.latest?.status === "down")
-  const groupStatus: CheckStatus = anyDown ? "down" : allUp ? "up" : "degraded"
+  const checked = services.filter((s) => s.latest)
+  const anyDown = checked.some((s) => s.latest?.status === "down")
+  const anyDegraded = checked.some((s) => s.latest?.status === "degraded")
+  const groupStatus: CheckStatus | undefined = !checked.length
+    ? undefined
+    : anyDown
+    ? "down"
+    : anyDegraded
+    ? "degraded"
+    : "up"
 
   return (
     <section className="mb-8">
@@ -217,8 +235,10 @@ function ServiceGroup({ name, services }: { name: string; services: Service[] })
             groupStatus === "up"
               ? "text-emerald-500"
               : groupStatus === "degraded"
-              ? "text-amber-400"
-              : "text-red-500"
+              ? "text-amber-500"
+              : groupStatus === "down"
+              ? "text-red-500"
+              : "text-muted-foreground"
           }`}
         >
           {statusLabel(groupStatus)}
@@ -234,25 +254,35 @@ function ServiceGroup({ name, services }: { name: string; services: Service[] })
 }
 
 // ── Private section ──────────────────────────────────────────────────────────
+// The password is checked on the server: private services are never sent to the
+// browser until the right password is supplied.
 
-function PrivateSection({ services }: { services: Service[] }) {
-  const [unlocked, setUnlocked] = useState(false)
+function PrivateSection({
+  services,
+  count,
+  configured,
+  unlocked,
+  onUnlock,
+}: {
+  services: Service[]
+  count: number
+  configured: boolean
+  unlocked: boolean
+  onUnlock: (pw: string) => Promise<boolean>
+}) {
   const [input, setInput] = useState("")
   const [showPw, setShowPw] = useState(false)
   const [error, setError] = useState(false)
+  const [busy, setBusy] = useState(false)
 
-  // Restore from sessionStorage so refresh doesn't lock again
-  useEffect(() => {
-    setUnlocked(sessionStorage.getItem("status_unlocked") === "1")
-  }, [])
+  if (!configured && count === 0) return null
 
-  function attempt() {
-    const pw = process.env.NEXT_PUBLIC_STATUS_PRIVATE_PASSWORD
-    if (!pw || input === pw) {
-      setUnlocked(true)
-      sessionStorage.setItem("status_unlocked", "1")
-      setError(false)
-    } else {
+  async function attempt() {
+    if (!input) return
+    setBusy(true)
+    const ok = await onUnlock(input)
+    setBusy(false)
+    if (!ok) {
       setError(true)
       setTimeout(() => setError(false), 1500)
     }
@@ -266,45 +296,57 @@ function PrivateSection({ services }: { services: Service[] }) {
         <Badge variant="secondary" className="text-xs">Private</Badge>
       </div>
 
-      <div className="relative rounded-xl border bg-card overflow-hidden">
-        {/* Always render the rows — blur them when locked */}
-        <div className={`px-4 transition-all duration-300 ${unlocked ? "" : "blur-sm select-none pointer-events-none"}`}>
+      {unlocked ? (
+        <div className="rounded-xl border bg-card px-4">
           {services.length === 0 ? (
             <p className="py-6 text-sm text-muted-foreground text-center">No private services added yet.</p>
           ) : (
             services.map((svc) => <ServiceRow key={svc.id} svc={svc} />)
           )}
         </div>
-
-        {/* Password overlay */}
-        {!unlocked && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/60 backdrop-blur-sm">
-            <Lock size={28} className="text-muted-foreground" />
-            <p className="text-sm font-medium">Enter password to view client services</p>
-            <div className="flex gap-2 w-full max-w-xs">
-              <div className="relative flex-1">
-                <Input
-                  type={showPw ? "text" : "password"}
-                  placeholder="Password"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && attempt()}
-                  className={error ? "border-red-500" : ""}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPw(!showPw)}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
-                </button>
+      ) : (
+        <div className="rounded-xl border bg-card flex flex-col items-center justify-center gap-3 px-4 py-10 text-center">
+          <Lock size={28} className="text-muted-foreground" />
+          <p className="text-sm font-medium">
+            {count > 0
+              ? `${count} client service${count === 1 ? "" : "s"} hidden`
+              : "Client services are hidden"}
+          </p>
+          {configured ? (
+            <>
+              <div className="flex gap-2 w-full max-w-xs">
+                <div className="relative flex-1">
+                  <Input
+                    type={showPw ? "text" : "password"}
+                    placeholder="Password"
+                    aria-label="Password for client services"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && attempt()}
+                    className={error ? "border-red-500" : ""}
+                  />
+                  <button
+                    type="button"
+                    aria-label={showPw ? "Hide password" : "Show password"}
+                    onClick={() => setShowPw(!showPw)}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
+                </div>
+                <Button onClick={attempt} size="sm" disabled={busy}>
+                  {busy ? "Checking…" : "Unlock"}
+                </Button>
               </div>
-              <Button onClick={attempt} size="sm">Unlock</Button>
-            </div>
-            {error && <p className="text-xs text-red-500">Incorrect password</p>}
-          </div>
-        )}
-      </div>
+              {error && <p className="text-xs text-red-500">Incorrect password</p>}
+            </>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Set <code>STATUS_PRIVATE_PASSWORD</code> to enable this section.
+            </p>
+          )}
+        </div>
+      )}
     </section>
   )
 }
@@ -313,29 +355,36 @@ function PrivateSection({ services }: { services: Service[] }) {
 
 function OverallBanner({ services }: { services: Service[] }) {
   const publicServices = services.filter((s) => !s.is_private)
-  const anyDown = publicServices.some((s) => s.latest?.status === "down")
-  const anyDegraded = publicServices.some((s) => s.latest?.status === "degraded")
-  const allUp = !anyDown && !anyDegraded
+  const checked = publicServices.filter((s) => s.latest)
+  const anyDown = checked.some((s) => s.latest?.status === "down")
+  const anyDegraded = checked.some((s) => s.latest?.status === "degraded")
+  const pending = checked.length === 0
+  const allUp = !pending && !anyDown && !anyDegraded
+
+  const tone = pending
+    ? "bg-muted/40 border-border"
+    : allUp
+    ? "bg-emerald-500/5 border-emerald-500/20"
+    : anyDown
+    ? "bg-red-500/5 border-red-500/20"
+    : "bg-amber-400/5 border-amber-400/20"
+  const dot = pending ? "bg-muted-foreground" : allUp ? "bg-emerald-500" : anyDown ? "bg-red-500" : "bg-amber-400"
+  const headline = pending
+    ? "Waiting for the first checks"
+    : allUp
+    ? "All systems operational"
+    : anyDown
+    ? "Service disruption detected"
+    : "Partial degradation"
 
   return (
-    <div
-      className={`rounded-2xl px-6 py-5 mb-10 flex items-center gap-4 border ${
-        allUp
-          ? "bg-emerald-500/5 border-emerald-500/20"
-          : anyDown
-          ? "bg-red-500/5 border-red-500/20"
-          : "bg-amber-400/5 border-amber-400/20"
-      }`}
-    >
-      <div
-        className={`h-3 w-3 rounded-full shrink-0 ${
-          allUp ? "bg-emerald-500" : anyDown ? "bg-red-500" : "bg-amber-400"
-        }`}
-      />
+    <div className={`rounded-2xl px-6 py-5 mb-10 flex items-center gap-4 border ${tone}`}>
+      <span className="relative flex h-3 w-3 shrink-0">
+        {allUp && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-50" />}
+        <span className={`relative inline-flex h-3 w-3 rounded-full ${dot}`} />
+      </span>
       <div>
-        <p className="font-semibold text-lg">
-          {allUp ? "All systems operational" : anyDown ? "Service disruption detected" : "Partial degradation"}
-        </p>
+        <p className="font-semibold text-lg">{headline}</p>
         <p className="text-sm text-muted-foreground">
           {publicServices.length} service{publicServices.length !== 1 ? "s" : ""} monitored
         </p>
@@ -346,20 +395,35 @@ function OverallBanner({ services }: { services: Service[] }) {
 
 // ── Main dashboard ───────────────────────────────────────────────────────────
 
+const PW_KEY = "status_pw"
+
 export function StatusDashboard() {
-  const [services, setServices] = useState<Service[]>([])
+  const [data, setData] = useState<StatusResponse | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
   const [refreshing, setRefreshing] = useState(false)
+  const pwRef = useRef<string>("")
 
-  const fetchServices = useCallback(async () => {
+  const fetchServices = useCallback(async (password?: string) => {
+    const pw = password ?? pwRef.current
     try {
-      const res = await fetch("/api/status/services")
-      if (res.ok) {
-        const data = await res.json()
-        setServices(data)
-        setLastRefresh(new Date())
+      const res = await fetch("/api/status/services", {
+        cache: "no-store",
+        headers: pw ? { "x-status-password": pw } : undefined,
+      })
+      const json = await res.json().catch(() => null)
+      if (!res.ok || !json || !Array.isArray(json.services)) {
+        setError(json?.error ?? `Couldn't load status (HTTP ${res.status}).`)
+        return null
       }
+      setData(json)
+      setError(null)
+      setLastRefresh(new Date())
+      return json as StatusResponse
+    } catch {
+      setError("Couldn't reach the status service. Check your connection and try again.")
+      return null
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -367,17 +431,43 @@ export function StatusDashboard() {
   }, [])
 
   useEffect(() => {
+    try {
+      pwRef.current = sessionStorage.getItem(PW_KEY) ?? ""
+    } catch {
+      /* storage blocked */
+    }
     fetchServices()
-    const interval = setInterval(fetchServices, 60_000) // refresh every 60s
+    const interval = setInterval(() => fetchServices(), 60_000) // refresh every 60s
     return () => clearInterval(interval)
   }, [fetchServices])
+
+  // keep "Updated Xs ago" ticking
+  const [, setTick] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setTick((n) => n + 1), 15_000)
+    return () => clearInterval(t)
+  }, [])
 
   const handleRefresh = () => {
     setRefreshing(true)
     fetchServices()
   }
 
-  // Group services
+  const unlock = async (pw: string) => {
+    const res = await fetchServices(pw)
+    if (res?.privateUnlocked) {
+      pwRef.current = pw
+      try {
+        sessionStorage.setItem(PW_KEY, pw)
+      } catch {
+        /* ignore */
+      }
+      return true
+    }
+    return false
+  }
+
+  const services = data?.services ?? []
   const publicServices = services.filter((s) => !s.is_private)
   const privateServices = services.filter((s) => s.is_private)
 
@@ -387,17 +477,6 @@ export function StatusDashboard() {
     return acc
   }, {})
 
-  if (loading) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-muted border-t-primary" />
-          <p className="text-sm text-muted-foreground">Fetching service status…</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="container mx-auto px-4 py-10 max-w-3xl">
       {/* Header */}
@@ -405,14 +484,14 @@ export function StatusDashboard() {
         <div>
           <h1 className="text-3xl font-bold mb-1">Status</h1>
           <p className="text-sm text-muted-foreground">
-            {lastRefresh ? `Updated ${timeAgo(lastRefresh.toISOString())}` : "Fetching…"}
+            {lastRefresh ? `Updated ${timeAgo(lastRefresh.toISOString())}` : loading ? "Fetching…" : ""}
           </p>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={handleRefresh}
-          disabled={refreshing}
+          disabled={refreshing || loading}
           className="gap-2"
         >
           <RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />
@@ -420,23 +499,49 @@ export function StatusDashboard() {
         </Button>
       </div>
 
-      {/* Overall banner */}
-      {services.length > 0 && <OverallBanner services={services} />}
-
-      {/* Public groups */}
-      {Object.entries(groups).map(([groupName, svcs]) => (
-        <ServiceGroup key={groupName} name={groupName} services={svcs} />
-      ))}
-
-      {services.length === 0 && (
-        <div className="rounded-xl border bg-card px-6 py-12 text-center text-muted-foreground">
-          <p className="font-medium mb-1">No services configured</p>
-          <p className="text-sm">Add services in Supabase using the SQL from scripts/05-status-tables.sql</p>
+      {loading && (
+        <div className="flex flex-col items-center gap-4 py-20">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
+          <p className="text-sm text-muted-foreground">Checking services…</p>
         </div>
       )}
 
-      {/* Private section — always shown */}
-      <PrivateSection services={privateServices} />
+      {!loading && error && !data && (
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-6 py-10 text-center">
+          <XCircle className="mx-auto mb-3 text-red-500" size={28} />
+          <p className="font-medium mb-1">Status is temporarily unavailable</p>
+          <p className="text-sm text-muted-foreground">{error}</p>
+        </div>
+      )}
+
+      {data && (
+        <>
+          {publicServices.length > 0 && <OverallBanner services={services} />}
+
+          {Object.entries(groups).map(([groupName, svcs]) => (
+            <ServiceGroup key={groupName} name={groupName} services={svcs} />
+          ))}
+
+          {publicServices.length === 0 && (
+            <div className="rounded-xl border bg-card px-6 py-12 text-center text-muted-foreground">
+              <p className="font-medium mb-1">No services configured</p>
+              <p className="text-sm">Add rows to the <code>status_services</code> table (see scripts/05-status-tables.sql).</p>
+            </div>
+          )}
+
+          <PrivateSection
+            services={privateServices}
+            count={data.privateCount}
+            configured={data.privateConfigured}
+            unlocked={data.privateUnlocked}
+            onUnlock={unlock}
+          />
+
+          <p className="mt-10 text-center text-xs text-muted-foreground">
+            Services are checked automatically every few minutes while this page is open.
+          </p>
+        </>
+      )}
     </div>
   )
 }

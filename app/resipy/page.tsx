@@ -2,7 +2,7 @@ import { allRecipes } from "@/content/recipes"
 import { RecipeGrid } from "@/components/recipe/recipe-grid"
 
 export const metadata = {
-  title: "Resipy | Dhruv Agrawat",
+  title: "Resipy",
   description: "Recipes I cook and love — from quick weeknight dinners to weekend projects.",
 }
 

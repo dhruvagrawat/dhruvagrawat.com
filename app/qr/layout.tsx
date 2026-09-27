@@ -1,10 +1,8 @@
-import type { Metadata } from "next"
+import { toolMetadata } from "@/lib/tools"
+import { ToolLayout } from "@/components/tools/tool-seo"
 
-export const metadata: Metadata = {
-  title: "QR Code Generator",
-  description: "Turn any URL or text into a downloadable QR code — instant, free, no account.",
-}
+export const metadata = toolMetadata("qr")
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return <ToolLayout slug="qr">{children}</ToolLayout>
 }
