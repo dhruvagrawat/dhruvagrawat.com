@@ -33,6 +33,13 @@ export default function ContactSection() {
           >
             with a direct question on twitter
           </Link>{" "}
+          or{" "}
+          <Link
+            href={`mailto:${DATA.contact.email}`}
+            className="text-blue-500 hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+          >
+            drop me an email
+          </Link>{" "}
           and I&apos;ll respond whenever I can. I will ignore all
           soliciting.
         </p>

@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/photography`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/projects`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/tools`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/1999`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/status`, lastModified: new Date(), changeFrequency: "always", priority: 0.5 },
     { url: `${base}/weather`, lastModified: new Date(), changeFrequency: "never", priority: 0.4 },
     { url: `${base}/currency`, lastModified: new Date(), changeFrequency: "never", priority: 0.4 },

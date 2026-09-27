@@ -1,0 +1,774 @@
+/* =========================================================
+   /1999 — everything is scoped under .r99 so none of this
+   leaks into the modern site.
+   ========================================================= */
+
+.r99 {
+  --xp-blue: #0054e3;
+  --xp-face: #ece9d8;
+  --xp-border: #0831d9;
+  --w98-face: #c0c0c0;
+  --w98-light: #ffffff;
+  --w98-dark: #808080;
+  --w98-darker: #000000;
+  --link: #0000ee;
+  --visited: #551a8b;
+
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: Tahoma, "Trebuchet MS", Verdana, "DejaVu Sans", sans-serif;
+  font-size: 13px;
+  color: #000;
+  -webkit-font-smoothing: none;
+  /* "Rolling hills" desktop wallpaper, drawn with gradients */
+  background:
+    radial-gradient(ellipse 90% 45% at 30% 100%, #4c9a2a 0 60%, transparent 61%),
+    radial-gradient(ellipse 110% 40% at 85% 105%, #5fb236 0 60%, transparent 61%),
+    radial-gradient(ellipse 25% 8% at 20% 22%, rgba(255, 255, 255, 0.85), transparent 70%),
+    radial-gradient(ellipse 30% 7% at 70% 14%, rgba(255, 255, 255, 0.75), transparent 70%),
+    radial-gradient(ellipse 18% 5% at 55% 30%, rgba(255, 255, 255, 0.6), transparent 70%),
+    linear-gradient(180deg, #245edb 0%, #5a8ef0 45%, #a7c7f7 75%, #d7e7fb 100%);
+  background-attachment: fixed;
+}
+
+.r99 *,
+.r99 *::before,
+.r99 *::after {
+  box-sizing: border-box;
+}
+
+.r99 svg {
+  /* Tailwind's preflight makes svg display:block — pixel icons sit inline here */
+  display: inline-block;
+  vertical-align: middle;
+  flex: none;
+}
+
+.r99 a {
+  color: var(--link);
+  text-decoration: underline;
+}
+.r99 a:visited {
+  color: var(--visited);
+}
+.r99 a:hover {
+  color: #ff0000;
+}
+
+/* ---------- Desktop layout ---------- */
+.r99-desktop {
+  position: relative;
+  min-height: 100%;
+  padding: 16px 16px 128px;
+}
+
+.r99-icons {
+  display: none;
+}
+@media (min-width: 1180px) {
+  .r99-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: absolute;
+    top: 20px;
+    left: 18px;
+    width: 84px;
+  }
+}
+
+.r99-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px dotted transparent;
+  padding: 4px 2px;
+  color: #fff;
+  font: inherit;
+  font-size: 11px;
+  text-align: center;
+  text-shadow: 1px 1px 1px #000;
+  cursor: inherit;
+}
+.r99-icon svg {
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.35));
+}
+.r99-icon:focus-visible,
+.r99-icon:active {
+  outline: none;
+  border-color: #fff;
+}
+.r99-icon:focus-visible span,
+.r99-icon:active span {
+  background: #316ac5;
+}
+
+/* ---------- XP window chrome ---------- */
+.r99-window {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--xp-face);
+  border: 3px solid var(--xp-border);
+  border-top-width: 0;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 4px 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.r99-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 4px 0 8px;
+  border-radius: 7px 7px 0 0;
+  color: #fff;
+  font-weight: bold;
+  font-size: 13px;
+  text-shadow: 1px 1px 0 #0a1f6e;
+  background: linear-gradient(
+    180deg,
+    #0997ff 0%,
+    #0053ee 8%,
+    #0050ee 40%,
+    #0066ff 88%,
+    #0066ff 93%,
+    #005bff 95%,
+    #003dd7 96%,
+    #003dd7 100%
+  );
+  user-select: none;
+  touch-action: none;
+}
+.r99-titlebar .r99-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.r99-tbtn {
+  width: 21px;
+  height: 21px;
+  flex: none;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #3c8cff, #1f5fe0 60%, #1b50c8);
+  color: #fff;
+  font: bold 12px/1 Tahoma, sans-serif;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: inherit;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.35);
+}
+.r99-tbtn:hover {
+  filter: brightness(1.15);
+}
+.r99-tbtn.close {
+  background: linear-gradient(180deg, #f08a6f, #e0482d 55%, #c83a1f);
+}
+
+.r99-menubar {
+  display: flex;
+  gap: 2px;
+  padding: 2px 4px;
+  border-bottom: 1px solid #fff;
+  box-shadow: 0 1px 0 #aca899;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.r99-menubar button {
+  background: none;
+  border: 1px solid transparent;
+  padding: 1px 6px;
+  font: inherit;
+  cursor: inherit;
+}
+.r99-menubar button:hover {
+  background: #316ac5;
+  color: #fff;
+}
+
+.r99-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border-bottom: 1px solid #fff;
+  box-shadow: 0 1px 0 #aca899;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.r99-toolbar::-webkit-scrollbar {
+  display: none;
+}
+.r99-toolbar .sep {
+  width: 1px;
+  align-self: stretch;
+  margin: 2px 3px;
+  background: #aca899;
+  box-shadow: 1px 0 0 #fff;
+}
+.r99-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  color: #000;
+  text-decoration: none !important;
+  cursor: inherit;
+}
+.r99-tool:hover {
+  border-color: #aca899;
+  background: linear-gradient(180deg, #fff, #ece9d8);
+}
+.r99-tool .glyph {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+  font-size: 12px;
+  background: radial-gradient(circle at 35% 30%, #9fe08a, #2f9a1f 70%);
+  border: 1px solid #1d6b12;
+}
+.r99-tool .glyph.stop {
+  border-radius: 3px;
+  background: radial-gradient(circle at 35% 30%, #ff9c8a, #d22 70%);
+  border-color: #911;
+}
+.r99-tool .glyph.plain {
+  background: none;
+  border: none;
+  color: inherit;
+  width: auto;
+}
+
+.r99-address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  font-size: 12px;
+  border-bottom: 1px solid #aca899;
+}
+.r99-address .field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  border: 1px solid #7f9db9;
+  padding: 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: Tahoma, sans-serif;
+}
+.r99-address .label {
+  color: #6d6d6d;
+}
+
+.r99-statusbar {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  font-size: 11px;
+  border-top: 1px solid #aca899;
+}
+.r99-statusbar > div {
+  padding: 1px 6px;
+  border: 1px solid;
+  border-color: #aca899 #fff #fff #aca899;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.r99-statusbar > div:first-child {
+  flex: 1;
+}
+
+/* ---------- The 90s homepage inside the browser ---------- */
+.r99-page {
+  font-family: "Times New Roman", Times, "Liberation Serif", serif;
+  font-size: 16px;
+  line-height: 1.35;
+  color: #fff;
+  background-color: #000033;
+  /* tiled starfield */
+  background-image:
+    radial-gradient(1px 1px at 10px 14px, #fff 99%, transparent),
+    radial-gradient(1px 1px at 46px 60px, #fff 99%, transparent),
+    radial-gradient(1.5px 1.5px at 80px 30px, #ffffcc 99%, transparent),
+    radial-gradient(1px 1px at 120px 90px, #fff 99%, transparent),
+    radial-gradient(1px 1px at 150px 20px, #aaccff 99%, transparent),
+    radial-gradient(1px 1px at 30px 110px, #fff 99%, transparent),
+    radial-gradient(1.5px 1.5px at 100px 130px, #fff 99%, transparent);
+  background-size: 160px 150px;
+  padding: 14px;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  margin: 4px;
+}
+.r99-page a {
+  color: #66ffff;
+}
+.r99-page a:visited {
+  color: #ff99ff;
+}
+.r99-page a:hover {
+  color: #ffff00;
+}
+
+.r99-comic {
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive;
+}
+.r99-mono {
+  font-family: "Courier New", Courier, "Liberation Mono", monospace;
+}
+
+.r99-wordart {
+  margin: 0;
+  font-family: Impact, "Arial Black", "Haettenschweiler", sans-serif;
+  font-size: clamp(34px, 7vw, 60px);
+  line-height: 1;
+  letter-spacing: 1px;
+  text-align: center;
+  font-weight: 900;
+  background: linear-gradient(90deg, #ff0000, #ff9900, #ffff00, #33ff00, #00ccff, #6633ff, #ff00cc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(3px 3px 0 #000080) drop-shadow(1px 1px 0 #fff);
+  transform: perspective(300px) rotateX(12deg);
+}
+
+.r99-subtitle {
+  text-align: center;
+  color: #ffff66;
+  margin: 10px 0 0;
+  font-size: 15px;
+}
+
+.r99-hr {
+  height: 6px;
+  border: 0;
+  margin: 18px 0;
+  background: linear-gradient(90deg, #ff0000, #ff9900, #ffff00, #33ff00, #00ccff, #6633ff, #ff00cc);
+  box-shadow: 0 2px 0 #000;
+}
+
+.r99-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #000080;
+  border: 2px inset #c0c0c0;
+  color: #00ff00;
+  padding: 3px 0;
+  margin-top: 14px;
+}
+.r99-marquee > span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: r99-scroll 28s linear infinite;
+}
+@keyframes r99-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.r99-blink {
+  animation: r99-blink 1s steps(1, end) infinite;
+}
+@keyframes r99-blink {
+  50% {
+    visibility: hidden;
+  }
+}
+
+.r99-new {
+  display: inline-block;
+  font: bold 11px/1 Arial, sans-serif;
+  color: #ffff00;
+  background: #ff0000;
+  padding: 2px 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+  transform: rotate(-8deg);
+  animation: r99-blink 0.8s steps(1, end) infinite;
+}
+
+.r99-spin {
+  display: inline-block;
+  animation: r99-spin 2.4s steps(8) infinite;
+}
+@keyframes r99-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.r99-bounce {
+  animation: r99-bounce 1.2s steps(4) infinite;
+}
+@keyframes r99-bounce {
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* two-column "table layout" */
+.r99-layout {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+@media (min-width: 760px) {
+  .r99-layout {
+    grid-template-columns: 180px minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.r99-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 760px) {
+  .r99-sidebar {
+    position: sticky;
+    top: 8px;
+  }
+}
+
+.r99-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+@media (min-width: 760px) {
+  .r99-nav {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Windows 98 bevel button */
+.r99-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 3px 10px;
+  font: 12px Tahoma, "MS Sans Serif", sans-serif;
+  color: #000 !important;
+  text-decoration: none !important;
+  background: var(--w98-face);
+  border: 2px solid;
+  border-color: var(--w98-light) var(--w98-darker) var(--w98-darker) var(--w98-light);
+  box-shadow: inset -1px -1px 0 var(--w98-dark), inset 1px 1px 0 #dfdfdf;
+  cursor: inherit;
+  white-space: nowrap;
+}
+.r99-btn:active,
+.r99-btn[aria-pressed="true"] {
+  border-color: var(--w98-darker) var(--w98-light) var(--w98-light) var(--w98-darker);
+  box-shadow: inset 1px 1px 0 var(--w98-dark), inset -1px -1px 0 #dfdfdf;
+  padding: 4px 9px 2px 11px;
+}
+.r99-btn:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -5px;
+}
+
+/* XP-style button (dialogs) */
+.r99-xpbtn {
+  min-width: 75px;
+  padding: 4px 12px;
+  font: 12px Tahoma, sans-serif;
+  color: #000;
+  background: linear-gradient(180deg, #fff 0%, #ecebe6 86%, #d6d0c5 100%);
+  border: 1px solid #003c74;
+  border-radius: 3px;
+  cursor: inherit;
+}
+.r99-xpbtn:hover {
+  box-shadow: inset 0 0 0 2px #f8b636;
+}
+.r99-xpbtn:focus-visible {
+  box-shadow: inset 0 0 0 2px #7da2ce;
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+.r99-box {
+  background: #fffff0;
+  color: #000;
+  border: 3px ridge #c0c0c0;
+}
+.r99-box a {
+  color: var(--link);
+}
+.r99-box a:visited {
+  color: var(--visited);
+}
+.r99-box a:hover {
+  color: #ff0000;
+}
+.r99-box > h2,
+.r99-box > .h {
+  margin: 0;
+  padding: 4px 8px;
+  font: bold 14px Tahoma, Verdana, sans-serif;
+  color: #fff;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.r99-box > .body {
+  padding: 10px 12px;
+}
+
+.r99-counter {
+  display: inline-flex;
+  gap: 1px;
+  padding: 2px;
+  background: #222;
+  border: 2px inset #808080;
+}
+.r99-counter span {
+  display: inline-block;
+  width: 13px;
+  text-align: center;
+  font: bold 16px/20px "Courier New", monospace;
+  color: #39ff14;
+  background: #000;
+  text-shadow: 0 0 4px #39ff14;
+}
+
+.r99-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+/* 88x31 web buttons */
+.r99-badge {
+  width: 88px;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font: bold 9px/1.05 Verdana, Arial, sans-serif;
+  text-transform: uppercase;
+  border: 1px solid #000;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.6), inset -1px -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.r99-construction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 6px;
+  color: #000;
+  font: bold 14px Arial, sans-serif;
+  background: repeating-linear-gradient(-45deg, #ffcc00 0 14px, #000 14px 28px);
+  border: 2px solid #000;
+}
+.r99-construction b {
+  background: #ffcc00;
+  padding: 2px 8px;
+  border: 2px solid #000;
+}
+
+.r99-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2px;
+  border: 2px outset #c0c0c0;
+  font-size: 14px;
+}
+.r99-table th {
+  background: #000080;
+  color: #fff;
+  text-align: left;
+  padding: 3px 6px;
+  font: bold 12px Tahoma, sans-serif;
+}
+.r99-table td {
+  border: 1px inset #c0c0c0;
+  padding: 5px 6px;
+  vertical-align: top;
+}
+.r99-table tr:nth-child(even) td {
+  background: #eef3ff;
+}
+@media (max-width: 560px) {
+  .r99-table .hide-sm {
+    display: none;
+  }
+}
+
+/* explorer-style file grid */
+.r99-files {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  background: #fff;
+  border: 2px inset #c0c0c0;
+  padding: 10px;
+}
+.r99-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 4px;
+  font: 11px Tahoma, sans-serif;
+  text-align: center;
+  color: #000;
+  background: none;
+  border: 1px dotted transparent;
+  cursor: inherit;
+}
+.r99-file:hover .name,
+.r99-file:focus-visible .name {
+  background: #316ac5;
+  color: #fff;
+}
+.r99-file:focus-visible {
+  outline: none;
+  border-color: #000;
+}
+.r99-file .meta {
+  color: #666;
+}
+
+.r99-field {
+  width: 100%;
+  font: 13px "Courier New", monospace;
+  padding: 3px 4px;
+  background: #fff;
+  color: #000;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  box-shadow: inset 1px 1px 0 #000;
+}
+
+.r99-webring {
+  text-align: center;
+  border: 2px ridge #c0c0c0;
+  background: #330066;
+  padding: 6px;
+  font: bold 13px Arial, sans-serif;
+}
+
+/* ---------- Popups / dialogs ---------- */
+.r99-dialog {
+  position: fixed;
+  z-index: 40;
+  width: min(380px, calc(100vw - 32px));
+  background: var(--xp-face);
+  border: 3px solid var(--xp-border);
+  border-top-width: 0;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 3px 5px 14px rgba(0, 0, 0, 0.5);
+  animation: r99-pop 0.12s steps(3);
+}
+.r99-dialog.inactive .r99-titlebar {
+  background: linear-gradient(180deg, #a6b9f2, #7a96df 10%, #7a96df 90%, #6e87d0);
+}
+@keyframes r99-pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+.r99-dialog .content {
+  display: flex;
+  gap: 12px;
+  padding: 14px 14px 6px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.r99-dialog .actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 14px 14px;
+}
+
+/* ---------- Dial-up boot screen ---------- */
+.r99-boot {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: #008080;
+}
+.r99-boot .r99-window {
+  width: min(420px, 100%);
+}
+.r99-progress {
+  height: 18px;
+  padding: 2px;
+  background: #fff;
+  border: 1px solid #686868;
+  border-radius: 3px;
+  display: flex;
+  gap: 2px;
+  overflow: hidden;
+}
+.r99-progress i {
+  width: 8px;
+  flex: none;
+  background: linear-gradient(180deg, #d1f6c7, #37c028 45%, #2aa81d);
+}
+
+/* avatar "scanned photo" */
+.r99-photo {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  border: 4px ridge #c0c0c0;
+  background: #c0c0c0;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .r99 *,
+  .r99 *::before,
+  .r99 *::after {
+    animation: none !important;
+  }
+  .r99-marquee > span {
+    padding-left: 12px;
+    white-space: normal;
+  }
+}
