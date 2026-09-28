@@ -9,6 +9,7 @@ export const CAMPS = [
   { id: "work", camp: "Camp I", label: "Work" },
   { id: "trail", camp: "Camp II", label: "The trail" },
   { id: "projects", camp: "Camp III", label: "Projects" },
+  { id: "notes", camp: "Field notes", label: "Writing" },
   { id: "skills", camp: "Camp IV", label: "Skills" },
   { id: "contact", camp: "Summit", label: "Contact" },
 ] as const

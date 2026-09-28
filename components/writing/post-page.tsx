@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react"
 import { DATA } from "@/data/resume"
+import { seoTitle } from "@/lib/seo"
 import { headingsOf, wordCount } from "./markdown"
 import { CopyLink, ReadingProgress, Toc } from "./post-client"
 
@@ -36,7 +37,7 @@ export function postMetadata(kind: PostKind, p: PostLike): Metadata {
   const url = `${KIND[kind].base}/${p.slug}`
   const cover = realCover(p.coverImage)
   return {
-    title: p.title,
+    title: seoTitle(p.title),
     description: p.description,
     keywords: p.tags,
     authors: [{ name: DATA.name, url: DATA.url }],

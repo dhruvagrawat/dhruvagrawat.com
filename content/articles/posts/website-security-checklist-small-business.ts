@@ -4,7 +4,7 @@ export default defineArticle({
   slug: "website-security-checklist-small-business",
   title: "Website Security Checklist for Small Businesses (2026 Edition)",
   description:
-    "A plain-English, 20-point security checklist for small business and startup websites — HTTPS, updates, backups, logins, security headers, forms and what to do if you're hacked.",
+    "A plain-English, 20-point security checklist for small business websites: HTTPS, updates, backups, logins, headers and what to do if hacked.",
   date: "2025-10-20",
   category: "Security",
   tags: ["Security", "Web Security", "Small Business", "Checklist", "WordPress"],

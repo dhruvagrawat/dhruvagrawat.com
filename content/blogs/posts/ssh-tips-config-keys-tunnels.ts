@@ -4,7 +4,7 @@ export default defineBlog({
   slug: "ssh-tips-config-keys-tunnels",
   title: "SSH Like a Pro: Keys, ~/.ssh/config, Tunnels and Hardening",
   description:
-    "Generate ed25519 keys, stop typing IPs with ~/.ssh/config, use jump hosts, port-forward to remote databases, keep sessions alive and lock down your server's SSH daemon.",
+    "Use ed25519 keys, ~/.ssh/config shortcuts, jump hosts and port forwarding like a pro — then harden your server's SSH daemon.",
   date: "2026-07-19",
   category: "Linux",
   tags: ["Linux", "SSH", "Security", "DevOps", "Tips"],

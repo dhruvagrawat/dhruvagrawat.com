@@ -2,9 +2,9 @@ import { defineRecipe } from "@/content/define"
 
 export default defineRecipe({
   slug: "pesto-alla-genovese",
-  title: "Pesto alla Genovese with Trofie, Potatoes and Green Beans",
+  title: "Pesto alla Genovese (with Trofie, Potatoes & Beans)",
   description:
-    "Authentic Genoese basil pesto made the Ligurian way — basil, pine nuts, garlic, Parmigiano, Pecorino and olive oil — served with trofie, potatoes and green beans cooked in the same pot.",
+    "Authentic Genoese basil pesto made the Ligurian way, served with trofie, potatoes and green beans cooked in the same pot.",
   date: "2026-06-14",
   category: "Pasta",
   cuisine: "Italian",

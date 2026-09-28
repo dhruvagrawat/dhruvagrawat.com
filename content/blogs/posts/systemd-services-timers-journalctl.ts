@@ -4,7 +4,7 @@ export default defineBlog({
   slug: "systemd-services-timers-journalctl",
   title: "systemd for Developers: Services, Timers and journalctl Explained",
   description:
-    "Run your app as a systemd service that restarts on crash, replace cron with systemd timers, and read logs like a pro with journalctl — a practical guide with copy-paste unit files.",
+    "Run your app as a systemd service that restarts on crash, replace cron with systemd timers, and read logs with journalctl. Copy-paste unit files included.",
   date: "2026-03-01",
   category: "Linux",
   tags: ["Linux", "systemd", "DevOps", "Servers", "Tutorial"],

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { Clock, Flame, Gauge, Leaf, Timer, Users } from "lucide-react"
 import { allRecipes, recipeRegistry } from "@/content/recipes"
 import { DATA } from "@/data/resume"
+import { seoTitle } from "@/lib/seo"
 import { Markdown } from "@/components/writing/markdown"
 import { IngredientChecklist, Method, PrintButton, RecipePlate } from "@/components/recipe/recipe-ui"
 
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const title = `${r.title.replace(/\s*\(.*?\)/, "")} Recipe${r.cuisine ? ` — ${r.cuisine}` : ""}`
   const cover = realCover(r.coverImage)
   return {
-    title,
+    title: seoTitle(title),
     description: r.description,
     keywords: [...r.tags, ...(r.keywords ?? [])],
     authors: [{ name: DATA.name, url: DATA.url }],

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { seoTitle } from "@/lib/seo"
 import { allArticles } from "@/content/articles"
 import { DATA } from "@/data/resume"
 import { PostList } from "@/components/writing/post-list"
@@ -8,7 +9,7 @@ const description =
   "Long-form articles on web security, running a small tech agency and freelancing in India, and travelling through the Himalayas and India's wild places."
 
 export const metadata: Metadata = {
-  title,
+  title: seoTitle(title),
   description,
   alternates: { canonical: "/articles", types: { "application/rss+xml": "/articles/rss.xml" } },
   openGraph: { title, description, url: "/articles" },

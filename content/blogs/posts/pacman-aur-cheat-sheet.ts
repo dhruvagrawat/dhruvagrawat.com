@@ -4,7 +4,7 @@ export default defineBlog({
   slug: "pacman-aur-cheat-sheet",
   title: "pacman and the AUR: The Arch Linux Package Cheat Sheet",
   description:
-    "Every pacman command you'll actually use, how to install from the AUR safely with paru or yay, cleaning the cache, fixing keyring errors and rolling back a bad package.",
+    "Every pacman command you'll actually use, plus installing from the AUR safely with paru or yay, fixing keyring errors and rolling back packages.",
   date: "2025-11-02",
   category: "Arch Linux",
   tags: ["Arch Linux", "pacman", "AUR", "Cheat Sheet"],

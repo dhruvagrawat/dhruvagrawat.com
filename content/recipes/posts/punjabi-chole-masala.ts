@@ -4,7 +4,7 @@ export default defineRecipe({
   slug: "punjabi-chole-masala",
   title: "Punjabi Chole Masala",
   description:
-    "Dark, tangy, dhaba-style Punjabi chole: chickpeas pressure-cooked with tea and black cardamom for colour, then simmered in a deeply browned onion-tomato masala with amchur and chole masala.",
+    "Dark, tangy, dhaba-style Punjabi chole: chickpeas cooked with tea for colour, then simmered in a deeply browned onion-tomato masala.",
   date: "2026-09-06",
   category: "Main course",
   cuisine: "North Indian",

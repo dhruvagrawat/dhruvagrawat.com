@@ -140,6 +140,15 @@ const showDrafts = process.env.NODE_ENV !== "production"
 /** Places that should appear on the site right now. */
 export const publishedPlaces = PLACES.filter((p) => showDrafts || !p.draft)
 
+/**
+ * Places with very little written yet stay visible on the globe but are kept out of
+ * search results until the story has some substance (about 150 words).
+ */
+export function isIndexable(p: Place) {
+  const words = `${p.summary} ${p.story ?? ""}`.split(/\s+/).filter(Boolean).length
+  return !p.draft && words >= 150
+}
+
 export function getPlace(slug: string) {
   return publishedPlaces.find((p) => p.slug === slug)
 }

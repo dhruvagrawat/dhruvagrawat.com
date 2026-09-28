@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
+import { seoTitle } from "@/lib/seo"
 import { DATA } from "@/data/resume"
 import { TOOLS } from "@/lib/tools"
 
 const title = "Free Online Tools — JSON, Base64, UUID, QR, Currency & More"
 const description =
-  "Free, fast and ad-free web tools: JSON formatter, Base64 encoder, UUID and password generators, SHA-256 hashes, Unix timestamps, word counter, color converter, QR codes, currency converter and weather."
+  "25 free, ad-free online tools: EMI, SIP and GST calculators, JSON formatter, Base64, UUID, hash and password generators, image compressor and more."
 
 export const metadata: Metadata = {
-  title,
+  title: seoTitle(title),
   description,
   alternates: { canonical: "/tools" },
   openGraph: { title, description, url: "/tools" },

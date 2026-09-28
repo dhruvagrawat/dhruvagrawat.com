@@ -4,7 +4,7 @@ export default defineArticle({
   slug: "secure-nextjs-nodejs-production",
   title: "How to Secure a Next.js and Node.js App in Production",
   description:
-    "A production security guide for Next.js and Node.js: environment secrets, security headers and CSP, auth and sessions, server actions, input validation, rate limiting, logging and dependency hygiene.",
+    "A production security checklist for Next.js and Node.js: secrets, security headers and CSP, auth, server actions, validation and rate limiting.",
   date: "2026-03-18",
   category: "Security",
   tags: ["Security", "Next.js", "Node.js", "DevOps", "Web Development"],

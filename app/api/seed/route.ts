@@ -1,7 +1,12 @@
+import type { NextRequest } from "next/server"
+import { requireAdmin } from "@/lib/admin-auth"
 import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 
-export async function POST() {
+export async function POST(req: NextRequest) {
+  const denied = requireAdmin(req)
+  if (denied) return denied
+
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(

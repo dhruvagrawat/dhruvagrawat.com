@@ -4,7 +4,7 @@ export default defineRecipe({
   slug: "palak-paneer",
   title: "Palak Paneer",
   description:
-    "Bright green palak paneer: fresh spinach blanched and blended into a smooth, gently spiced gravy with soft paneer cubes — with the trick to keep the colour vibrant.",
+    "Bright green palak paneer: blanched spinach blended into a smooth, gently spiced gravy with soft paneer — and the trick to keep it vibrant.",
   date: "2026-07-05",
   category: "Main course",
   cuisine: "North Indian",

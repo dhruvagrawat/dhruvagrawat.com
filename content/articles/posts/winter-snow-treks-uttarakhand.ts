@@ -2,9 +2,9 @@ import { defineArticle } from "@/content/define"
 
 export default defineArticle({
   slug: "winter-snow-treks-uttarakhand",
-  title: "Winter Snow Treks in Uttarakhand: Kedarkantha, Brahmatal and Dayara Bugyal",
+  title: "Winter Snow Treks in Uttarakhand: Kedarkantha, Brahmatal & Dayara",
   description:
-    "Planning your first snow trek? A guide to Kedarkantha, Brahmatal and Dayara Bugyal — altitude, duration, best months, what to pack for sub-zero nights, and how to stay safe in the snow.",
+    "A first-timer's guide to Kedarkantha, Brahmatal and Dayara Bugyal: altitude, duration, best months, what to pack and how to stay safe in the snow.",
   date: "2026-08-30",
   category: "Travel",
   tags: ["Travel", "Trekking", "Uttarakhand", "Snow", "Winter", "India"],

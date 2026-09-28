@@ -4,7 +4,7 @@ export default defineBlog({
   slug: "linux-terminal-tricks",
   title: "30 Linux Terminal Tricks That Save Me Hours Every Week",
   description:
-    "Keyboard shortcuts, history tricks, brace expansion, xargs, process substitution and more — practical Bash and Zsh tricks that make you dramatically faster in the Linux terminal.",
+    "Keyboard shortcuts, history tricks, brace expansion, xargs and more — practical Bash and Zsh tricks that make you much faster in the terminal.",
   date: "2025-11-24",
   category: "Terminal",
   tags: ["Linux", "Terminal", "Bash", "Productivity", "Tips"],

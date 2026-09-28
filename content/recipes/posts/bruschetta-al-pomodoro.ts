@@ -4,7 +4,7 @@ export default defineRecipe({
   slug: "bruschetta-al-pomodoro",
   title: "Bruschetta al Pomodoro",
   description:
-    "Classic Italian tomato bruschetta: grilled rustic bread rubbed with garlic, topped with ripe tomatoes, fresh basil, salt and extra-virgin olive oil. Simple, fresh and ready in 20 minutes.",
+    "Classic Italian tomato bruschetta: grilled bread rubbed with garlic, topped with ripe tomatoes, basil and olive oil. Ready in 20 minutes.",
   date: "2025-12-21",
   category: "Starter",
   cuisine: "Italian",

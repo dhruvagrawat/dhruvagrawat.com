@@ -2,9 +2,9 @@ import { defineBlog } from "@/content/define"
 
 export default defineBlog({
   slug: "keep-arch-linux-stable-btrfs-snapshots",
-  title: "Keeping Arch Linux Stable: Btrfs Snapshots, Safe Updates and Recovery",
+  title: "Keep Arch Linux Stable: Btrfs Snapshots, Updates & Recovery",
   description:
-    "Arch is only as fragile as your habits. Set up Btrfs snapshots with Snapper and snap-pac, update safely, use the LTS kernel as a fallback, and recover a broken system with arch-chroot.",
+    "Make Arch Linux dependable: Btrfs snapshots with Snapper and snap-pac, safe update habits, an LTS kernel fallback and arch-chroot recovery.",
   date: "2026-05-11",
   category: "Arch Linux",
   tags: ["Arch Linux", "Btrfs", "Snapper", "Linux", "System Administration"],

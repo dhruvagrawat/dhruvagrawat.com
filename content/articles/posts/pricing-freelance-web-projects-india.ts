@@ -4,7 +4,7 @@ export default defineArticle({
   slug: "pricing-freelance-web-projects-india",
   title: "How to Price Freelance Web Development Projects in India",
   description:
-    "Hourly vs fixed vs value pricing, how to estimate a project, typical milestone payment structures, pricing for international clients, GST basics and the maintenance retainers that stabilise income.",
+    "Hourly vs fixed vs value pricing, estimating projects, milestone payments, international clients, GST basics and retainers that stabilise income.",
   date: "2026-04-22",
   category: "Freelancing",
   tags: ["Freelancing", "Pricing", "Agency", "India", "Business"],

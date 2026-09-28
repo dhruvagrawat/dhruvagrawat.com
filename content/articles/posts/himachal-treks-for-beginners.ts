@@ -2,9 +2,9 @@ import { defineArticle } from "@/content/define"
 
 export default defineArticle({
   slug: "himachal-treks-for-beginners",
-  title: "Best Himachal Pradesh Treks for Beginners: Triund, Kheerganga, Kareri Lake and More",
+  title: "Best Himachal Treks for Beginners: Triund, Kheerganga & More",
   description:
-    "A beginner's guide to trekking in Himachal Pradesh — Triund, Kheerganga, Kareri Lake, Prashar Lake and Hampta Pass — with distances, difficulty, best seasons, what to pack and how to stay safe.",
+    "Triund, Kheerganga, Kareri Lake, Prashar Lake and Hampta Pass: a beginner's guide to Himachal treks with difficulty, seasons and packing tips.",
   date: "2025-11-15",
   category: "Travel",
   tags: ["Travel", "Trekking", "Himachal Pradesh", "Mountains", "India"],

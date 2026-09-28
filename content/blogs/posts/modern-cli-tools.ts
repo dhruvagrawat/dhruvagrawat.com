@@ -4,7 +4,7 @@ export default defineBlog({
   slug: "modern-cli-tools",
   title: "12 Modern CLI Tools That Replace the Classics (and Why)",
   description:
-    "ripgrep, fd, bat, eza, fzf, zoxide, btop, dust, jq, delta, tldr and lazygit — faster, friendlier replacements for grep, find, cat, ls and friends, with install commands and my config.",
+    "ripgrep, fd, bat, eza, fzf, zoxide and more — faster, friendlier replacements for grep, find, cat and ls, with install commands and config.",
   date: "2025-12-15",
   category: "Tools",
   tags: ["Linux", "CLI", "Tools", "Productivity", "Open Source"],

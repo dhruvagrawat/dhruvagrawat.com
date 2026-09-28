@@ -214,6 +214,11 @@ export function SummitContact() {
               </a>
             ))}
           </Rise>
+          <p className="mt-12 text-xs text-white/50">
+            © {new Date().getFullYear()} {DATA.name} · <a href="/privacy" className="underline-offset-4 hover:text-white hover:underline">Privacy</a> ·{" "}
+            <a href="/llms.txt" className="underline-offset-4 hover:text-white hover:underline">llms.txt</a> ·{" "}
+            <a href="/blogs/rss.xml" className="underline-offset-4 hover:text-white hover:underline">RSS</a>
+          </p>
         </div>
       </motion.div>
     </section>

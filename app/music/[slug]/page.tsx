@@ -14,7 +14,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const track = getMusicBySlug(slug)
   if (!track) return {}
-  return { title: `${track.title} | Music`, description: track.artist }
+  return {
+    title: `${track.title} — Music`,
+    description: `${track.title}${track.album ? ` from ${track.album}` : ""} by ${track.artist ?? "Dhruv Agrawat"}.`,
+    alternates: { canonical: `/music/${track.slug}` },
+    // placeholder track — hidden from search until real audio is added
+    robots: { index: false, follow: true },
+  }
 }
 
 export default async function MusicDetailPage({ params }: { params: Promise<{ slug: string }> }) {

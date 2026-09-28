@@ -4,7 +4,7 @@ export default defineRecipe({
   slug: "penne-allarrabbiata",
   title: "Penne all'Arrabbiata",
   description:
-    "The authentic Roman arrabbiata: penne in a fiery tomato sauce made with just garlic, dried chilli, olive oil and good tomatoes. No cream, no onion — ready in 30 minutes.",
+    "Authentic Roman penne arrabbiata: a fiery tomato sauce of garlic, dried chilli and olive oil. No cream, no onion — ready in 30 minutes.",
   date: "2025-10-05",
   category: "Pasta",
   cuisine: "Italian",

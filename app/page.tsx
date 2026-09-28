@@ -7,6 +7,10 @@ import { SummitHero } from "@/components/summit/hero"
 import { Kicker, Rise, SmoothScroll, WordsReveal, CurtainImage } from "@/components/summit/motion"
 import { TrailNav } from "@/components/summit/trail-nav"
 import { SummitContact, ToolsTeaser, TrailGallery, WorkTrail } from "@/components/summit/sections"
+import Link from "next/link"
+import { allBlogs } from "@/content/blogs"
+import { allArticles } from "@/content/articles"
+import { allRecipes } from "@/content/recipes"
 
 export const metadata = {
   alternates: { canonical: "/" },
@@ -183,6 +187,34 @@ export default function Page() {
               All projects <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </Rise>
+        </Section>
+
+        {/* ───────────── Field notes · latest writing (internal links) ───────────── */}
+        <Section id="notes" camp="Field notes" label="Writing" title="Things I've written down." italicLast>
+          <div className="grid gap-10 md:grid-cols-3">
+            {[
+              { heading: "Blog", more: "All blog posts", href: "/blogs", items: allBlogs.slice(0, 3).map((p) => ({ href: `/blogs/${p.slug}`, title: p.title, meta: `${p.readTime} min read` })) },
+              { heading: "Articles", more: "All articles", href: "/articles", items: allArticles.slice(0, 3).map((p) => ({ href: `/articles/${p.slug}`, title: p.title, meta: `${p.readTime} min read` })) },
+              { heading: "Recipes", more: "All recipes", href: "/resipy", items: allRecipes.slice(0, 3).map((r) => ({ href: `/resipy/${r.slug}`, title: r.title, meta: `${r.cuisine ?? r.category} · ${r.prepTime + r.cookTime} min` })) },
+            ].map((col, ci) => (
+              <Rise key={col.heading} delay={ci * 0.06}>
+                <h3 className="mb-4 font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">{col.heading}</h3>
+                <ul className="divide-y border-y">
+                  {col.items.map((it) => (
+                    <li key={it.href}>
+                      <Link href={it.href} className="group block py-4">
+                        <span className="block font-display text-xl leading-snug group-hover:text-primary">{it.title}</span>
+                        <span className="mt-1 block text-xs text-muted-foreground">{it.meta}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link href={col.href} className="group mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                  {col.more} <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
+              </Rise>
+            ))}
+          </div>
         </Section>
 
         {/* ───────────── Camp IV · Skills, education, tools ───────────── */}

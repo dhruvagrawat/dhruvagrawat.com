@@ -2,9 +2,9 @@ import { defineBlog } from "@/content/define"
 
 export default defineBlog({
   slug: "tiling-window-managers-hyprland-sway-i3",
-  title: "Tiling Window Managers: Hyprland vs Sway vs i3 (Which Should You Pick?)",
+  title: "Hyprland vs Sway vs i3: Which Tiling Window Manager?",
   description:
-    "What a tiling window manager is, why developers love them, and an honest comparison of Hyprland, Sway and i3 — plus a starter config and the tools you'll need around them.",
+    "An honest comparison of Hyprland, Sway and i3 — what tiling window managers are, who each suits, and a starter config to get going.",
   date: "2026-02-03",
   category: "Linux Desktop",
   tags: ["Linux", "Hyprland", "Sway", "i3", "Window Manager", "Arch Linux"],

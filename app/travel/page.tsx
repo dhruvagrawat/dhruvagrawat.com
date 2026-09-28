@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next"
+import { seoTitle } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { DATA } from "@/data/resume"
@@ -11,7 +12,7 @@ const description =
   "Dhruv Agrawat's travel journal on an interactive 3D globe: stories, tips and photos from Himalayan treks and trips, plus a wishlist of places to go next."
 
 export const metadata: Metadata = {
-  title,
+  title: seoTitle(title),
   description,
   alternates: { canonical: "/travel" },
   openGraph: { title, description, url: "/travel" },

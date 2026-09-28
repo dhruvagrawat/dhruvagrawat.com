@@ -4,7 +4,7 @@ export default defineArticle({
   slug: "how-to-start-run-web-agency-india",
   title: "How to Start and Run a Small Web Agency in India",
   description:
-    "What I've learned co-founding a tech agency: choosing a niche, finding the first clients, pricing, hiring, delivery processes, tools, cash flow and the mistakes that sink small agencies.",
+    "Lessons from co-founding a tech agency: picking a niche, finding clients, pricing, hiring, delivery, cash flow and the mistakes that sink agencies.",
   date: "2026-02-14",
   category: "Agency",
   tags: ["Agency", "Freelancing", "Business", "Startups", "India"],

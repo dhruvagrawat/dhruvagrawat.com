@@ -4,7 +4,7 @@ export default defineRecipe({
   slug: "veg-dum-biryani",
   title: "Veg Dum Biryani",
   description:
-    "Fragrant layered vegetable biryani cooked on dum: spiced yogurt-marinated vegetables, long-grain basmati, crisp fried onions, mint, saffron and ghee, sealed and slow-steamed together.",
+    "Fragrant layered veg dum biryani: spiced yogurt-marinated vegetables, basmati, fried onions, mint and saffron, sealed and slow-steamed.",
   date: "2026-04-12",
   category: "Rice",
   cuisine: "North Indian",

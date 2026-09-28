@@ -2,9 +2,9 @@ import { defineArticle } from "@/content/define"
 
 export default defineArticle({
   slug: "client-contracts-scope-creep",
-  title: "Client Contracts and Scope Creep: The Processes That Keep an Agency Sane",
+  title: "Client Contracts & Scope Creep: Keeping an Agency Sane",
   description:
-    "What every web project contract should include, how to write a scope clients actually understand, and a simple change-request process that turns scope creep into paid work without damaging the relationship.",
+    "What every web project contract needs, how to write a clear scope, and a change-request process that turns scope creep into paid work.",
   date: "2026-06-09",
   category: "Agency",
   tags: ["Agency", "Freelancing", "Contracts", "Project Management", "Business"],

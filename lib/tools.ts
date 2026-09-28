@@ -30,6 +30,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { DATA } from "@/data/resume"
+import { seoTitle } from "@/lib/seo"
 
 /* =========================================================
    Single source of truth for every tool on the site.
@@ -142,7 +143,7 @@ export const TOOLS: ToolDef[] = [
     label: "EMI Calculator",
     title: "EMI Calculator — Home, Car & Personal Loan EMI with Amortization",
     description:
-      "Calculate your monthly loan EMI, total interest and total payment for home, car or personal loans. See a year-by-year amortization schedule and principal vs interest split.",
+      "Calculate the monthly EMI, total interest and total payment for home, car or personal loans, with a year-by-year amortization schedule.",
     blurb: "Monthly EMI, total interest and a full amortization schedule.",
     keywords: ["emi calculator", "loan emi calculator", "home loan emi", "car loan emi", "personal loan calculator", "amortization schedule"],
     category: "Calculators",
@@ -176,7 +177,7 @@ export const TOOLS: ToolDef[] = [
     label: "GST Calculator",
     title: "GST Calculator India — Add or Remove GST (5%, 18%, 40%)",
     description:
-      "Add GST to a price or remove GST from an inclusive amount with the current slabs (0.25%, 3%, 5%, 18%, 40%) or any custom rate. Shows CGST, SGST and IGST split instantly.",
+      "Add or remove GST with the current rates (5%, 18%, 40% and more) or a custom rate, and see the CGST, SGST and IGST split instantly.",
     blurb: "Add or remove GST with CGST / SGST / IGST split.",
     keywords: ["gst calculator", "gst calculator india", "reverse gst calculator", "gst inclusive calculator", "cgst sgst calculator", "18% gst"],
     category: "Calculators",
@@ -226,7 +227,7 @@ export const TOOLS: ToolDef[] = [
     label: "Unit Converter",
     title: "Unit Converter — Length, Weight, Temperature, Area & More",
     description:
-      "Convert between metric and imperial units for length, weight, temperature, area, volume, speed and digital storage. Fast, accurate and works offline once loaded.",
+      "Convert metric and imperial units for length, weight, temperature, area, volume, speed and data storage — fast, accurate and free.",
     blurb: "Length, weight, temperature, area, volume, speed and data.",
     keywords: ["unit converter", "cm to inches", "kg to lbs", "celsius to fahrenheit", "km to miles", "sq ft to sq m", "mb to gb"],
     category: "Calculators",
@@ -244,7 +245,7 @@ export const TOOLS: ToolDef[] = [
     label: "JSON Formatter",
     title: "JSON Formatter & Validator — Beautify, Minify and Check JSON",
     description:
-      "Paste JSON to format, beautify, minify or validate it instantly, with the exact line and column of any error. Runs entirely in your browser — nothing is uploaded.",
+      "Format, beautify, minify or validate JSON instantly, with the exact line and column of any error. Runs in your browser — nothing is uploaded.",
     blurb: "Beautify, minify and validate JSON with clear error messages.",
     keywords: ["json formatter", "json validator", "json beautifier", "format json online", "minify json", "json lint"],
     category: "Developer",
@@ -278,7 +279,7 @@ export const TOOLS: ToolDef[] = [
     label: "UUID Generator",
     title: "UUID Generator — Random v4 UUIDs / GUIDs in Bulk",
     description:
-      "Generate cryptographically secure random UUID v4 (GUID) values — one or up to 500 at a time, in upper or lower case, with or without hyphens. Copy all in one click.",
+      "Generate secure random UUID v4 / GUID values — one or up to 500 at once, upper or lower case, with or without hyphens. Copy all in one click.",
     blurb: "Generate random v4 UUIDs / GUIDs in bulk.",
     keywords: ["uuid generator", "guid generator", "uuid v4", "random uuid", "generate uuid online"],
     category: "Developer",
@@ -294,7 +295,7 @@ export const TOOLS: ToolDef[] = [
     label: "Unix Timestamp Converter",
     title: "Unix Timestamp Converter — Epoch to Date and Back",
     description:
-      "Convert Unix epoch timestamps (seconds or milliseconds) to human-readable dates in UTC and your local time zone, and turn any date back into a timestamp. Live current epoch clock.",
+      "Convert Unix epoch timestamps (seconds or milliseconds) to readable dates in UTC and your time zone, and any date back into a timestamp.",
     blurb: "Convert epoch timestamps to dates and back.",
     keywords: ["unix timestamp converter", "epoch converter", "timestamp to date", "date to timestamp", "current epoch time"],
     category: "Developer",
@@ -311,7 +312,7 @@ export const TOOLS: ToolDef[] = [
     label: "Hash Generator",
     title: "SHA-256 Hash Generator — SHA-1, SHA-384, SHA-512 Online",
     description:
-      "Generate SHA-1, SHA-256, SHA-384 and SHA-512 hashes of any text or file instantly using the Web Crypto API. Nothing is uploaded — hashing happens on your device.",
+      "Generate SHA-1, SHA-256, SHA-384 and SHA-512 hashes of any text or file instantly. Nothing is uploaded — hashing happens on your device.",
     blurb: "SHA-1 / SHA-256 / SHA-512 hashes of text or files.",
     keywords: ["sha256 generator", "hash generator", "sha512 online", "sha1 hash", "file checksum", "sha256 checksum"],
     category: "Developer",
@@ -329,7 +330,7 @@ export const TOOLS: ToolDef[] = [
     label: "JWT Decoder",
     title: "JWT Decoder — Decode JSON Web Tokens Online",
     description:
-      "Paste a JWT to decode its header and payload, see issued-at and expiry times in your time zone, and check whether the token has expired. Decoded locally — tokens never leave your browser.",
+      "Decode a JWT's header and payload, see issued-at and expiry times, and check if it has expired. Decoded locally — tokens never leave your browser.",
     blurb: "Decode JWT header & payload, check expiry. Nothing is uploaded.",
     keywords: ["jwt decoder", "decode jwt", "jwt parser", "json web token decoder", "jwt expiry checker"],
     category: "Developer",
@@ -362,7 +363,7 @@ export const TOOLS: ToolDef[] = [
     label: "Regex Tester",
     title: "Regex Tester — Test JavaScript Regular Expressions Live",
     description:
-      "Write a regular expression and see every match highlighted live, with capture groups, named groups, flags and a replace preview. Uses the JavaScript regex engine.",
+      "Test regular expressions with live match highlighting, capture and named groups, flags and a replace preview, using the JavaScript regex engine.",
     blurb: "Live match highlighting, groups and replace preview.",
     keywords: ["regex tester", "regular expression tester", "regex online", "javascript regex", "regex checker"],
     category: "Developer",
@@ -378,7 +379,7 @@ export const TOOLS: ToolDef[] = [
     label: "Diff Checker",
     title: "Diff Checker — Compare Two Texts and Find Differences",
     description:
-      "Paste two versions of text or code and see added and removed lines highlighted side by side. Ignore whitespace or case. Runs in your browser — nothing is uploaded.",
+      "Compare two versions of text or code and see added and removed lines side by side. Ignore whitespace or case. Nothing is uploaded.",
     blurb: "Compare two texts line by line with highlighted changes.",
     keywords: ["diff checker", "text compare", "compare two texts", "diff tool online", "code compare"],
     category: "Developer",
@@ -396,7 +397,7 @@ export const TOOLS: ToolDef[] = [
     label: "Word Counter",
     title: "Word Counter — Count Words, Characters & Reading Time",
     description:
-      "Count words, characters (with and without spaces), sentences and paragraphs as you type, plus reading and speaking time. Great for essays, tweets, LinkedIn posts and SEO meta tags.",
+      "Count words, characters, sentences and paragraphs as you type, plus reading time — handy for essays, tweets, LinkedIn posts and meta descriptions.",
     blurb: "Words, characters, sentences and reading time as you type.",
     keywords: ["word counter", "character counter", "word count", "reading time calculator", "letter counter"],
     category: "Utilities",
@@ -444,7 +445,7 @@ export const TOOLS: ToolDef[] = [
     label: "Password Generator",
     title: "Strong Password Generator — Secure & Random",
     description:
-      "Create strong, cryptographically random passwords up to 64 characters with letters, numbers and symbols. Generated locally in your browser and never sent anywhere.",
+      "Create strong, random passwords up to 64 characters with letters, numbers and symbols. Generated in your browser and never sent anywhere.",
     blurb: "Cryptographically random passwords. Generated locally, never sent anywhere.",
     keywords: ["password generator", "strong password generator", "random password", "secure password"],
     category: "Utilities",
@@ -477,7 +478,7 @@ export const TOOLS: ToolDef[] = [
     label: "Image Compressor",
     title: "Image Compressor — Compress & Resize JPG, PNG, WebP Online",
     description:
-      "Shrink image file sizes and resize photos in your browser. Convert to JPEG, WebP or PNG, adjust quality, and compare before and after — images are never uploaded.",
+      "Compress and resize photos in your browser, convert to JPEG, WebP or PNG and compare before and after. Your images are never uploaded.",
     blurb: "Compress, resize and convert images — never uploaded.",
     keywords: ["image compressor", "compress jpg", "reduce image size", "resize image", "png to webp", "compress image to 100kb"],
     category: "Utilities",
@@ -536,7 +537,7 @@ export function toolMetadata(slug: string): Metadata {
   const t = getTool(slug)
   const path = `/${t.slug}`
   return {
-    title: t.title,
+    title: seoTitle(t.title),
     description: t.description,
     keywords: t.keywords,
     alternates: { canonical: path },

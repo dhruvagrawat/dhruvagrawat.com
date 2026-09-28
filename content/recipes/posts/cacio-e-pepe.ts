@@ -4,7 +4,7 @@ export default defineRecipe({
   slug: "cacio-e-pepe",
   title: "Cacio e Pepe",
   description:
-    "The Roman classic of pasta, Pecorino Romano and black pepper — with the foolproof method for a creamy, clump-free sauce. No butter, no cream, just three ingredients and technique.",
+    "The Roman classic of pasta, Pecorino Romano and black pepper, with a foolproof method for a creamy, clump-free sauce. No butter, no cream.",
   date: "2026-02-22",
   category: "Pasta",
   cuisine: "Italian",

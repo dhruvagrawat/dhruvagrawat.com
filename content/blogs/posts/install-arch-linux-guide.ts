@@ -4,7 +4,7 @@ export default defineBlog({
   slug: "install-arch-linux-guide",
   title: "How to Install Arch Linux: A Clear, Step-by-Step Guide",
   description:
-    "Install Arch Linux on a UEFI machine from scratch — partitioning, pacstrap, bootloader, networking and your first user — with every command explained, plus when to just use archinstall.",
+    "Install Arch Linux on a UEFI machine step by step — partitioning, pacstrap, bootloader, networking and your first user — with every command explained.",
   date: "2025-10-12",
   category: "Arch Linux",
   tags: ["Arch Linux", "Linux", "Installation", "Tutorial"],

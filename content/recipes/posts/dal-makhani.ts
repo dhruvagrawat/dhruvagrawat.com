@@ -4,7 +4,7 @@ export default defineRecipe({
   slug: "dal-makhani",
   title: "Dal Makhani (Restaurant Style)",
   description:
-    "Slow-cooked Punjabi dal makhani: whole black urad dal and rajma simmered with butter, tomatoes and cream until velvety — with the optional charcoal smoke (dhungar) for that dhaba flavour.",
+    "Slow-cooked Punjabi dal makhani: black urad dal and rajma simmered with butter, tomato and cream until velvety, with optional dhungar smoke.",
   date: "2026-01-18",
   category: "Main course",
   cuisine: "North Indian",

@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     template: `%s | ${DATA.name}`,
   },
   description:
-    "Dhruv Agrawat is a full-stack software engineer and freelancer in New Delhi building fast, scalable web products with React, Next.js and Node.js — plus 25 free online tools.",
+    "Dhruv Agrawat is a full-stack engineer and freelancer in New Delhi building fast, scalable web products with React, Next.js and Node.js.",
   keywords: [
     "Dhruv Agrawat", "Full-Stack Engineer", "Freelancer", "Next.js", "React",
     "TypeScript", "Node.js", "Web Development", "India", "Portfolio",

@@ -2,8 +2,10 @@ import { allProjects } from "@/content/projects"
 import { ProjectsGridClient } from "@/components/project/projects-grid-client"
 
 export const metadata = {
-  title: "Projects",
-  description: "Things I've built — side projects, freelance work, and startup experiments.",
+  title: "Projects — Web Apps, Automation & Computer Vision",
+  description:
+    "Projects by Dhruv Agrawat: an AI website automation platform, a WebRTC video conferencing app, an OpenCV air painter and this Next.js portfolio.",
+  alternates: { canonical: "/projects" },
 }
 
 export default function ProjectsPage() {

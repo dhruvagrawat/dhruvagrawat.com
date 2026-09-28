@@ -1,14 +1,15 @@
 import type { Metadata } from "next"
+import { seoTitle } from "@/lib/seo"
 import { allRecipes } from "@/content/recipes"
 import { DATA } from "@/data/resume"
 import { RecipeBrowser } from "@/components/recipe/recipe-ui"
 
 const title = "Recipes — Authentic Italian Pasta & North Indian Classics"
 const description =
-  "Tested home recipes: authentic Italian pasta like arrabbiata, fettuccine Alfredo and cacio e pepe, plus North Indian classics — dal makhani, shahi paneer and veg dum biryani."
+  "Tested home recipes: authentic Italian pasta like arrabbiata, Alfredo and cacio e pepe, plus North Indian classics like dal makhani and shahi paneer."
 
 export const metadata: Metadata = {
-  title,
+  title: seoTitle(title),
   description,
   alternates: { canonical: "/resipy" },
   openGraph: { title, description, url: "/resipy" },

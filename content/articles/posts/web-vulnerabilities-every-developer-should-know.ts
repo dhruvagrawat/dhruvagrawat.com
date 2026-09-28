@@ -2,9 +2,9 @@ import { defineArticle } from "@/content/define"
 
 export default defineArticle({
   slug: "web-vulnerabilities-every-developer-should-know",
-  title: "8 Web Vulnerabilities Every Developer Should Know (and How to Prevent Them)",
+  title: "8 Web Vulnerabilities Every Developer Should Know",
   description:
-    "Broken access control, injection, XSS, CSRF, SSRF, insecure secrets, vulnerable dependencies and missing rate limits — how each attack works and the concrete fixes, with code examples.",
+    "Broken access control, injection, XSS, CSRF, SSRF, leaked secrets and more — how each attack works and how to fix it, with code examples.",
   date: "2026-01-26",
   category: "Security",
   tags: ["Security", "OWASP", "Web Development", "Node.js", "Best Practices"],

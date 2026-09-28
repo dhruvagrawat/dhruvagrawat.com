@@ -4,7 +4,8 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ArrowRight, MapPin } from "lucide-react"
 import { DATA } from "@/data/resume"
-import { getPlace, publishedPlaces } from "@/content/travel/places"
+import { seoTitle } from "@/lib/seo"
+import { getPlace, isIndexable, publishedPlaces } from "@/content/travel/places"
 import { Markdown } from "@/components/travel/markdown"
 import { LocatorGlobe } from "@/components/travel/locator-globe"
 import { StatusBadge } from "@/components/travel/explorer"
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const title =
     p.status === "wishlist" ? `${p.name}, ${p.country} — On My Travel Wishlist` : `${p.name}, ${p.country} — Travel Journal & Tips`
   return {
-    title,
+    title: seoTitle(title),
     description: p.summary,
     alternates: { canonical: `/travel/${p.slug}` },
     openGraph: {
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: "article",
       ...(p.cover ? { images: [{ url: p.cover.src, alt: p.cover.alt }] } : {}),
     },
-    ...(p.draft ? { robots: { index: false, follow: false } } : {}),
+    ...(!isIndexable(p) ? { robots: { index: false, follow: true } } : {}),
   }
 }
 

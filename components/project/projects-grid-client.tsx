@@ -53,7 +53,7 @@ export function ProjectsGridClient({ projects }: ProjectsGridClientProps) {
                 {project.githubUrl && (
                   <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1"
                     onClick={(e) => e.stopPropagation()}>
-                    <Button variant="outline" size="sm" className="w-full border-zinc-700 hover:bg-zinc-800 bg-transparent">
+                    <Button variant="outline" size="sm" className="w-full border-zinc-700 bg-transparent text-zinc-100 hover:bg-zinc-800 hover:text-white">
                       <Github className="w-4 h-4 mr-2" /> Code
                     </Button>
                   </a>

@@ -3,7 +3,7 @@ import { TOOLS } from "@/lib/tools"
 import { allBlogs } from "@/content/blogs"
 import { allArticles } from "@/content/articles"
 import { allRecipes } from "@/content/recipes"
-import { publishedPlaces } from "@/content/travel/places"
+import { isIndexable, publishedPlaces } from "@/content/travel/places"
 
 export const dynamic = "force-static"
 
@@ -52,7 +52,7 @@ ${allArticles.map((a) => `- [${a.title}](${u}/articles/${a.slug}): ${a.descripti
 ${allRecipes.map((r) => `- [${r.title}](${u}/resipy/${r.slug}) (${r.cuisine ?? r.category}${r.vegetarian ? ", vegetarian" : ""}): ${r.description}`).join("\n")}
 
 ## Travel journal
-${publishedPlaces.filter((p) => !p.draft).map((p) => `- [${p.name}, ${p.country}](${u}/travel/${p.slug}) (${p.status === "visited" ? "visited" : "wishlist"}): ${p.summary}`).join("\n")}
+${publishedPlaces.filter(isIndexable).map((p) => `- [${p.name}, ${p.country}](${u}/travel/${p.slug}) (${p.status === "visited" ? "visited" : "wishlist"}): ${p.summary}`).join("\n")}
 
 ## Free tools (no sign-up, most run entirely in the browser)
 ${tools.map((t) => `- [${t.label}](${u}/${t.slug}): ${t.blurb}`).join("\n")}

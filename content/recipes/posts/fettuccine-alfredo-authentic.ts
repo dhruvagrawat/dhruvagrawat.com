@@ -4,7 +4,7 @@ export default defineRecipe({
   slug: "fettuccine-alfredo-authentic",
   title: "Fettuccine Alfredo (the Original, No Cream)",
   description:
-    "The real Roman fettuccine Alfredo — fettuccine al burro — made with just butter, Parmigiano Reggiano and starchy pasta water, emulsified into a silky sauce. Three ingredients, 15 minutes.",
+    "The original Roman fettuccine Alfredo: just butter, Parmigiano Reggiano and pasta water emulsified into a silky sauce. No cream, 15 minutes.",
   date: "2025-11-09",
   category: "Pasta",
   cuisine: "Italian",

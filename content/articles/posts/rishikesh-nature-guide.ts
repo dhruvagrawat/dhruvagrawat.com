@@ -4,7 +4,7 @@ export default defineArticle({
   slug: "rishikesh-nature-guide",
   title: "Rishikesh Beyond Rafting: A Nature Lover's Guide",
   description:
-    "The quieter side of Rishikesh — Ganga ghats at dawn, forest waterfalls, the Beatles Ashram, sunrise at Kunjapuri, riverside camps and Rajaji National Park — plus when to visit and how to get there.",
+    "The quieter side of Rishikesh: ghats at dawn, forest waterfalls, the Beatles Ashram, Kunjapuri sunrise and Rajaji National Park, plus when to go.",
   date: "2026-05-27",
   category: "Travel",
   tags: ["Travel", "Rishikesh", "Uttarakhand", "Nature", "India"],

@@ -11,28 +11,30 @@ interface PasswordGateProps {
   isAuthenticated: boolean
 }
 
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
-
 export function PasswordGate({ onAuthenticated, isAuthenticated }: PasswordGateProps) {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // The password is checked on the server, which sets an httpOnly session cookie
+  // that the admin API routes require.
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
-
-    setTimeout(() => {
-      if (!ADMIN_PASSWORD) {
-        setError("Admin password not configured")
-      } else if (password === ADMIN_PASSWORD) {
-        onAuthenticated()
-      } else {
-        setError("Incorrect password")
-      }
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ password }),
+      })
+      if (res.ok) onAuthenticated()
+      else setError(res.status === 401 ? "Incorrect password" : "Admin login isn't configured")
+    } catch {
+      setError("Couldn't reach the server")
+    } finally {
       setIsLoading(false)
-    }, 800)
+    }
   }
 
   if (isAuthenticated) return null

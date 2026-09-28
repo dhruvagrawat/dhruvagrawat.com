@@ -1,3 +1,4 @@
+import { requireAdmin } from "@/lib/admin-auth"
 import { createClient } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -21,6 +22,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = requireAdmin(req)
+  if (denied) return denied
+
   try {
     const body = await req.json()
     const { data, error } = await getSupabase().from("music").insert([body]).select()

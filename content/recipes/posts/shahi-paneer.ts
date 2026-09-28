@@ -4,7 +4,7 @@ export default defineRecipe({
   slug: "shahi-paneer",
   title: "Shahi Paneer",
   description:
-    "Restaurant-style shahi paneer at home: soft paneer in a rich, mildly spiced Mughlai gravy of onions, tomatoes, cashews, cream and whole spices, finished with kasuri methi and saffron.",
+    "Restaurant-style shahi paneer: soft paneer in a rich, mildly spiced Mughlai gravy of onions, tomatoes, cashews and cream, finished with kasuri methi.",
   date: "2025-10-26",
   category: "Main course",
   cuisine: "North Indian",

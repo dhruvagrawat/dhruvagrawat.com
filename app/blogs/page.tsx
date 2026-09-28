@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { seoTitle } from "@/lib/seo"
 import { allBlogs } from "@/content/blogs"
 import { DATA } from "@/data/resume"
 import { PostList } from "@/components/writing/post-list"
@@ -8,7 +9,7 @@ const description =
   "Hands-on posts about Linux, Arch Linux, open source, the terminal and developer tools — practical guides, cheat sheets and tricks from a full-stack engineer."
 
 export const metadata: Metadata = {
-  title,
+  title: seoTitle(title),
   description,
   alternates: { canonical: "/blogs", types: { "application/rss+xml": "/blogs/rss.xml" } },
   openGraph: { title, description, url: "/blogs" },

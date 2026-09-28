@@ -1,3 +1,4 @@
+import { requireAdmin } from "@/lib/admin-auth"
 import { createClient } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -11,6 +12,9 @@ function getSupabase() {
 export const dynamic = "force-dynamic"
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  const denied = requireAdmin(req)
+  if (denied) return denied
+
   try {
     const body = await req.json()
     const { data, error } = await getSupabase()
@@ -26,6 +30,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const denied = requireAdmin(req)
+  if (denied) return denied
+
   try {
     const { error } = await getSupabase().from("music").delete().eq("id", params.id)
     if (error) throw error

@@ -17,6 +17,33 @@ export const allProjects: ProjectMeta[] = [
     startDate: "2024-01-01",
     teamSize: 1,
   },
+  {
+    slug: "ai-website-automation-tool",
+    title: "AI Website Automation Tool",
+    description:
+      "An AI-powered automation platform that generates and deploys websites using modern full-stack technologies.",
+    technologies: ["Next.js", "Node.js", "MongoDB", "Docker", "AI APIs"],
+    status: "Active",
+    startDate: "2024-01-01",
+  },
+  {
+    slug: "video-conferencing-platform",
+    title: "Video Conferencing Platform",
+    description:
+      "A real-time video conferencing system built on WebRTC, with in-call chat and audio-video sync.",
+    technologies: ["WebRTC", "Node.js", "JavaScript"],
+    status: "Completed",
+    startDate: "2023-01-01",
+  },
+  {
+    slug: "opencv-air-painter",
+    title: "OpenCV Air Painter",
+    description:
+      "A gesture-based virtual drawing app: draw in the air with your finger in front of a webcam. Built with OpenCV and Python and optimised for low-end hardware.",
+    technologies: ["Python", "OpenCV"],
+    status: "Completed",
+    startDate: "2023-01-01",
+  },
   // add more projects here
 ]
 

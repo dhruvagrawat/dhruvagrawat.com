@@ -4,7 +4,7 @@ export default defineArticle({
   slug: "passkeys-password-managers-2fa",
   title: "Passkeys, Password Managers and 2FA: Securing Your Digital Life",
   description:
-    "Why passwords fail, how password managers and passkeys fix it, which kind of two-factor authentication to use, and a 30-minute plan to lock down your email, bank and work accounts.",
+    "How password managers, passkeys and the right kind of 2FA protect you — plus a 30-minute plan to lock down your email, bank and work accounts.",
   date: "2025-12-08",
   category: "Security",
   tags: ["Security", "Passkeys", "2FA", "Password Manager", "Privacy"],
