@@ -63,58 +63,272 @@ Every journey on this map starts here. Delhi is where I build, ship and daydream
     ],
   },
 
-  /* ---------- Drafts: examples from my photo folder — edit them, then remove `draft: true` ---------- */
   {
     slug: "rishikesh",
     name: "Rishikesh",
     region: "Uttarakhand",
     country: "India",
     countryCode: "IN",
-    lat: 30.0869,
-    lng: 78.2676,
+    lat: 30.1187,
+    lng: 78.3115,
     status: "visited",
-    when: "Add the month you went",
-    summary: "The Ganga, the ghats and the foothills — replace this with one line about the trip.",
-    cover: { src: "/summit/g2-1600.webp", alt: "The Ganga flowing past rocks and ghats in Rishikesh" },
-    tags: ["river", "foothills"],
-    story: `## The river
+    when: "February 2025",
+    summary:
+      "A winter day on the Ganga above Rishikesh — jade-green water, smooth river boulders and the Shivalik foothills closing in on both banks.",
+    cover: {
+      src: "/photography/web/IMG_20250208_142507.webp",
+      alt: "Jade-green Ganga flowing past large grey boulders below forested hills near Rishikesh",
+    },
+    tags: ["river", "foothills", "Ganga", "Uttarakhand", "winter"],
+    story: `## The river in February
 
-Write about the trip here. What did you do first? Where did you stay? What surprised you?
+I reached Rishikesh in early February 2025, straight after a few days of snow higher up in Uttarakhand. Coming down from the cold, the Ganga felt almost warm by comparison — and in winter it runs clear and green instead of the brown monsoon flow most photos show.
+
+Most of the day went on the riverbank upstream of the main town, where the crowds thin out and the river is lined with huge, water-polished rocks. It's the kind of place where you sit on a boulder for an hour and only notice the time because the light on the hills has changed.
+
+![The ghat and boats at Rishikesh with the foothills behind](/photography/web/5.webp)
+
+## Why winter works
+
+February is one of the best months to be here. The days are sunny and mild, the evenings cool, and the river is calm and clean. Rafting season is starting up again, but the beaches along the bank are still quiet on weekdays.
 
 ## What I'd do again
 
-- One thing you loved
-- A place to eat
-- A walk or view worth the effort`,
+- Walk upstream along the river instead of staying around the bridges
+- Sit on the rocks through the afternoon and watch the colour of the water change with the light
+- Treat it as a slow recovery stop after a trek — it's perfect for that
+
+For a full guide to the walks, waterfalls and forest trails around town, read my [Rishikesh nature guide](/articles/rishikesh-nature-guide).`,
     facts: [
+      { label: "When", value: "8 February 2025" },
+      { label: "Altitude", value: "≈ 340 m" },
       { label: "Best time", value: "Sep – Nov, Feb – Apr" },
       { label: "Getting there", value: "Train to Haridwar or Rishikesh, or fly into Dehradun" },
     ],
-    tips: ["Add your own tips here."],
-    draft: true,
+    tips: [
+      "Go in winter or spring if you want the river green and clear.",
+      "River rocks are slippery near the water — the current is much stronger than it looks.",
+      "Weekdays are far quieter than weekends, when Delhi empties into town.",
+    ],
+    gallery: [
+      { src: "/photography/web/IMG_20250208_115615.webp", alt: "Sun flaring over the Ganga and rocky bank near Rishikesh", caption: "Late morning on the bank" },
+      { src: "/photography/web/IMG_20250208_145753.webp", alt: "Sunlight sparkling on the Ganga beside a large boulder", caption: "Afternoon light on the water" },
+      { src: "/photography/web/5.webp", alt: "Ghat steps, boats and a rocky island in the Ganga at Rishikesh", caption: "The ghats" },
+    ],
   },
   {
     slug: "dharamshala",
-    name: "Dharamshala & McLeod Ganj",
+    name: "Dharamshala",
     region: "Himachal Pradesh",
     country: "India",
     countryCode: "IN",
-    lat: 32.2432,
+    lat: 32.219,
+    lng: 76.3234,
+    status: "visited",
+    when: "June 2025",
+    summary:
+      "The gateway to the Dhauladhar range — where the Kangra valley ends and the road starts climbing towards McLeod Ganj, Triund and Laka Glacier.",
+    cover: {
+      src: "/photography/web/IMG_20250614_005210.webp",
+      alt: "Green hillside looking out over the Kangra valley under monsoon clouds near Dharamshala",
+    },
+    tags: ["mountains", "Himachal", "Dhauladhar", "hill station"],
+    story: `## The gateway
+
+Dharamshala was the starting point of my June 2025 trip into the Dhauladhars. It's really two towns stacked on one mountainside: lower Dharamshala, the busy market and bus hub down in the Kangra valley, and upper Dharamshala — McLeod Ganj, Bhagsu and Dharamkot — about 600 metres higher up the hill.
+
+The thing that stays with you is the wall of mountains directly behind it. The Dhauladhar range rises so steeply from the valley that you can go from warm, green terraces to snowfields in a single long day on foot. That's exactly what I came for: the plan was a few days on the trail to [Triund](/travel/triund-trek) and [Laka Glacier](/travel/laka-glacier), with [McLeod Ganj](/travel/mcleod-ganj) as the base.
+
+## Weather in June
+
+I arrived just before the monsoon properly set in. Mornings were often clear, but clouds built up over the valley every afternoon — the view you see above, with the hills fading into grey, was the typical light of the trip. Pack a rain jacket even when the forecast looks fine.
+
+## Getting there
+
+- **Bus**: overnight Volvo buses from Delhi reach Dharamshala or McLeod Ganj in about 10–12 hours
+- **Train**: Pathankot is the nearest broad-gauge station, around 3 hours by road
+- **Air**: Gaggal (Kangra) airport is about 15 km from town
+
+If you're heading up to trek, read [Himachal treks for beginners](/articles/himachal-treks-for-beginners) before you go.`,
+    facts: [
+      { label: "When", value: "June 2025" },
+      { label: "Altitude", value: "≈ 1,450 m (lower town)" },
+      { label: "Best time", value: "Mar – Jun, Sep – Nov" },
+      { label: "Getting there", value: "Overnight bus from Delhi, or fly into Gaggal (Kangra)" },
+    ],
+    tips: [
+      "Stay up in McLeod Ganj or Dharamkot if you plan to trek — it saves a steep climb every morning.",
+      "Afternoon clouds are the norm from June; start walks early.",
+      "Shared taxis run between lower Dharamshala and McLeod Ganj all day.",
+    ],
+  },
+  {
+    slug: "mcleod-ganj",
+    name: "McLeod Ganj",
+    region: "Himachal Pradesh",
+    country: "India",
+    countryCode: "IN",
+    lat: 32.2426,
     lng: 76.3213,
     status: "visited",
-    when: "Add the month you went",
-    summary: "A hill town waking up under the Dhauladhars — replace this with your own line.",
-    cover: { src: "/summit/summit-2400.webp", alt: "Sunrise over a hill town and forested mountains" },
-    tags: ["mountains", "trek"],
-    story: `## Morning over the town
+    when: "June 2025",
+    summary:
+      "Sunrise over McLeod Ganj — pastel rooftops stacked on the hillside, deodar forest all around and the Dhauladhars fading into morning haze.",
+    cover: {
+      src: "/photography/web/IMG_20250613_070511.webp",
+      alt: "The sun rising over McLeod Ganj with colourful rooftops and forested mountains",
+    },
+    tags: ["mountains", "Himachal", "sunrise", "town", "trek base"],
+    story: `## The base camp town
 
-Write about the trip here.`,
-    gallery: [
-      { src: "/summit/g7-1600.webp", alt: "Alpine valley full of boulders below misty peaks", caption: "Boulder valley" },
-      { src: "/summit/g6-1600.webp", alt: "Rocky forest trail disappearing into fog", caption: "Into the fog" },
-      { src: "/summit/g8-1600.webp", alt: "Storm clouds rolling over a forested valley", caption: "Storm coming in" },
+McLeod Ganj was my base for the Triund and Laka Glacier trek in June 2025. It sits on a ridge above [Dharamshala](/travel/dharamshala), at roughly 2,000 metres, and it's home to the Tibetan government in exile and the residence of the Dalai Lama — so the streets are a mix of monks, trekkers, cafés, prayer flags and momo stalls.
+
+## Morning after the trek
+
+The photo at the top of this page is the one I like most from the whole trip. I took it at about seven in the morning on 13 June, the day after coming down from Laka Glacier: the sun just clearing the ridge, the town still quiet, and the whole hillside of teal and red rooftops catching the first light. After two days of rock, fog and cold, a slow morning looking over the town felt earned.
+
+![McLeod Ganj rooftops and forest in the soft morning light](/photography/web/IMG_20250613_071639.webp)
+
+## Why start the trek here
+
+The Triund trail starts just above town, at the Gallu Devi temple beyond Dharamkot. Staying in McLeod Ganj or Dharamkot means you can leave early on foot, avoid the afternoon clouds on the ridge and still be at Triund by lunchtime.
+
+## What I'd do again
+
+- Catch the sunrise from a rooftop on the upper side of town
+- Spend a rest day here after the trek rather than rushing back to Delhi
+- Walk to Bhagsu and Dharamkot — both are an easy stroll away
+
+Continue the story: [the Triund trek](/travel/triund-trek) and [Laka Glacier](/travel/laka-glacier).`,
+    facts: [
+      { label: "When", value: "11 – 13 June 2025" },
+      { label: "Altitude", value: "≈ 2,000 m" },
+      { label: "Known for", value: "Tibetan culture, cafés, trekking base" },
+      { label: "Getting there", value: "Overnight bus from Delhi, or taxi from Dharamshala (≈ 10 km)" },
     ],
-    draft: true,
+    tips: [
+      "Book a room with an east-facing view — sunrise over the town is worth it.",
+      "Leave for Triund from Dharamkot early; the ridge often clouds over after noon.",
+      "Keep a day spare at the end of the trek for rest and weather delays.",
+    ],
+    gallery: [
+      { src: "/photography/web/IMG_20250613_071639.webp", alt: "Hillside of McLeod Ganj buildings under hazy morning light", caption: "13 June, 7 am" },
+      { src: "/photography/web/IMG_20250614_005210.webp", alt: "Grassy slope above McLeod Ganj looking over the valley", caption: "Above town before the climb" },
+    ],
+  },
+  {
+    slug: "triund-trek",
+    name: "Triund Trek",
+    region: "Himachal Pradesh",
+    country: "India",
+    countryCode: "IN",
+    lat: 32.2593,
+    lng: 76.3567,
+    status: "visited",
+    when: "June 2025",
+    summary:
+      "The classic Dhauladhar ridge walk above McLeod Ganj: a steep forest climb to open meadows at 2,850 m, the valley on one side and high peaks on the other.",
+    cover: {
+      src: "/photography/web/IMG_20250611_165200.webp",
+      alt: "Misty forested valley seen from the grassy Triund ridge",
+    },
+    tags: ["trek", "mountains", "Himachal", "Dhauladhar", "beginner friendly"],
+    story: `## Up to the ridge
+
+I walked up to Triund on 11 June 2025, starting from above [McLeod Ganj](/travel/mcleod-ganj). The trail climbs steadily through oak and rhododendron forest, with a few stone-stepped switchbacks near the top that feel much longer than they are. By early afternoon I was out of the trees and onto the open grass of the ridge.
+
+![The grassy trail approaching Triund ridge](/photography/web/IMG_20250614_005137.webp)
+
+## The top
+
+Triund is a long, flat meadow at around 2,850 metres. On one side the Kangra valley drops away; on the other the Dhauladhar peaks rise straight up. That day the clouds were rolling through the valley, so the view came and went — one minute a wall of grey, the next a gap showing forest ridges stacked all the way down.
+
+## Carrying on
+
+Most people stop at Triund, camp for the night and walk down in the morning. I kept going: by evening I was past Triund on the rocky ground below Snowline, at just over 3,100 metres, with storm clouds sitting on the peaks and boulders all around. The next morning was the push to [Laka Glacier](/travel/laka-glacier).
+
+## Worth knowing
+
+- It's a good first Himalayan trek — steady, well-marked and doable in a day
+- The last stretch is the steepest; pace yourself
+- Weather changes fast up here, especially from June
+
+More trail advice in [Himachal treks for beginners](/articles/himachal-treks-for-beginners).`,
+    facts: [
+      { label: "When", value: "11 June 2025" },
+      { label: "Altitude", value: "≈ 2,850 m" },
+      { label: "Distance", value: "≈ 7–9 km one way from Dharamkot / McLeod Ganj" },
+      { label: "Difficulty", value: "Easy – moderate" },
+      { label: "Best time", value: "Mar – Jun, Sep – Nov" },
+    ],
+    tips: [
+      "Start early — the ridge often clouds over by afternoon.",
+      "Carry 2 litres of water; shops on the way are seasonal and expensive.",
+      "Take a warm layer even in summer — it's cold on the ridge once the sun goes.",
+      "Carry your rubbish back down; Triund gets a lot of visitors.",
+    ],
+    gallery: [
+      { src: "/photography/web/IMG_20250614_005137.webp", alt: "Grassy slope and trail below the Triund ridge", caption: "The last stretch to the ridge" },
+      { src: "/photography/web/IMG_20250611_165200.webp", alt: "Clouds filling the valley below Triund", caption: "Clouds over the valley" },
+      { src: "/photography/web/IMG_20250611_181843.webp", alt: "Deodar trees on a rocky slope under heavy clouds", caption: "Evening above Triund" },
+      { src: "/photography/web/IMG_20250611_184649.webp", alt: "Boulder field below the Dhauladhar peaks under storm clouds", caption: "Below Snowline, 3,100 m" },
+    ],
+  },
+  {
+    slug: "laka-glacier",
+    name: "Laka Glacier",
+    region: "Himachal Pradesh",
+    country: "India",
+    countryCode: "IN",
+    lat: 32.2755,
+    lng: 76.3677,
+    status: "visited",
+    when: "June 2025",
+    summary:
+      "Beyond Triund and Snowline: a boulder valley at around 3,350 m where snow still lies in the gullies under the Dhauladhar wall, even in June.",
+    cover: {
+      src: "/photography/web/IMG20250612075827.webp",
+      alt: "Boulder-strewn alpine valley leading up to the Dhauladhar peaks near Laka Glacier",
+    },
+    tags: ["trek", "glacier", "high altitude", "Himachal", "Dhauladhar"],
+    story: `## Above the crowds
+
+Laka Glacier is the next step up from [Triund](/travel/triund-trek), and far fewer people make it. After a night on the rocky ground below Snowline, I started out before sunrise on 12 June 2025. The path climbs through a huge valley of grey granite boulders and short alpine grass, with the Dhauladhar ridge growing taller at the head of it.
+
+![The boulder valley towards Laka Glacier at dawn](/photography/web/IMG20250612075910.webp)
+
+## The glacier
+
+By June the glacier is mostly a long tongue of old snow and ice packed into the gullies at the top of the valley, with meltwater running out from under the boulders. It isn't a clean white icefield — it's grey, rocky and raw, which is exactly what makes it feel like proper high mountain country after the grassy meadows of Triund.
+
+Around mid-morning the clouds lifted for a while and the whole ridge came out: sharp rock peaks, streaks of snow, and deodars clinging to the slopes below. Then the fog came back in, and the walk down was through a quiet, grey forest where you could only see a few trees ahead.
+
+## Worth knowing
+
+- Treat it as a two-day trip from McLeod Ganj, with a night at Triund or Snowline
+- The trail above Snowline is rocky and loose — good shoes matter more than speed
+- Turn back if the weather closes in; the boulder field is hard to navigate in fog
+
+After the descent I spent a slow morning in [McLeod Ganj](/travel/mcleod-ganj). Planning your own first trek? Start with [Himachal treks for beginners](/articles/himachal-treks-for-beginners).`,
+    facts: [
+      { label: "When", value: "12 June 2025" },
+      { label: "Altitude", value: "≈ 3,350 m" },
+      { label: "Route", value: "McLeod Ganj → Triund → Snowline → Laka Glacier" },
+      { label: "Difficulty", value: "Moderate" },
+      { label: "Best time", value: "May – June, late Sep – Oct" },
+    ],
+    tips: [
+      "Start before sunrise from Triund or Snowline for the clearest views.",
+      "Carry layers, a rain shell and gloves — it's cold near the snow even in June.",
+      "Check the weather before going beyond Snowline; don't push on into a storm.",
+    ],
+    gallery: [
+      { src: "/photography/web/IMG_20250612_100741.webp", alt: "Dhauladhar peaks with streaks of snow above deodar trees", caption: "The ridge clears, mid-morning" },
+      { src: "/photography/web/IMG_20250614_005323.webp", alt: "Snow and ice filling a rocky gully at the head of the valley", caption: "The glacier gully" },
+      { src: "/photography/web/IMG_20250612_060747.webp", alt: "Boulders and grass below a forested peak at dawn", caption: "Early start" },
+      { src: "/photography/web/IMG_20250612_103227.webp", alt: "Rocky slope disappearing into fog", caption: "Fog rolling back in" },
+      { src: "/photography/web/IMG_20250612_110659.webp", alt: "Narrow rocky trail through foggy forest", caption: "The walk down" },
+    ],
   },
   {
     slug: "spiti-valley",
