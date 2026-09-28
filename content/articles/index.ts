@@ -1,21 +1,21 @@
 import type { ArticleMeta } from "@/content/types"
-
-// ── Import metadata from each article ───────────────────────────────────────
-// Add a new import + entry here whenever you create a new article folder.
-
+import { mdModule } from "@/components/writing/md-module"
 import { metadata as buildingScalableApis } from "./building-scalable-apis"
+import { posts } from "./posts"
 
-// ── All articles metadata (used by the /articles listing page) ───────────────
-export const allArticles: ArticleMeta[] = [
-  buildingScalableApis,
-  // add new articles here
-]
+/* ── How to add an article ─────────────────────────────────────────────────
+   1. Copy any file in ./posts and edit it (Markdown body)
+   2. Add it to the list in ./posts/index.ts
+   ─────────────────────────────────────────────────────────────────────────── */
 
-// ── Dynamic import registry (used by /articles/[slug] detail page) ───────────
+export const allArticles: ArticleMeta[] = [...posts, buildingScalableApis].sort(
+  (a, b) => +new Date(b.date) - +new Date(a.date)
+)
+
 export const articleRegistry: Record<
   string,
   () => Promise<{ metadata: ArticleMeta; default: React.ComponentType }>
 > = {
   "building-scalable-apis": () => import("./building-scalable-apis"),
-  // add new articles here (key must match slug)
+  ...Object.fromEntries(posts.map((p) => [p.slug, () => Promise.resolve(mdModule(p))])),
 }

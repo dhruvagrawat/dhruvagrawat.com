@@ -1,28 +1,39 @@
+import type { Metadata } from "next"
 import { allRecipes } from "@/content/recipes"
-import { RecipeGrid } from "@/components/recipe/recipe-grid"
+import { DATA } from "@/data/resume"
+import { RecipeBrowser } from "@/components/recipe/recipe-ui"
 
-export const metadata = {
-  title: "Resipy",
-  description: "Recipes I cook and love — from quick weeknight dinners to weekend projects.",
+const title = "Recipes — Authentic Italian Pasta & North Indian Classics"
+const description =
+  "Tested home recipes: authentic Italian pasta like arrabbiata, fettuccine Alfredo and cacio e pepe, plus North Indian classics — dal makhani, shahi paneer and veg dum biryani."
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: "/resipy" },
+  openGraph: { title, description, url: "/resipy" },
 }
 
-export default function RecipePage() {
-  const sorted = [...allRecipes].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
-
+export default function RecipesPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Recipes by " + DATA.name,
+    itemListElement: allRecipes.map((r, i) => ({ "@type": "ListItem", position: i + 1, url: `${DATA.url}/resipy/${r.slug}` })),
+  }
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">Resipy</h1>
-      <p className="text-muted-foreground mb-4">
-        Recipes I cook and love — from quick weeknight dinners to weekend projects.
-      </p>
-
-      {sorted.length === 0 ? (
-        <p className="text-muted-foreground mt-8">No recipes yet — check back soon.</p>
-      ) : (
-        <RecipeGrid recipes={sorted} />
-      )}
+    <div className="mx-auto max-w-6xl">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <header className="mb-12 max-w-3xl">
+        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Resipy · Recipes</p>
+        <h1 className="text-5xl leading-[0.95] sm:text-7xl">
+          Food I actually <span className="italic">cook.</span>
+        </h1>
+        <p className="mt-5 text-lg text-muted-foreground">
+          The Italian classics done the way Rome does them, and the North Indian dishes I grew up on — written step by step, with the small details that make them work.
+        </p>
+      </header>
+      <RecipeBrowser recipes={allRecipes} />
     </div>
   )
 }

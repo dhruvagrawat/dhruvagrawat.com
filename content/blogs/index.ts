@@ -1,21 +1,22 @@
 import type { BlogMeta } from "@/content/types"
-
-// ── Import metadata from each blog ──────────────────────────────────────────
-// Add a new import + entry here whenever you create a new blog folder.
-
+import { mdModule } from "@/components/writing/md-module"
 import { metadata as gettingStartedWithNextjs } from "./getting-started-with-nextjs"
+import { posts } from "./posts"
 
-// ── All blogs metadata (used by the /blogs listing page) ────────────────────
-export const allBlogs: BlogMeta[] = [
-  gettingStartedWithNextjs,
-  // add new blogs here
-]
+/* ── How to add a blog post ────────────────────────────────────────────────
+   1. Copy any file in ./posts, rename it (the file name doesn't matter, `slug` does)
+   2. Edit the fields and write the body in Markdown
+   3. Add it to the list in ./posts/index.ts
+   ─────────────────────────────────────────────────────────────────────────── */
 
-// ── Dynamic import registry (used by /blogs/[slug] detail page) ─────────────
+export const allBlogs: BlogMeta[] = [...posts, gettingStartedWithNextjs].sort(
+  (a, b) => +new Date(b.date) - +new Date(a.date)
+)
+
 export const blogRegistry: Record<
   string,
   () => Promise<{ metadata: BlogMeta; default: React.ComponentType }>
 > = {
   "getting-started-with-nextjs": () => import("./getting-started-with-nextjs"),
-  // add new blogs here (key must match slug)
+  ...Object.fromEntries(posts.map((p) => [p.slug, () => Promise.resolve(mdModule(p))])),
 }

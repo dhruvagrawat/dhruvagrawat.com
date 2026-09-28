@@ -1,28 +1,45 @@
+import type { Metadata } from "next"
 import { allArticles } from "@/content/articles"
-import { ArticleCard } from "@/components/article/article-card"
+import { DATA } from "@/data/resume"
+import { PostList } from "@/components/writing/post-list"
 
-export const metadata = {
-  title: "Articles",
-  description: "In-depth articles on engineering, systems, and software craft.",
+const title = "Articles — Security, Running an Agency & Travelling India"
+const description =
+  "Long-form articles on web security, running a small tech agency and freelancing in India, and travelling through the Himalayas and India's wild places."
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: "/articles", types: { "application/rss+xml": "/articles/rss.xml" } },
+  openGraph: { title, description, url: "/articles" },
 }
 
 export default function ArticlesPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    description,
+    url: `${DATA.url}/articles`,
+    author: { "@type": "Person", name: DATA.name, url: DATA.url },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: allArticles.map((p, i) => ({ "@type": "ListItem", position: i + 1, url: `${DATA.url}/articles/${p.slug}`, name: p.title })),
+    },
+  }
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">Articles</h1>
-      <p className="text-muted-foreground mb-8">In-depth articles on engineering, systems, and software craft.</p>
-
-      {allArticles.length === 0 ? (
-        <p className="text-muted-foreground">No articles yet — check back soon.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allArticles
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-            .map((article) => (
-              <ArticleCard key={article.slug} article={article} />
-            ))}
-        </div>
-      )}
+    <div className="mx-auto max-w-6xl">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <header className="mb-12 max-w-3xl">
+        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Articles</p>
+        <h1 className="text-5xl leading-[0.95] sm:text-7xl">
+          Longer reads, <span className="italic">worth the time.</span>
+        </h1>
+        <p className="mt-5 text-lg text-muted-foreground">
+          Security, building and running an agency, freelancing in India — and the mountains, rivers and trails that keep me sane.
+        </p>
+      </header>
+      <PostList kind="article" posts={allArticles} />
     </div>
   )
 }

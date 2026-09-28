@@ -1,21 +1,25 @@
 import type { RecipeMeta } from "@/content/types"
-
-// ── Import metadata from each recipe ────────────────────────────────────────
-// Add a new import + entry here whenever you create a new recipe folder.
-
 import { metadata as butterChicken } from "./butter-chicken"
+import { recipes } from "./posts"
 
-// ── All recipes metadata (used by the /resipy listing page) ─────────────────
-export const allRecipes: RecipeMeta[] = [
-  butterChicken,
-  // add new recipes here
-]
+/* ── How to add a recipe ───────────────────────────────────────────────────
+   1. Copy any file in ./posts and edit it — ingredients and steps are plain lists
+   2. Add it to the list in ./posts/index.ts
+   3. Photos: put one in /public/recipes/<slug>.webp and set `coverImage`
+   ─────────────────────────────────────────────────────────────────────────── */
 
-// ── Dynamic import registry (used by /resipy/[slug] detail page) ─────────────
+export const allRecipes: RecipeMeta[] = [...recipes, butterChicken].sort(
+  (a, b) => +new Date(b.date) - +new Date(a.date)
+)
+
+function structured(meta: RecipeMeta) {
+  return { metadata: meta, default: () => null }
+}
+
 export const recipeRegistry: Record<
   string,
   () => Promise<{ metadata: RecipeMeta; default: React.ComponentType }>
 > = {
   "butter-chicken": () => import("./butter-chicken"),
-  // add new recipes here (key must match slug)
+  ...Object.fromEntries(recipes.map((r) => [r.slug, () => Promise.resolve(structured(r))])),
 }

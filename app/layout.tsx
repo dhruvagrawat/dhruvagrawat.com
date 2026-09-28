@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Instrument_Sans, Instrument_Serif, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -99,6 +100,15 @@ export default function RootLayout({
             <Navbar />
           </TooltipProvider>
         </ThemeProvider>
+
+        {/* Google Analytics 4 — loaded after the page is interactive so it never slows the first paint */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-JTKTMXGE6X" strategy="afterInteractive" />
+        <Script id="ga4" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-JTKTMXGE6X');`}
+        </Script>
       </body>
     </html>
   );

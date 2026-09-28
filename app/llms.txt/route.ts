@@ -2,6 +2,7 @@ import { DATA } from "@/data/resume"
 import { TOOLS } from "@/lib/tools"
 import { allBlogs } from "@/content/blogs"
 import { allArticles } from "@/content/articles"
+import { allRecipes } from "@/content/recipes"
 import { publishedPlaces } from "@/content/travel/places"
 
 export const dynamic = "force-static"
@@ -46,6 +47,9 @@ ${DATA.education.map((e) => `- ${e.degree}, ${e.school} (${e.start}–${e.end})`
 - [Status](${u}/status): live uptime of Dhruv's sites and services
 ${allBlogs.map((b) => `- [${b.title}](${u}/blogs/${b.slug}): ${b.description}`).join("\n")}
 ${allArticles.map((a) => `- [${a.title}](${u}/articles/${a.slug}): ${a.description}`).join("\n")}
+
+## Recipes
+${allRecipes.map((r) => `- [${r.title}](${u}/resipy/${r.slug}) (${r.cuisine ?? r.category}${r.vegetarian ? ", vegetarian" : ""}): ${r.description}`).join("\n")}
 
 ## Travel journal
 ${publishedPlaces.filter((p) => !p.draft).map((p) => `- [${p.name}, ${p.country}](${u}/travel/${p.slug}) (${p.status === "visited" ? "visited" : "wishlist"}): ${p.summary}`).join("\n")}

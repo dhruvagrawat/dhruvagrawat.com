@@ -6,12 +6,13 @@ export const metadata: RecipeMeta = {
   description:
     "The classic North Indian curry — tender chicken in a velvety tomato-cream sauce with warm spices. Rich, comforting, and surprisingly simple.",
   date: "2025-03-05",
-  category: "Indian",
+  category: "Main course",
   tags: ["Indian", "Chicken", "Curry", "Dinner"],
   prepTime: 20,
   cookTime: 40,
   servings: 4,
-  coverImage: "/placeholder.svg?height=500&width=1000&text=Butter+Chicken",
+  cuisine: "North Indian",
+  difficulty: "Medium",
   ingredients: [
     "700g boneless chicken thighs",
     "1 cup plain yogurt",
