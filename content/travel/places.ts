@@ -64,6 +64,71 @@ Every journey on this map starts here. Delhi is where I build, ship and daydream
   },
 
   {
+    slug: "chandrashila-peak",
+    name: "Chandrashila Peak",
+    region: "Uttarakhand",
+    country: "India",
+    countryCode: "IN",
+    lat: 30.4881,
+    lng: 79.2214,
+    status: "visited",
+    when: "February 2025",
+    summary:
+      "A winter climb from Chopta past Tungnath to Chandrashila summit — deep snow, a whiteout on the way up and a clear 360° Himalayan panorama at the top.",
+    cover: {
+      src: "/photography/web/IMG_20250205_141157.webp",
+      alt: "Snow-covered Chandrashila summit ridge under blue sky with Himalayan ranges fading into the distance",
+    },
+    tags: ["trek", "summit", "snow", "Uttarakhand", "winter", "Garhwal"],
+    story: `## The drive up
+
+This was the first trek of my February 2025 trip to Uttarakhand. The morning of 4 February started low, at around 600 metres, beside a perfectly still stretch of water in the Garhwal hills, and the whole day was spent winding up and up through the valleys. By evening the clouds were pouring through the valley below where I stayed that night, and it was obvious there was fresh snow waiting higher up.
+
+![Clouds filling a Garhwal valley at dusk](/photography/web/IMG_20250204_173310.webp)
+
+## Into the snow
+
+On 5 February I set off from Chopta towards Tungnath and Chandrashila. By 9:40 am I was already at almost 3,000 metres, walking across wide meadows buried in snow, with rhododendron and oak trees standing out dark against the white. Mid-morning the weather closed in completely — for a while the trail was just a line of footprints disappearing into a white wall, with no horizon at all.
+
+![A snowy trail vanishing into a whiteout](/photography/web/IMG_20250205_111745.webp)
+
+## The summit
+
+Then it opened up. Early afternoon on the summit the sky turned deep blue, the clouds lifted off the ranges, and the view went on in every direction: snow-covered ridges right below, dark forested valleys, and the high Garhwal Himalaya lined up along the horizon. Chandrashila — "moon rock" — is famous for exactly this 360° panorama, which on a clear day takes in Chaukhamba, Trishul, Nanda Devi, Kedarnath and Bandarpunch. I stayed up there for a couple of hours, watching the clouds build and clear again, before heading down in the late afternoon light.
+
+A few days later I was down on the Ganga in [Rishikesh](/travel/rishikesh), which felt almost tropical by comparison.
+
+## Worth knowing
+
+- In winter the whole trail is under snow; microspikes or gaiters make a huge difference
+- The route is short but steep — about 3.5 km from Chopta to Tungnath, then about 1.5 km more to the summit
+- Weather changes by the hour; a whiteout in the morning can turn into a perfectly clear summit
+
+New to trekking? Start with [Himachal treks for beginners](/articles/himachal-treks-for-beginners) — most of the advice applies here too.`,
+    facts: [
+      { label: "When", value: "4 – 5 February 2025" },
+      { label: "Summit", value: "≈ 3,690 m" },
+      { label: "Route", value: "Chopta → Tungnath → Chandrashila" },
+      { label: "Distance", value: "≈ 5 km one way from Chopta" },
+      { label: "Difficulty", value: "Easy – moderate (harder in snow)" },
+      { label: "Best time", value: "Dec – Apr for snow, Oct – Nov for clear views" },
+    ],
+    tips: [
+      "Start early from Chopta — summit views are usually clearest before the afternoon.",
+      "Carry microspikes, gaiters and waterproof gloves in winter.",
+      "Don't push on in a whiteout if you can't see the trail; wait or turn back.",
+      "Wear sunglasses — the glare off fresh snow at the top is intense.",
+    ],
+    gallery: [
+      { src: "/photography/web/IMG_20250205_094145.webp", alt: "Snow-covered meadow with dark trees under heavy clouds near Chopta", caption: "Snow meadows at 3,000 m" },
+      { src: "/photography/web/IMG_20250205_100303.webp", alt: "Trekkers crossing a snowy meadow with Himalayan peaks behind", caption: "On the way to Tungnath" },
+      { src: "/photography/web/IMG_20250205_143156.webp", alt: "Snowy rocky ridge below cloud-covered Himalayan peaks", caption: "The view opens up" },
+      { src: "/photography/web/IMG_20250205_152624.webp", alt: "Stone cairn on the snowy Chandrashila summit with ridges beyond", caption: "Cairns at the top" },
+      { src: "/photography/web/IMG_20250205_155236.webp", alt: "Wide snowfield beneath peaks and clouds on Chandrashila", caption: "Late afternoon on the summit" },
+      { src: "/photography/web/IMG_20250204_083828.webp", alt: "Still water reflecting forested hills and clouds in the Garhwal hills", caption: "The drive up, 4 February" },
+    ],
+  },
+  {
     slug: "rishikesh",
     name: "Rishikesh",
     region: "Uttarakhand",
@@ -82,7 +147,7 @@ Every journey on this map starts here. Delhi is where I build, ship and daydream
     tags: ["river", "foothills", "Ganga", "Uttarakhand", "winter"],
     story: `## The river in February
 
-I reached Rishikesh in early February 2025, straight after a few days of snow higher up in Uttarakhand. Coming down from the cold, the Ganga felt almost warm by comparison — and in winter it runs clear and green instead of the brown monsoon flow most photos show.
+I reached Rishikesh in early February 2025, straight after climbing [Chandrashila](/travel/chandrashila-peak) in the snow. Coming down from the cold, the Ganga felt almost warm by comparison — and in winter it runs clear and green instead of the brown monsoon flow most photos show.
 
 Most of the day went on the riverbank upstream of the main town, where the crowds thin out and the river is lined with huge, water-polished rocks. It's the kind of place where you sit on a boulder for an hour and only notice the time because the light on the hills has changed.
 
