@@ -6,6 +6,7 @@ import { allRecipes } from "@/content/recipes"
 import { allMusic } from "@/content/music"
 import { TOOLS } from "@/lib/tools"
 import { isIndexable, publishedPlaces } from "@/content/travel/places"
+import { ABOUT_UPDATED } from "@/lib/person"
 
 const base = DATA.url
 
@@ -24,10 +25,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const articlesUpdated = latest(...allArticles.map((a) => a.updated ?? a.date))
   const recipesUpdated = latest(...allRecipes.map((r) => r.date))
   const travelUpdated = latest(...publishedPlaces.map((p) => p.updated))
-  const siteUpdated = latest(SITE_UPDATED, blogsUpdated.toISOString(), articlesUpdated.toISOString(), recipesUpdated.toISOString(), travelUpdated.toISOString())
+  const siteUpdated = latest(SITE_UPDATED, ABOUT_UPDATED, blogsUpdated.toISOString(), articlesUpdated.toISOString(), recipesUpdated.toISOString(), travelUpdated.toISOString())
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: base, lastModified: siteUpdated, changeFrequency: "weekly", priority: 1 },
+    { url: `${base}/about`, lastModified: new Date(ABOUT_UPDATED), changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/blogs`, lastModified: blogsUpdated, changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/articles`, lastModified: articlesUpdated, changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/resipy`, lastModified: recipesUpdated, changeFrequency: "weekly", priority: 0.8 },

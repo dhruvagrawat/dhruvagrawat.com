@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { seoTitle } from "@/lib/seo"
 import { allArticles } from "@/content/articles"
 import { DATA } from "@/data/resume"
+import { personRef } from "@/lib/person"
 import { PostList } from "@/components/writing/post-list"
 
 const title = "Articles — Security, Running an Agency & Travelling India"
@@ -22,7 +23,7 @@ export default function ArticlesPage() {
     name: title,
     description,
     url: `${DATA.url}/articles`,
-    author: { "@type": "Person", name: DATA.name, url: DATA.url },
+    author: personRef,
     mainEntity: {
       "@type": "ItemList",
       itemListElement: allArticles.map((p, i) => ({ "@type": "ListItem", position: i + 1, url: `${DATA.url}/articles/${p.slug}`, name: p.title })),

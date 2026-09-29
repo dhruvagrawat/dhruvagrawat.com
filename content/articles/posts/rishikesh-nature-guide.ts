@@ -6,6 +6,7 @@ export default defineArticle({
   description:
     "The quieter side of Rishikesh: ghats at dawn, forest waterfalls, the Beatles Ashram, Kunjapuri sunrise and Rajaji National Park, plus when to go.",
   date: "2026-05-27",
+  updated: "2026-09-30",
   category: "Travel",
   tags: ["Travel", "Rishikesh", "Uttarakhand", "Nature", "India"],
   body: `Most people arrive in Rishikesh for the rafting and leave after a weekend of cafés and crowded bridges. Stay a couple of days longer, get up early, and a completely different town appears: a jade-green river pouring out of the Himalayan foothills, forest on both banks, and trails that are empty by seven in the morning.
@@ -29,6 +30,8 @@ export default defineArticle({
 ## The river at dawn
 
 Walk along the ghats around Laxman Jhula and Ram Jhula at sunrise, before the shops open. The river is loud, the air is cold, and the only people around are sadhus, early swimmers and chai sellers lighting their stoves. It's the best free experience in town.
+
+The quietest stretches are upstream of the bridges. When I visited in February 2025, straight after a snow trek to Chandrashila, I spent most of the day on the huge water-polished boulders along the river there — the water was clear and green, and there was hardly anyone around. Photos from that day are in my [Rishikesh travel entry](/travel/rishikesh).
 
 In the evening, the **Ganga Aarti** at Parmarth Niketan or Triveni Ghat is worth seeing once — go a bit early to find a spot on the steps.
 

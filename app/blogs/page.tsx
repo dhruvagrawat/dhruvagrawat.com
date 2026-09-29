@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { seoTitle } from "@/lib/seo"
 import { allBlogs } from "@/content/blogs"
 import { DATA } from "@/data/resume"
+import { personRef } from "@/lib/person"
 import { PostList } from "@/components/writing/post-list"
 
 const title = "Blog — Linux, Arch, Open Source & Developer Tools"
@@ -22,13 +23,13 @@ export default function BlogsPage() {
     name: `${DATA.name}'s blog`,
     description,
     url: `${DATA.url}/blogs`,
-    author: { "@type": "Person", name: DATA.name, url: DATA.url },
+    author: personRef,
     blogPost: allBlogs.map((p) => ({
       "@type": "BlogPosting",
       headline: p.title,
       url: `${DATA.url}/blogs/${p.slug}`,
       datePublished: p.date,
-      author: { "@type": "Person", name: DATA.name },
+      author: personRef,
     })),
   }
   return (

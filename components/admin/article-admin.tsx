@@ -97,7 +97,7 @@ export function ArticleAdmin() {
     description: "",
     image_url: "",
     content: "",
-    author: "Dhruv Agarwat",
+    author: "Dhruv Agrawat",
     tags: [],
     read_time: 10,
   })
@@ -108,7 +108,7 @@ export function ArticleAdmin() {
       description: "",
       image_url: "",
       content: "",
-      author: "Dhruv Agarwat",
+      author: "Dhruv Agrawat",
       tags: [],
       read_time: 10,
     })

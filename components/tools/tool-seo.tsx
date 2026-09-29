@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
 import { DATA } from "@/data/resume"
+import { personRef } from "@/lib/person"
 import { getTool, relatedTools } from "@/lib/tools"
 
 /** JSON-LD for a tool page: WebApplication + BreadcrumbList (+ FAQPage when there are FAQs). */
@@ -17,7 +18,7 @@ export function ToolJsonLd({ slug }: { slug: string }) {
       operatingSystem: "Any (web browser)",
       isAccessibleForFree: true,
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-      author: { "@type": "Person", name: DATA.name, url: DATA.url },
+      author: personRef,
     },
     {
       "@type": "BreadcrumbList",

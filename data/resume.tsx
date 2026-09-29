@@ -85,6 +85,26 @@ export const DATA = {
         icon: Icons.x,
         navbar: true,
       },
+      // Other profiles (from github.com/dhruvagrawat) — not shown in the dock,
+      // but listed in structured data so search engines know they're the same person.
+      Instagram: {
+        name: "Instagram",
+        url: "https://www.instagram.com/dhruvagrawat/",
+        icon: Icons.globe,
+        navbar: false,
+      },
+      LeetCode: {
+        name: "LeetCode",
+        url: "https://leetcode.com/dhruvagrawat/",
+        icon: Icons.globe,
+        navbar: false,
+      },
+      GeeksforGeeks: {
+        name: "GeeksforGeeks",
+        url: "https://auth.geeksforgeeks.org/user/dhruvagrawat",
+        icon: Icons.globe,
+        navbar: false,
+      },
       email: {
         name: "Send Email",
         url: "mailto:agrawatdhruv@gmail.com",
@@ -97,7 +117,7 @@ export const DATA = {
   work: [
     {
       company: "Quadcydle",
-      href: "",
+      href: "https://quadcydle.com",
       badges: ["Co-Founder"],
       location: "New Delhi, India",
       title: "Co-Founder & Software Engineer",

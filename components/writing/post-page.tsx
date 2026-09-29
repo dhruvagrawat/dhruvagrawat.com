@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react"
 import { DATA } from "@/data/resume"
+import { personRef } from "@/lib/person"
 import { seoTitle } from "@/lib/seo"
 import { headingsOf, wordCount } from "./markdown"
 import { CopyLink, ReadingProgress, Toc } from "./post-client"
@@ -40,7 +41,7 @@ export function postMetadata(kind: PostKind, p: PostLike): Metadata {
     title: seoTitle(p.title),
     description: p.description,
     keywords: p.tags,
-    authors: [{ name: DATA.name, url: DATA.url }],
+    authors: [{ name: DATA.name, url: `${DATA.url}/about` }],
     alternates: { canonical: url },
     openGraph: {
       type: "article",
@@ -100,8 +101,8 @@ export function PostPage({
         datePublished: post.date,
         dateModified: post.updated ?? post.date,
         inLanguage: "en-IN",
-        author: { "@type": "Person", name: DATA.name, url: DATA.url },
-        publisher: { "@type": "Person", name: DATA.name, url: DATA.url },
+        author: personRef,
+        publisher: personRef,
         keywords: post.tags.join(", "),
         ...(post.category ? { articleSection: post.category } : {}),
         ...(post.body ? { wordCount: wordCount(post.body) } : {}),
@@ -143,7 +144,7 @@ export function PostPage({
           <img src={`${DATA.avatarUrl}?size=80`} alt="" width={40} height={40} className="size-10 rounded-full bg-muted object-cover ring-1 ring-border" />
           <div className="text-left text-sm">
             <p className="font-semibold">
-              <Link href="/" rel="author" className="hover:underline">{DATA.name}</Link>
+              <Link href="/about" rel="author" className="hover:underline">{DATA.name}</Link>
             </p>
             <p className="text-muted-foreground">
               {post.updated && post.updated !== post.date ? <>Updated <time dateTime={post.updated}>{fmtDate(post.updated)}</time></> : "Full-stack engineer, New Delhi"}
@@ -201,11 +202,12 @@ export function PostPage({
         <section aria-label="About the author" className="flex gap-4 rounded-3xl border bg-card p-6">
           <img src={`${DATA.avatarUrl}?size=120`} alt="" width={56} height={56} className="size-14 shrink-0 rounded-full bg-muted object-cover" />
           <div className="text-sm">
-            <p className="font-display text-xl">Written by {DATA.name}</p>
+            <p className="font-display text-xl">Written by <Link href="/about" rel="author" className="hover:underline">{DATA.name}</Link></p>
             <p className="mt-1 text-muted-foreground">
-              Full-stack software engineer and freelancer in New Delhi. I build web products with React, Next.js and Node.js, run an agency, and spend my time off in the mountains.
+              Full-stack software engineer, freelancer and co-founder of the web agency Quadcydle, based in New Delhi. I build web products with React, Next.js and Node.js, and spend my time off trekking in the Himalayas.
             </p>
             <p className="mt-3 flex flex-wrap gap-4">
+              <Link href="/about" className="font-medium text-primary hover:underline">More about me</Link>
               <a href={`mailto:${DATA.contact.email}`} className="font-medium text-primary hover:underline">Email me</a>
               <a href={DATA.contact.social.X.url} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline">Follow on X</a>
             </p>

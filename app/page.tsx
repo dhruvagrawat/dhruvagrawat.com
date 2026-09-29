@@ -11,13 +11,13 @@ import Link from "next/link"
 import { allBlogs } from "@/content/blogs"
 import { allArticles } from "@/content/articles"
 import { allRecipes } from "@/content/recipes"
+import { personSchema, yearsExperience } from "@/lib/person"
 
 export const metadata = {
   alternates: { canonical: "/" },
 }
 
-const firstWorkYear = Math.min(...DATA.work.map((w) => Number(w.start.match(/\d{4}/)?.[0] ?? 9999)))
-const yearsExp = new Date().getFullYear() - firstWorkYear
+const yearsExp = yearsExperience
 
 /* ---------- Structured data: who this is, for search engines and AI assistants ---------- */
 const jsonLd = {
@@ -40,23 +40,7 @@ const jsonLd = {
       isPartOf: { "@id": `${DATA.url}/#website` },
       mainEntity: { "@id": `${DATA.url}/#person` },
     },
-    {
-      "@type": "Person",
-      "@id": `${DATA.url}/#person`,
-      name: DATA.name,
-      url: DATA.url,
-      image: DATA.avatarUrl,
-      jobTitle: "Full-Stack Software Engineer",
-      description: DATA.summary,
-      email: `mailto:${DATA.contact.email}`,
-      address: { "@type": "PostalAddress", addressLocality: "New Delhi", addressCountry: "IN" },
-      worksFor: { "@type": "Organization", name: DATA.work[0].company },
-      alumniOf: DATA.education.map((e) => ({ "@type": "EducationalOrganization", name: e.school })),
-      knowsAbout: DATA.skills.map((s) => s.name),
-      sameAs: Object.values(DATA.contact.social)
-        .filter((s) => s.url.startsWith("http"))
-        .map((s) => s.url),
-    },
+    personSchema,
   ],
 }
 
@@ -127,6 +111,9 @@ export default function Page() {
                     </div>
                   ))}
                 </dl>
+                <Link href="/about" className="group mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                  More about me <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
               </Rise>
             </div>
 

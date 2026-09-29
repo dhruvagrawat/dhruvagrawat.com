@@ -4,6 +4,7 @@ import { seoTitle } from "@/lib/seo"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { DATA } from "@/data/resume"
+import { personRef } from "@/lib/person"
 import { publishedPlaces } from "@/content/travel/places"
 import { TravelExplorer, StatusBadge } from "@/components/travel/explorer"
 
@@ -29,7 +30,7 @@ export default function TravelPage() {
     name: title,
     description,
     url: `${DATA.url}/travel`,
-    author: { "@type": "Person", name: DATA.name, url: DATA.url },
+    author: personRef,
     mainEntity: {
       "@type": "ItemList",
       itemListElement: places.map((p, i) => ({

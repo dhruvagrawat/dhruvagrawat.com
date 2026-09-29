@@ -6,6 +6,7 @@ export default defineArticle({
   description:
     "A first-timer's guide to Kedarkantha, Brahmatal and Dayara Bugyal: altitude, duration, best months, what to pack and how to stay safe in the snow.",
   date: "2026-08-30",
+  updated: "2026-09-30",
   category: "Travel",
   tags: ["Travel", "Trekking", "Uttarakhand", "Snow", "Winter", "India"],
   body: `There's nothing quite like your first morning on a winter trek: the tent crusted with frost, pine trees heavy with snow, and a summit you'll be standing on in a few hours glowing orange in the first light. Uttarakhand has some of the best beginner-friendly snow treks in India, and you don't need mountaineering experience — just reasonable fitness, the right gear and a good operator.
@@ -29,6 +30,12 @@ Quieter than Kedarkantha, with frozen lakes, long ridge walks and big close-up v
 ### Dayara Bugyal
 
 Some of the most beautiful high-altitude meadows in India. In winter they turn into a vast, rolling snowfield — perfect if you want snow without a hard summit day. In summer the same meadows are green and full of wildflowers.
+
+### Short on time? Chandrashila via Tungnath
+
+If you can't take a week off, the climb from Chopta past Tungnath temple to the Chandrashila summit (about 3,690 m) is the best short snow trek I know. It's only around 5 km each way, so it fits into a single day, and the summit has a full 360° view of the Garhwal Himalaya — Chaukhamba, Trishul, Nanda Devi and more on a clear day.
+
+I did it in early February 2025. The whole trail was under fresh snow; the morning turned into a complete whiteout, and then early afternoon the sky cleared into deep blue for one of the best summit views I've had. Read the full trip, with photos, in my [Chandrashila Peak](/travel/chandrashila-peak) journal entry.
 
 ## When to go
 

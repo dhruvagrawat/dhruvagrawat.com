@@ -6,6 +6,7 @@ export default defineArticle({
   description:
     "Triund, Kheerganga, Kareri Lake, Prashar Lake and Hampta Pass: a beginner's guide to Himachal treks with difficulty, seasons and packing tips.",
   date: "2025-11-15",
+  updated: "2026-09-30",
   category: "Travel",
   tags: ["Travel", "Trekking", "Himachal Pradesh", "Mountains", "India"],
   body: `Himachal Pradesh is where a lot of us in North India first discover that walking uphill for six hours can be the best day of the year. You can leave Delhi on an overnight bus, and by the next afternoon be standing on a ridge looking at the snow-covered Dhauladhars. These are the treks I'd recommend to anyone starting out, roughly from easiest to hardest.
@@ -29,6 +30,8 @@ Starting above McLeod Ganj, the trail climbs about 9 km through oak and rhododen
 - **Best time:** March–June and September–November. Winter brings snow; monsoon brings leeches and slippery rock.
 - **Tip:** start early to beat the crowds and the midday sun. The last stretch (the "22 curves") is steep.
 - **Extend it:** continue to Laka Glacier or the Indrahar Pass route with a guide if you're fit and acclimatised.
+
+**How I did it:** in June 2025 I walked up to Triund from above McLeod Ganj, kept going past Snowline to spend the night at about 3,100 m, and reached the boulder valley below Laka Glacier (around 3,350 m) early the next morning. The clouds came in every afternoon, so an early start really does matter. My photos and notes from the trip: [Triund trek](/travel/triund-trek), [Laka Glacier](/travel/laka-glacier) and [McLeod Ganj](/travel/mcleod-ganj).
 
 ## Prashar Lake — the gentle one
 

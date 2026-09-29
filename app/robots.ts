@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
       // Explicitly welcome AI assistants and answer engines, so the site can be cited.
       {
         userAgent: ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended"],
-        allow: ["/", "/llms.txt"],
+        allow: ["/", "/llms.txt", "/llms-full.txt"],
         disallow: PRIVATE,
       },
     ],

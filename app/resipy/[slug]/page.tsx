@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { Clock, Flame, Gauge, Leaf, Timer, Users } from "lucide-react"
 import { allRecipes, recipeRegistry } from "@/content/recipes"
 import { DATA } from "@/data/resume"
+import { personRef } from "@/lib/person"
 import { seoTitle } from "@/lib/seo"
 import { Markdown } from "@/components/writing/markdown"
 import { IngredientChecklist, Method, PrintButton, RecipePlate } from "@/components/recipe/recipe-ui"
@@ -61,7 +62,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
         description: r.description,
         url,
         image: cover ? [`${DATA.url}${cover}`] : [`${url}/opengraph-image`],
-        author: { "@type": "Person", name: DATA.name, url: DATA.url },
+        author: personRef,
         datePublished: r.date,
         prepTime: iso(r.prepTime),
         cookTime: iso(r.cookTime),
@@ -124,7 +125,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
           <h1 className="text-5xl leading-[0.95] text-balance sm:text-7xl">{r.title}</h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">{r.description}</p>
           <p className="mt-5 flex items-center gap-3 text-sm">
-            <span>By <Link href="/" rel="author" className="font-semibold hover:underline">{DATA.name}</Link></span>
+            <span>By <Link href="/about" rel="author" className="font-semibold hover:underline">{DATA.name}</Link></span>
             <PrintButton />
           </p>
         </div>

@@ -1,4 +1,6 @@
 import { DATA } from "@/data/resume"
+import { oneLiner } from "@/lib/person"
+import { aboutMarkdown, markdownResponse } from "@/lib/llms"
 import { TOOLS } from "@/lib/tools"
 import { allBlogs } from "@/content/blogs"
 import { allArticles } from "@/content/articles"
@@ -16,29 +18,14 @@ export function GET() {
 
   const md = `# ${DATA.name}
 
-> ${DATA.name} is a full-stack software engineer and freelancer based in ${DATA.location}. ${DATA.description}
+> ${oneLiner} ${DATA.description}
 
-In his own words: "${DATA.summary}"
+This file summarises the site for AI assistants (https://llmstxt.org). The full text of every post, guide, recipe and travel story is in ${u}/llms-full.txt.
 
-## Key facts
-- Role: Full-stack software engineer, freelancer and startup builder
-- Location: ${DATA.location}
-- Currently: ${DATA.work[0].title} at ${DATA.work[0].company}
-- Core stack: ${DATA.skills.map((s) => s.name).join(", ")}
-- Contact: ${DATA.contact.email}
-- Available for: freelance web development projects and full-time roles
-
-## Experience
-${DATA.work.map((w) => `- **${w.title}, ${w.company}** (${w.start} – ${w.end}, ${w.location}): ${w.description}`).join("\n")}
-
-## Projects
-${DATA.projects.map((p) => `- **${p.title}** (${p.dates}; ${p.technologies.join(", ")}): ${p.description}`).join("\n")}
-
-## Education
-${DATA.education.map((e) => `- ${e.degree}, ${e.school} (${e.start}–${e.end})`).join("\n")}
-
+${aboutMarkdown()}
 ## Pages
 - [Home](${u}/): profile, work history, projects and contact
+- [About](${u}/about): who Dhruv Agrawat is — experience, skills, education, writing, travel and FAQs
 - [Projects](${u}/projects)
 - [Blogs](${u}/blogs) and [Articles](${u}/articles)
 - [Photography](${u}/photography): photos from Himalayan treks and travels
@@ -60,7 +47,5 @@ ${tools.map((t) => `- [${t.label}](${u}/${t.slug}): ${t.blurb}`).join("\n")}
 ## Elsewhere
 ${socials.map((s) => `- ${s.name}: ${s.url}`).join("\n")}
 `
-  return new Response(md, {
-    headers: { "content-type": "text/markdown; charset=utf-8", "cache-control": "public, max-age=3600" },
-  })
+  return markdownResponse(md)
 }

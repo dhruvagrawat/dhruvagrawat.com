@@ -4,6 +4,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ArrowRight, MapPin } from "lucide-react"
 import { DATA } from "@/data/resume"
+import { personRef } from "@/lib/person"
 import { seoTitle } from "@/lib/seo"
 import { getPlace, isIndexable, publishedPlaces } from "@/content/travel/places"
 import { Markdown } from "@/components/travel/markdown"
@@ -56,7 +57,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
         mainEntityOfPage: `${DATA.url}/travel/${p.slug}`,
         datePublished: p.updated,
         dateModified: p.updated,
-        author: { "@type": "Person", name: DATA.name, url: DATA.url },
+        author: personRef,
         ...(p.cover ? { image: `${DATA.url}${p.cover.src}` } : {}),
         about: {
           "@type": "TouristDestination",
@@ -98,6 +99,10 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
           <MapPin className="size-3.5" /> {p.region}, {p.country}
         </p>
         <p className="mt-5 max-w-2xl text-xl leading-relaxed text-foreground/85">{p.summary}</p>
+        <p className="mt-5 text-sm text-muted-foreground">
+          By <Link href="/about" rel="author" className="font-semibold text-foreground hover:underline">{DATA.name}</Link>
+          {" · "}Updated <time dateTime={p.updated}>{new Date(p.updated).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</time>
+        </p>
       </header>
 
       {p.cover && (

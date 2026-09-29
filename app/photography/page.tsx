@@ -2,6 +2,7 @@ import fs from "node:fs"
 import path from "node:path"
 import Link from "next/link"
 import { DATA } from "@/data/resume"
+import { personRef } from "@/lib/person"
 import { PhotographyGallery } from "@/components/photography/gallery"
 
 const EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp", "avif"])
@@ -24,7 +25,7 @@ export default function PhotographyPage() {
     "@type": "ImageGallery",
     name: "Photography by Dhruv Agrawat",
     url: `${DATA.url}/photography`,
-    author: { "@type": "Person", name: DATA.name, url: DATA.url },
+    author: personRef,
     image: files.slice(0, 30).map((f) => `${DATA.url}/photography/web/${f.replace(/\.[^.]+$/, "")}.webp`),
   }
   return (
