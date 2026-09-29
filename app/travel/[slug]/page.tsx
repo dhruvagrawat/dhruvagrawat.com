@@ -53,6 +53,9 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
         headline: `${p.name}, ${p.country}`,
         description: p.summary,
         url: `${DATA.url}/travel/${p.slug}`,
+        mainEntityOfPage: `${DATA.url}/travel/${p.slug}`,
+        datePublished: p.updated,
+        dateModified: p.updated,
         author: { "@type": "Person", name: DATA.name, url: DATA.url },
         ...(p.cover ? { image: `${DATA.url}${p.cover.src}` } : {}),
         about: {

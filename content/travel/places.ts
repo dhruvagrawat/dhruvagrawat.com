@@ -36,6 +36,8 @@ export interface Place {
   facts?: { label: string; value: string }[]
   tips?: string[]
   gallery?: { src: string; alt: string; caption?: string }[]
+  /** date you last edited this entry (YYYY-MM-DD) — tells search engines to re-crawl it */
+  updated: string
   draft?: boolean
 }
 
@@ -49,6 +51,7 @@ export const PLACES: Place[] = [
     lat: 28.6139,
     lng: 77.209,
     status: "visited",
+    updated: "2026-09-29",
     when: "Home base",
     summary: "Home base — where I live, work and plan every trip that starts on this globe.",
     tags: ["home", "city"],
@@ -72,6 +75,7 @@ Every journey on this map starts here. Delhi is where I build, ship and daydream
     lat: 30.4881,
     lng: 79.2214,
     status: "visited",
+    updated: "2026-09-29",
     when: "February 2025",
     summary:
       "A winter climb from Chopta past Tungnath to Chandrashila summit — deep snow, a whiteout on the way up and a clear 360° Himalayan panorama at the top.",
@@ -137,6 +141,7 @@ New to trekking? Start with [Himachal treks for beginners](/articles/himachal-tr
     lat: 30.1187,
     lng: 78.3115,
     status: "visited",
+    updated: "2026-09-29",
     when: "February 2025",
     summary:
       "A winter day on the Ganga above Rishikesh — jade-green water, smooth river boulders and the Shivalik foothills closing in on both banks.",
@@ -190,6 +195,7 @@ For a full guide to the walks, waterfalls and forest trails around town, read my
     lat: 32.219,
     lng: 76.3234,
     status: "visited",
+    updated: "2026-09-29",
     when: "June 2025",
     summary:
       "The gateway to the Dhauladhar range — where the Kangra valley ends and the road starts climbing towards McLeod Ganj, Triund and Laka Glacier.",
@@ -236,6 +242,7 @@ If you're heading up to trek, read [Himachal treks for beginners](/articles/hima
     lat: 32.2426,
     lng: 76.3213,
     status: "visited",
+    updated: "2026-09-29",
     when: "June 2025",
     summary:
       "Sunrise over McLeod Ganj — pastel rooftops stacked on the hillside, deodar forest all around and the Dhauladhars fading into morning haze.",
@@ -290,6 +297,7 @@ Continue the story: [the Triund trek](/travel/triund-trek) and [Laka Glacier](/t
     lat: 32.2593,
     lng: 76.3567,
     status: "visited",
+    updated: "2026-09-29",
     when: "June 2025",
     summary:
       "The classic Dhauladhar ridge walk above McLeod Ganj: a steep forest climb to open meadows at 2,850 m, the valley on one side and high peaks on the other.",
@@ -348,6 +356,7 @@ More trail advice in [Himachal treks for beginners](/articles/himachal-treks-for
     lat: 32.2755,
     lng: 76.3677,
     status: "visited",
+    updated: "2026-09-29",
     when: "June 2025",
     summary:
       "Beyond Triund and Snowline: a boulder valley at around 3,350 m where snow still lies in the gullies under the Dhauladhar wall, even in June.",
@@ -404,6 +413,7 @@ After the descent I spent a slow morning in [McLeod Ganj](/travel/mcleod-ganj). 
     lat: 32.2461,
     lng: 78.0349,
     status: "wishlist",
+    updated: "2026-09-29",
     when: "Someday",
     summary: "Example wishlist entry — the cold desert, monasteries on cliffs and the highest villages in India.",
     tags: ["high altitude", "road trip"],

@@ -71,9 +71,11 @@ export const metadata: Metadata = {
   alternates: {
     types: { "text/markdown": "/llms.txt" },
   },
+  // Paste the codes from Google Search Console / Bing Webmaster Tools ("HTML tag" method)
+  // into these Vercel environment variables. Nothing is output while they're empty.
   verification: {
-    google: "",
-    yandex: "",
+    ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+    ...(process.env.BING_SITE_VERIFICATION ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } } : {}),
   },
 };
 
