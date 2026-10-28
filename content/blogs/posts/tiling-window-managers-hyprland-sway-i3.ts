@@ -6,6 +6,7 @@ export default defineBlog({
   description:
     "An honest comparison of Hyprland, Sway and i3 — what tiling window managers are, who each suits, and a starter config to get going.",
   date: "2026-02-03",
+  updated: "2026-10-28",
   category: "Linux Desktop",
   tags: ["Linux", "Hyprland", "Sway", "i3", "Window Manager", "Arch Linux"],
   body: `A tiling window manager arranges your windows for you. Open a terminal and it fills the screen; open a browser and the screen splits in two. No dragging, no overlapping, everything reachable from the keyboard. Once it clicks, going back to floating windows feels like working with oven mitts on.
@@ -30,7 +31,7 @@ X11 is the old display system; Wayland is its modern replacement with better sec
 | Display server | X11 | Wayland | Wayland |
 | Philosophy | Minimal, rock solid | i3, but on Wayland | Eye candy + features |
 | Animations & blur | No | No | Yes |
-| Config | i3 config | Nearly i3-compatible | Its own syntax |
+| Config | i3 config | Nearly i3-compatible | Lua (since 0.55) |
 | Best for | Old hardware, X11 apps | Stability on Wayland | A polished, modern look |
 
 ### i3
@@ -43,7 +44,7 @@ A drop-in Wayland replacement for i3 — most i3 configs work with small changes
 
 ### Hyprland
 
-Dynamic tiling with smooth animations, rounded corners, blur and a very active community. It's what you see in most "rice" screenshots. It moves faster than Sway, which means more features and occasionally more breakage after updates.
+Dynamic tiling with smooth animations, rounded corners, blur and a very active community. It's what you see in most "rice" screenshots. It moves faster than Sway, which means more features and occasionally more breakage after updates. The biggest recent example: version 0.55 (May 2026) replaced the old \`hyprland.conf\` format with a Lua config. My [migration guide](/blogs/hyprland-lua-config-migration) covers it.
 
 ## A starter setup on Arch (Hyprland)
 
@@ -60,38 +61,42 @@ sudo pacman -S hyprland kitty waybar wofi mako \\
 - **grim + slurp** — screenshots of a region
 - **wl-clipboard** — \`wl-copy\` / \`wl-paste\`
 
-A minimal \`~/.config/hypr/hyprland.conf\`:
+A minimal \`~/.config/hypr/hyprland.lua\` (Hyprland 0.55 and newer):
 
-\`\`\`ini
-monitor = , preferred, auto, 1
+\`\`\`lua
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 
-$mod = SUPER
-exec-once = waybar & mako
+local mod = "SUPER"
 
-bind = $mod, Return, exec, kitty
-bind = $mod, D, exec, wofi --show drun
-bind = $mod, Q, killactive
-bind = $mod, F, fullscreen
-bind = $mod, V, togglefloating
+hl.on("hyprland.start", function()
+    hl.exec_cmd("waybar")
+    hl.exec_cmd("mako")
+end)
 
-# move focus with vim keys
-bind = $mod, H, movefocus, l
-bind = $mod, L, movefocus, r
-bind = $mod, K, movefocus, u
-bind = $mod, J, movefocus, d
+hl.bind(mod .. " + Return", hl.dsp.exec_cmd("kitty"))
+hl.bind(mod .. " + D",      hl.dsp.exec_cmd("wofi --show drun"))
+hl.bind(mod .. " + Q",      hl.dsp.window.close())
+hl.bind(mod .. " + F",      hl.dsp.window.fullscreen())
+hl.bind(mod .. " + V",      hl.dsp.window.float({ action = "toggle" }))
 
-# workspaces 1–5
-bind = $mod, 1, workspace, 1
-bind = $mod, 2, workspace, 2
-bind = $mod, 3, workspace, 3
-bind = $mod SHIFT, 1, movetoworkspace, 1
-bind = $mod SHIFT, 2, movetoworkspace, 2
+-- move focus with vim keys
+hl.bind(mod .. " + H", hl.dsp.focus({ direction = "left" }))
+hl.bind(mod .. " + L", hl.dsp.focus({ direction = "right" }))
+hl.bind(mod .. " + K", hl.dsp.focus({ direction = "up" }))
+hl.bind(mod .. " + J", hl.dsp.focus({ direction = "down" }))
 
-# screenshot a region to the clipboard
-bind = , Print, exec, grim -g "$(slurp)" - | wl-copy
+-- workspaces 1–10 (0 = 10)
+for i = 1, 10 do
+    local key = i % 10
+    hl.bind(mod .. " + " .. key,         hl.dsp.focus({ workspace = i }))
+    hl.bind(mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+end
+
+-- screenshot a region to the clipboard
+hl.bind("Print", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
 \`\`\`
 
-Log out, choose Hyprland at your display manager (or run \`Hyprland\` from a TTY), and press \`Super+Enter\`.
+Log out, choose Hyprland at your display manager (or run \`start-hyprland\` from a TTY), and press \`Super+Enter\`.
 
 ## Tips for the first week
 
@@ -106,5 +111,13 @@ Log out, choose Hyprland at your display manager (or run \`Hyprland\` from a TTY
 - Want it to look gorgeous and don't mind tinkering → **Hyprland**
 - On old hardware or stuck on X11 → **i3**
 
-You can install all three side by side and pick at login, so there's no wrong first choice.`,
+You can install all three side by side and pick at login, so there's no wrong first choice.
+
+## Going deeper
+
+- [Hyprland on NVIDIA (Arch Linux)](/blogs/hyprland-nvidia-arch-linux): drivers, env vars, suspend and hybrid laptops
+- [Migrate hyprland.conf to Lua](/blogs/hyprland-lua-config-migration): a cheat sheet for the 0.55+ config
+- [Fix Hyprland screen sharing](/blogs/fix-hyprland-screen-sharing): Discord, OBS, Meet and Zoom
+- [Hyprlock + Hypridle](/blogs/hyprlock-hypridle-setup): lock screen, screen-off and suspend
+- [Migrate from i3 to Sway](/blogs/migrate-i3-to-sway): config changes and X11 tool replacements`,
 })
