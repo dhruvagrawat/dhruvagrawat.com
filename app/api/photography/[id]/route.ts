@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const cookieStore = await cookies()
   const supabase = createServerClient(
@@ -29,7 +29,7 @@ export async function GET(
     const { data, error } = await supabase
       .from("photography")
       .select("*")
-      .eq("id", params.id)
+      .eq("id", (await params).id)
       .single()
 
     if (error) throw error
@@ -42,7 +42,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = requireAdmin(request)
   if (denied) return denied
@@ -70,7 +70,7 @@ export async function PUT(
     const { data, error } = await supabase
       .from("photography")
       .update(body)
-      .eq("id", params.id)
+      .eq("id", (await params).id)
       .select()
 
     if (error) throw error
@@ -83,7 +83,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = requireAdmin(request)
   if (denied) return denied
@@ -110,7 +110,7 @@ export async function DELETE(
     const { error } = await supabase
       .from("photography")
       .delete()
-      .eq("id", params.id)
+      .eq("id", (await params).id)
 
     if (error) throw error
     return NextResponse.json({ success: true })

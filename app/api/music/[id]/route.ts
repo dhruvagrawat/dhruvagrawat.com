@@ -11,7 +11,7 @@ function getSupabase() {
 
 export const dynamic = "force-dynamic"
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const denied = requireAdmin(req)
   if (denied) return denied
 
@@ -20,7 +20,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const { data, error } = await getSupabase()
       .from("music")
       .update(body)
-      .eq("id", params.id)
+      .eq("id", (await params).id)
       .select()
     if (error) throw error
     return NextResponse.json(data[0])
@@ -29,12 +29,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const denied = requireAdmin(req)
   if (denied) return denied
 
   try {
-    const { error } = await getSupabase().from("music").delete().eq("id", params.id)
+    const { error } = await getSupabase().from("music").delete().eq("id", (await params).id)
     if (error) throw error
     return NextResponse.json({ success: true })
   } catch (error) {

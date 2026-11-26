@@ -103,9 +103,9 @@ export default function RootLayout({
           </TooltipProvider>
         </ThemeProvider>
 
-        {/* Google Analytics 4 — loaded after the page is interactive so it never slows the first paint */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-JTKTMXGE6X" strategy="afterInteractive" />
-        <Script id="ga4" strategy="afterInteractive">
+        {/* Google Analytics 4 — loaded once the page is idle so it never competes with the page itself */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-JTKTMXGE6X" strategy="lazyOnload" />
+        <Script id="ga4" strategy="lazyOnload">
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());

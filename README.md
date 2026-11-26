@@ -26,3 +26,13 @@ pnpm dev
 ```
 
 Then open http://localhost:3000. Database setup scripts are in `scripts/`, and `SETUP_GUIDE.md` covers the full setup.
+
+## Adding photos
+
+Originals never go in `public/` (they're 2–15 MB each and would eat Vercel bandwidth).
+
+1. Drop the original photos (JPG, PNG, HEIC…) into `photos-raw/` (git-ignored, never deployed).
+2. Run `pip install pillow pillow-heif` once, then `python3 scripts/optimize-photos.py`.
+3. Commit `public/photography/` and `content/photos.json`.
+
+The script makes 640px / 1600px / 2560px WebP copies and records each photo's size so the gallery lays out without jumping.

@@ -25,3 +25,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# original photos: converted by scripts/optimize-photos.py, never committed or deployed
+/photos-raw/

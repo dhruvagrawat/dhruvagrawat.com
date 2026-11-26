@@ -1,23 +1,11 @@
 import { NextResponse } from "next/server"
-import fs from "fs"
-import path from "path"
+import { photos, photoSrc } from "@/lib/photos"
 
-// Read the folder at build time: on Vercel, files in /public are served from the CDN and
-// aren't guaranteed to exist inside the serverless function at runtime.
 export const dynamic = "force-static"
 
-const EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp", "avif", "gif", "bmp", "tiff", "svg"])
-
-export async function GET() {
-  const dir = path.join(process.cwd(), "public", "photography")
-
-  if (!fs.existsSync(dir)) {
-    return NextResponse.json([])
-  }
-
-  const files = fs
-    .readdirSync(dir)
-    .filter((f) => !f.startsWith(".") && EXTENSIONS.has(f.split(".").pop()?.toLowerCase() ?? ""))
-
-  return NextResponse.json(files)
+// Public list of photos with their optimised URLs (originals are never deployed).
+export function GET() {
+  return NextResponse.json(
+    photos.map((p) => ({ ...p, thumb: photoSrc(p.name, "thumb"), web: photoSrc(p.name, "web"), full: photoSrc(p.name, "full") }))
+  )
 }

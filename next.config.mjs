@@ -3,8 +3,20 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Keep this ON. Vercel's Image Optimization is billed per source image, and this site
+  // already ships pre-sized WebP files (scripts/optimize-photos.py), so it would only cost
+  // money. Use plain <img> or next/image — both serve the files as-is.
   images: {
     unoptimized: true,
+  },
+
+  // Let browsers and Vercel's CDN keep images for 30 days instead of re-checking on every
+  // visit, so returning visitors cost (almost) no bandwidth.
+  async headers() {
+    const longCache = [{ key: "Cache-Control", value: "public, max-age=2592000, stale-while-revalidate=86400" }]
+    return ["/photography/:path*", "/summit/:path*", "/travel/countries-110m.json", "/images/:path*", "/payments/:path*"].map(
+      (source) => ({ source, headers: longCache })
+    )
   },
  
   // Friendly aliases → the real URLs (permanent, so search engines consolidate them)

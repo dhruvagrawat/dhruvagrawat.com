@@ -1,32 +1,17 @@
-import fs from "node:fs"
-import path from "node:path"
 import Link from "next/link"
 import { DATA } from "@/data/resume"
 import { personRef } from "@/lib/person"
 import { PhotographyGallery } from "@/components/photography/gallery"
-
-const EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp", "avif"])
-
-// Read at build time: which photos exist (only those with optimised copies are shown).
-function photoFiles() {
-  const dir = path.join(process.cwd(), "public", "photography")
-  if (!fs.existsSync(dir)) return []
-  return fs
-    .readdirSync(dir)
-    .filter((f) => EXTENSIONS.has(f.split(".").pop()?.toLowerCase() ?? ""))
-    .filter((f) => fs.existsSync(path.join(dir, "thumb", f.replace(/\.[^.]+$/, "") + ".webp")))
-    .sort()
-}
+import { photos, photoSrc } from "@/lib/photos"
 
 export default function PhotographyPage() {
-  const files = photoFiles()
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ImageGallery",
     name: "Photography by Dhruv Agrawat",
     url: `${DATA.url}/photography`,
     author: personRef,
-    image: files.slice(0, 30).map((f) => `${DATA.url}/photography/web/${f.replace(/\.[^.]+$/, "")}.webp`),
+    image: photos.slice(0, 30).map((p) => `${DATA.url}${photoSrc(p.name, "web")}`),
   }
   return (
     <>
@@ -42,7 +27,7 @@ export default function PhotographyPage() {
           <Link href="/articles" className="text-primary underline-offset-4 hover:underline">articles</Link>.
         </p>
       </header>
-      <PhotographyGallery files={files} />
+      <PhotographyGallery photos={photos} />
     </>
   )
 }
