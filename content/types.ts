@@ -38,7 +38,7 @@ export type RecipeMeta = {
   prepTime: number
   cookTime: number
   servings: number
-  /** photo: /recipes/<slug>.webp (made by scripts/recipe-photo.py), 4:3 works best */
+  /** photo: /recipe-photos/<slug>.webp (made by scripts/recipe-photo.py), 4:3 works best */
   coverImage?: string
   /** required when the photo isn't yours (e.g. Creative Commons): shown under the photo */
   coverCredit?: { author: string; license: string; url: string }

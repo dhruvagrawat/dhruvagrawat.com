@@ -2,6 +2,8 @@ import { defineRecipe } from "@/content/define"
 
 export default defineRecipe({
   slug: "punjabi-chole-masala",
+  coverImage: "/recipe-photos/punjabi-chole-masala.webp",
+  coverCredit: { author: "Simon Law", license: "CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Chana_masala.jpg" },
   title: "Punjabi Chole Masala",
   description:
     "Dark, tangy, dhaba-style Punjabi chole: chickpeas cooked with tea for colour, then simmered in a deeply browned onion-tomato masala.",

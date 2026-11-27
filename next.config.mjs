@@ -14,7 +14,7 @@ const nextConfig = {
   // visit, so returning visitors cost (almost) no bandwidth.
   async headers() {
     const longCache = [{ key: "Cache-Control", value: "public, max-age=2592000, stale-while-revalidate=86400" }]
-    return ["/photography/:path*", "/summit/:path*", "/travel/countries-110m.json", "/images/:path*", "/payments/:path*"].map(
+    return ["/photography/:path*", "/summit/:path*", "/travel/countries-110m.json", "/images/:path*", "/payments/:path*", "/recipe-photos/:path*"].map(
       (source) => ({ source, headers: longCache })
     )
   },

@@ -2,6 +2,8 @@ import { defineRecipe } from "@/content/define"
 
 export default defineRecipe({
   slug: "penne-allarrabbiata",
+  coverImage: "/recipe-photos/penne-allarrabbiata.webp",
+  coverCredit: { author: "Petar Milošević", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Penne_Arrabbiata.jpg" },
   title: "Penne all'Arrabbiata",
   description:
     "Authentic Roman penne arrabbiata: a fiery tomato sauce of garlic, dried chilli and olive oil. No cream, no onion — ready in 30 minutes.",

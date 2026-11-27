@@ -2,6 +2,8 @@ import { defineRecipe } from "@/content/define"
 
 export default defineRecipe({
   slug: "fettuccine-alfredo-authentic",
+  coverImage: "/recipe-photos/fettuccine-alfredo-authentic.webp",
+  coverCredit: { author: "Civa61", license: "CC BY 4.0", url: "https://commons.wikimedia.org/wiki/File:Fettuccine_Alfredo_originals.jpg" },
   title: "Fettuccine Alfredo (the Original, No Cream)",
   description:
     "The original Roman fettuccine Alfredo: just butter, Parmigiano Reggiano and pasta water emulsified into a silky sauce. No cream, 15 minutes.",

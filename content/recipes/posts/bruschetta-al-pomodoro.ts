@@ -2,6 +2,8 @@ import { defineRecipe } from "@/content/define"
 
 export default defineRecipe({
   slug: "bruschetta-al-pomodoro",
+  coverImage: "/recipe-photos/bruschetta-al-pomodoro.webp",
+  coverCredit: { author: "Takeaway", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:2014_Bruschetta_The_Larder_Chiang_Mai.jpg" },
   title: "Bruschetta al Pomodoro",
   description:
     "Classic Italian tomato bruschetta: grilled bread rubbed with garlic, topped with ripe tomatoes, basil and olive oil. Ready in 20 minutes.",

@@ -2,6 +2,8 @@ import { defineRecipe } from "@/content/define"
 
 export default defineRecipe({
   slug: "dal-makhani",
+  coverImage: "/recipe-photos/dal-makhani.webp",
+  coverCredit: { author: "Radhikamprabhu82", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Punjabi_style_Dal_Makhani.jpg" },
   title: "Dal Makhani (Restaurant Style)",
   description:
     "Slow-cooked Punjabi dal makhani: black urad dal and rajma simmered with butter, tomato and cream until velvety, with optional dhungar smoke.",

@@ -2,6 +2,8 @@ import { defineRecipe } from "@/content/define"
 
 export default defineRecipe({
   slug: "pesto-alla-genovese",
+  coverImage: "/recipe-photos/pesto-alla-genovese.webp",
+  coverCredit: { author: "Ɱ", license: "CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:BasilPesto.JPG" },
   title: "Pesto alla Genovese (with Trofie, Potatoes & Beans)",
   description:
     "Authentic Genoese basil pesto made the Ligurian way, served with trofie, potatoes and green beans cooked in the same pot.",

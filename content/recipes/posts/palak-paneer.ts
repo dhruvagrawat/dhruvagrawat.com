@@ -2,6 +2,8 @@ import { defineRecipe } from "@/content/define"
 
 export default defineRecipe({
   slug: "palak-paneer",
+  coverImage: "/recipe-photos/palak-paneer.webp",
+  coverCredit: { author: "Lopanayak", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Palakpaneer_Rayagada_Odisha_0009.jpg" },
   title: "Palak Paneer",
   description:
     "Bright green palak paneer: blanched spinach blended into a smooth, gently spiced gravy with soft paneer — and the trick to keep it vibrant.",

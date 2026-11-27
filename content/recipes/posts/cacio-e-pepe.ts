@@ -2,6 +2,8 @@ import { defineRecipe } from "@/content/define"
 
 export default defineRecipe({
   slug: "cacio-e-pepe",
+  coverImage: "/recipe-photos/cacio-e-pepe.webp",
+  coverCredit: { author: "Popo le Chien", license: "CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Cacio_e_pepe.jpg" },
   title: "Cacio e Pepe",
   description:
     "The Roman classic of pasta, Pecorino Romano and black pepper, with a foolproof method for a creamy, clump-free sauce. No butter, no cream.",

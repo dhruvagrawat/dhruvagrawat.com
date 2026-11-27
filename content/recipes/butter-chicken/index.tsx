@@ -2,6 +2,8 @@ import type { RecipeMeta } from "@/content/types"
 
 export const metadata: RecipeMeta = {
   slug: "butter-chicken",
+  coverImage: "/recipe-photos/butter-chicken.webp",
+  coverCredit: { author: "Yuvraj Singh 97", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Butter_Chicken_%26_Butter_Naan_-_Home_-_Chandigarh_-_India_-_0006.jpg" },
   title: "Butter Chicken (Murgh Makhani)",
   description:
     "The classic North Indian curry — tender chicken in a velvety tomato-cream sauce with warm spices. Rich, comforting, and surprisingly simple.",

@@ -5,7 +5,7 @@ import { recipes } from "./posts"
 /* ── How to add a recipe ───────────────────────────────────────────────────
    1. Copy any file in ./posts and edit it — ingredients and steps are plain lists
    2. Add it to the list in ./posts/index.ts
-   3. Photos: put one in /public/recipes/<slug>.webp and set `coverImage`
+   3. Photos: python3 scripts/recipe-photo.py <photo> <slug>, then set `coverImage` (and `coverCredit` if it isn't yours)
    ─────────────────────────────────────────────────────────────────────────── */
 
 export const allRecipes: RecipeMeta[] = [...recipes, butterChicken].sort(
