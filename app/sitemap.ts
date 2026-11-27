@@ -4,6 +4,7 @@ import { allBlogs } from "@/content/blogs"
 import { allArticles } from "@/content/articles"
 import { allRecipes } from "@/content/recipes"
 import { allMusic } from "@/content/music"
+import { allProjects } from "@/content/projects"
 import { TOOLS } from "@/lib/tools"
 import { isIndexable, publishedPlaces } from "@/content/travel/places"
 import { ABOUT_UPDATED } from "@/lib/person"
@@ -36,6 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/photography`, lastModified: new Date(SITE_UPDATED), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/travel`, lastModified: travelUpdated, changeFrequency: "weekly", priority: 0.8 },
     { url: `${base}/projects`, lastModified: new Date(SITE_UPDATED), changeFrequency: "monthly", priority: 0.8 },
+    ...allProjects.map((p) => ({ url: `${base}/projects/${p.slug}`, lastModified: new Date(SITE_UPDATED), changeFrequency: "monthly" as const, priority: 0.6 })),
     { url: `${base}/tools`, lastModified: new Date(SITE_UPDATED), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/privacy`, lastModified: new Date("2026-09-29"), changeFrequency: "yearly", priority: 0.2 },
     { url: `${base}/1999`, lastModified: new Date(SITE_UPDATED), changeFrequency: "yearly", priority: 0.3 },

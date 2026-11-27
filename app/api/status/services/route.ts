@@ -3,6 +3,7 @@ import {
   STALE_AFTER_MS,
   getStatusClient,
   hasSupabaseEnv,
+  liveSnapshot,
   privatePassword,
   runChecks,
 } from "@/lib/status"
@@ -17,13 +18,27 @@ const HISTORY = 90
 // each with its latest check, the last 90 checks oldest → newest, and uptime %.
 // If the newest check is older than 5 minutes, a fresh round of checks runs first, so the
 // page stays live even without a frequent cron job.
+// Without Supabase (or if it's down), it falls back to checking content/status-services.ts
+// live, so the page always shows something real. `mode` tells the page which one it got.
+async function liveResponse(notice: string) {
+  console.warn(`[status] live mode: ${notice}`)
+  return NextResponse.json(
+    {
+      services: await liveSnapshot(),
+      privateCount: 0,
+      privateUnlocked: false,
+      privateConfigured: false,
+      canCheck: false,
+      checkedNow: true,
+      mode: "live",
+      notice,
+    },
+    { headers: { "cache-control": "no-store" } }
+  )
+}
+
 export async function GET(req: NextRequest) {
-  if (!hasSupabaseEnv()) {
-    return NextResponse.json(
-      { error: "Status monitoring isn't configured: Supabase environment variables are missing." },
-      { status: 503 }
-    )
-  }
+  if (!hasSupabaseEnv()) return liveResponse("Supabase isn't configured")
 
   const { client, canWrite } = getStatusClient()
 
@@ -33,8 +48,10 @@ export async function GET(req: NextRequest) {
     .eq("active", true)
     .order("group_name")
     .order("name")
+    .abortSignal(AbortSignal.timeout(8_000))
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) return liveResponse(`Database unavailable: ${error.message}`)
+  if (!all?.length) return liveResponse("No services in the database yet")
 
   const services = all ?? []
   const pw = privatePassword()
@@ -91,6 +108,7 @@ export async function GET(req: NextRequest) {
       privateConfigured: Boolean(pw),
       canCheck: canWrite,
       checkedNow,
+      mode: "database",
     },
     { headers: { "cache-control": "no-store" } }
   )

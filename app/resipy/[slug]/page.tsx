@@ -129,9 +129,20 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
             <PrintButton />
           </p>
         </div>
-        <div className="aspect-[4/3] overflow-hidden rounded-3xl border">
-          {cover ? <img src={cover} alt={r.title} className="h-full w-full object-cover" /> : <RecipePlate r={r} big />}
-        </div>
+        <figure>
+          <div className="aspect-[4/3] overflow-hidden rounded-3xl border">
+            {cover ? <img src={cover} alt={r.title} fetchPriority="high" className="h-full w-full object-cover" /> : <RecipePlate r={r} big />}
+          </div>
+          {cover && r.coverCredit && (
+            <figcaption className="mt-2 text-right text-[11px] text-muted-foreground">
+              Photo:{" "}
+              <a href={r.coverCredit.url} target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:underline">
+                {r.coverCredit.author}
+              </a>
+              , {r.coverCredit.license}
+            </figcaption>
+          )}
+        </figure>
       </header>
 
       <dl className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-5">

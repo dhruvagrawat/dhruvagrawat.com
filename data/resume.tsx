@@ -10,6 +10,8 @@ import {
   LayoutGrid,
   History,
   Globe2,
+  UserRound,
+  Activity,
 } from "lucide-react";
 
 import { ReactLight } from "@/components/ui/svgs/reactLight";
@@ -50,17 +52,20 @@ export const DATA = {
     { name: "C++", icon: Cplusplus },
   ],
 
+  // Main links show in the dock; `more: true` links go in the "More" menu.
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
-    { href: "/blogs", icon: NotebookPen, label: "Blogs" },
-    { href: "/articles", icon: FileText, label: "Articles" },
-    { href: "/resipy", icon: BookOpenCheck, label: "Resipy" },
-    { href: "/photography", icon: Camera, label: "Photography" },
-    { href: "/travel", icon: Globe2, label: "Travel" },
-    { href: "/music", icon: Music, label: "Music" },
     { href: "/projects", icon: FolderGit2, label: "Projects" },
-    { href: "/tools", icon: LayoutGrid, label: "More" },
-    { href: "/1999", icon: History, label: "Go Back in Time" },
+    { href: "/blogs", icon: NotebookPen, label: "Blog" },
+    { href: "/photography", icon: Camera, label: "Photos" },
+    { href: "/travel", icon: Globe2, label: "Travel" },
+    { href: "/tools", icon: LayoutGrid, label: "Tools" },
+    { href: "/articles", icon: FileText, label: "Articles", more: true },
+    { href: "/resipy", icon: BookOpenCheck, label: "Recipes", more: true },
+    { href: "/music", icon: Music, label: "Music", more: true },
+    { href: "/about", icon: UserRound, label: "About", more: true },
+    { href: "/status", icon: Activity, label: "Status", more: true },
+    { href: "/1999", icon: History, label: "1999 mode", more: true },
   ],
 
   contact: {
@@ -208,44 +213,7 @@ export const DATA = {
     },
   ],
 
-  projects: [
-    {
-      title: "AI Website Automation Tool",
-      href: "",
-      dates: "2024",
-      active: true,
-      description:
-        "Built an AI-powered automation platform that generates and deploys websites using modern full-stack technologies.",
-      technologies: ["Next.js", "Node.js", "MongoDB", "Docker", "AI APIs"],
-      links: [],
-      image: "",
-      video: "",
-    },
-    {
-      title: "Video Conferencing Platform",
-      href: "",
-      dates: "2023",
-      active: true,
-      description:
-        "Developed a real-time video conferencing system using WebRTC with chat and audio-video sync.",
-      technologies: ["WebRTC", "Node.js", "JavaScript"],
-      links: [],
-      image: "",
-      video: "",
-    },
-    {
-      title: "OpenCV Air Painter",
-      href: "",
-      dates: "2023",
-      active: true,
-      description:
-        "Gesture-based virtual drawing application using OpenCV and Python, optimized for low-end hardware.",
-      technologies: ["Python", "OpenCV"],
-      links: [],
-      image: "",
-      video: "",
-    },
-  ],
+  // Projects live in content/projects/index.ts (one list for the whole site)
 
   hackathons: [],
 } as const;

@@ -1,3 +1,4 @@
+import { allProjects, projectYear } from "@/content/projects"
 import { DATA } from "@/data/resume"
 import { ABOUT_UPDATED, knowsAbout, oneLiner, sameAs, yearsExperience } from "@/lib/person"
 
@@ -28,7 +29,7 @@ In his own words: "${DATA.summary}"
 ${DATA.work.map((w) => `- **${w.title}, ${w.company}** (${w.start} – ${w.end}, ${w.location}): ${w.description}`).join("\n")}
 
 ## Projects
-${DATA.projects.map((p) => `- **${p.title}** (${p.dates}; ${p.technologies.join(", ")}): ${p.description}`).join("\n")}
+${allProjects.map((p) => `- **${p.title}** (${projectYear(p)}; ${p.technologies.join(", ")}): ${p.description} ${DATA.url}/projects/${p.slug}`).join("\n")}
 `
 }
 

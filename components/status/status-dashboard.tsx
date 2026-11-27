@@ -68,6 +68,9 @@ interface StatusResponse {
   privateUnlocked: boolean
   privateConfigured: boolean
   canCheck: boolean
+  /** "database": stored history from Supabase. "live": checked just now, no history (DB missing/unreachable). */
+  mode?: "database" | "live"
+  notice?: string
 }
 
 interface TooltipState {
@@ -175,6 +178,11 @@ function ServiceRow({ svc }: { svc: Service }) {
             {svc.description && (
               <p className="text-xs text-muted-foreground truncate">{svc.description}</p>
             )}
+            {svc.latest && svc.latest.status !== "up" && svc.latest.error_message && (
+              <p className={`text-xs mt-0.5 ${svc.latest.status === "down" ? "text-red-500" : "text-amber-500"}`}>
+                {svc.latest.error_message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -203,7 +211,7 @@ function ServiceRow({ svc }: { svc: Service }) {
       {svc.latest && (
         <div className="flex justify-between mt-1">
           <span className="text-xs text-muted-foreground">
-            Last {Math.min(30, svc.history.length)} checks
+            {svc.history.length === 1 ? "Last check" : `Last ${Math.min(30, svc.history.length)} checks`}
           </span>
           <span className="text-xs text-muted-foreground">{timeAgo(svc.latest.checked_at)}</span>
         </div>
@@ -517,6 +525,13 @@ export function StatusDashboard() {
       {data && (
         <>
           {publicServices.length > 0 && <OverallBanner services={services} />}
+
+          {data.mode === "live" && (
+            <p className="-mt-6 mb-8 flex items-center gap-2 text-xs text-muted-foreground">
+              <Clock size={13} className="shrink-0" />
+              Live check just now. History and uptime will show again once the status database is back.
+            </p>
+          )}
 
           {Object.entries(groups).map(([groupName, svcs]) => (
             <ServiceGroup key={groupName} name={groupName} services={svcs} />

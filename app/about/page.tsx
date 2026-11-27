@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { featuredProjects, projectYear } from "@/content/projects"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
@@ -194,9 +195,9 @@ export default function AboutPage() {
         <section aria-labelledby="projects">
           <H2 id="projects">Things I&apos;ve built</H2>
           <ul className="space-y-4">
-            {DATA.projects.map((p) => (
+            {featuredProjects.map((p) => (
               <li key={p.title}>
-                <h3 className="font-display text-2xl leading-tight">{p.title} <span className="font-mono text-xs text-muted-foreground">{p.dates}</span></h3>
+                <h3 className="font-display text-2xl leading-tight"><Link href={`/projects/${p.slug}`} className="hover:text-primary">{p.title}</Link> <span className="font-mono text-xs text-muted-foreground">{projectYear(p)}</span></h3>
                 <p className="text-muted-foreground">{p.description} Built with {p.technologies.join(", ")}.</p>
               </li>
             ))}

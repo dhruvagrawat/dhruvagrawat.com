@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { allProjects, projectYear } from "@/content/projects";
+import type { ProjectMeta } from "@/content/types";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { DATA } from "@/data/resume";
@@ -261,21 +263,21 @@ export default function RetroSite() {
   ];
 
   /* ---------- project "files" ---------- */
-  const openProject = (p: (typeof DATA.projects)[number]) =>
+  const openProject = (p: ProjectMeta) =>
     openDialog({
       title: `${p.title} - Properties`,
       icon: "folder",
       body: (
         <div>
           <b style={{ fontSize: 13 }}>{p.title}</b>
-          <div style={{ color: "#555", margin: "2px 0 8px" }}>Created: {p.dates}</div>
+          <div style={{ color: "#555", margin: "2px 0 8px" }}>Created: {projectYear(p)}</div>
           <div>{p.description}</div>
           <div style={{ marginTop: 8 }}>
             <b>Built with:</b> {p.technologies.join(", ")}
           </div>
-          {p.href && (
+          {p.liveUrl && (
             <div style={{ marginTop: 8 }}>
-              <a href={p.href} target="_blank" rel="noopener noreferrer">
+              <a href={p.liveUrl} target="_blank" rel="noopener noreferrer">
                 Open project &raquo;
               </a>
             </div>
@@ -671,14 +673,14 @@ export default function RetroSite() {
                   </h2>
                   <div className="body">
                     <p style={{ marginTop: 0, fontSize: 14 }}>
-                      Click a folder to see what&apos;s inside. {DATA.projects.length} object(s).
+                      Click a folder to see what&apos;s inside. {allProjects.length} object(s).
                     </p>
                     <div className="r99-files">
-                      {DATA.projects.map((p) => (
+                      {allProjects.map((p) => (
                         <button key={p.title} className="r99-file" onClick={() => openProject(p)}>
                           <Pixel name="folder" size={40} />
                           <span className="name">{p.title}</span>
-                          <span className="meta">{p.dates}</span>
+                          <span className="meta">{projectYear(p)}</span>
                         </button>
                       ))}
                     </div>

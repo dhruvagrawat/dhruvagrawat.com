@@ -226,38 +226,56 @@ export function SummitContact() {
 }
 
 /* ============ Tools teaser (also great internal linking for SEO) ============ */
-export function ToolsTeaser() {
-  const picks = ["emi-calculator", "json-formatter", "gst-calculator", "image-compressor", "qr", "sip-calculator"]
-    .map((s) => TOOLS.find((t) => t.slug === s)!)
-    .filter(Boolean)
+/**
+ * Home-page tool shelf: every category in its own short column, plain links,
+ * so visitors can find a tool in one glance. The full list lives on /tools.
+ */
+export function ToolsShelf() {
+  const order = ["Calculators", "Developer", "Utilities", "Live Data"] as const
+  const PER_CATEGORY = 5
   const count = TOOLS.filter((t) => t.category !== "Services").length
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      {picks.map((t, i) => {
-        const Icon = t.icon
+    <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+      {order.map((cat, ci) => {
+        const tools = TOOLS.filter((t) => t.category === cat)
         return (
-          <Rise key={t.slug} delay={i * 0.05}>
-            <a
-              href={`/${t.slug}`}
-              className="group flex h-full items-start gap-3 rounded-2xl border bg-card p-4 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_12px_30px_-15px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
-            >
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground">
-                <Icon className="size-4" aria-hidden />
-              </span>
-              <span>
-                <span className="flex items-center gap-1 text-sm font-semibold">
-                  {t.label}
-                  <ArrowUpRight className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
-                </span>
-                <span className="text-xs text-muted-foreground">{t.blurb}</span>
-              </span>
-            </a>
+          <Rise key={cat} delay={ci * 0.05}>
+            <h3 className="mb-3 flex items-baseline justify-between border-b pb-3 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              {cat}
+              <span className="tracking-normal">{tools.length}</span>
+            </h3>
+            <ul>
+              {tools.slice(0, PER_CATEGORY).map((t) => {
+                const Icon = t.icon
+                return (
+                  <li key={t.slug}>
+                    <a href={`/${t.slug}`} className="group -mx-2 flex items-center gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-card">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border bg-card text-muted-foreground transition-colors group-hover:border-primary/40 group-hover:text-primary">
+                        <Icon className="size-4" aria-hidden />
+                      </span>
+                      <span className="text-[15px] font-medium leading-tight">{t.label}</span>
+                    </a>
+                  </li>
+                )
+              })}
+              {tools.length > PER_CATEGORY && (
+                <li>
+                  <a href="/tools" className="mt-1 inline-block px-0 py-1 text-sm text-muted-foreground hover:text-primary">
+                    +{tools.length - PER_CATEGORY} more
+                  </a>
+                </li>
+              )}
+            </ul>
           </Rise>
         )
       })}
-      <Rise delay={0.3} className="sm:col-span-2">
-        <a href="/tools" className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-          See all {count} free tools <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      <Rise delay={0.25} className="sm:col-span-2 lg:col-span-4">
+        <a
+          href="/tools"
+          className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-transform hover:-translate-y-0.5"
+        >
+          Browse all {count} tools
+          <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </a>
       </Rise>
     </div>

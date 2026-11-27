@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js"
+import { fallbackServices } from "@/content/status-services"
 
 export type CheckStatus = "up" | "degraded" | "down"
 
@@ -56,16 +57,37 @@ export async function checkService(url: string, timeoutMs = 10_000): Promise<Che
         /* not valid JSON */
       }
     }
+    if (status !== "up" && !errorMessage) {
+      errorMessage = status === "degraded" && res.status < 400 ? `Slow response (${responseTimeMs} ms)` : `HTTP ${res.status}${res.statusText ? ` ${res.statusText}` : ""}`
+    }
     return { status, responseTimeMs, statusCode: res.status, errorMessage }
   } catch (err) {
-    const timedOut = err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError")
-    return {
-      status: "down",
-      responseTimeMs: Date.now() - start,
-      statusCode: null,
-      errorMessage: timedOut ? `No response within ${timeoutMs / 1000}s` : err instanceof Error ? err.message : "Unknown error",
-    }
+    return { status: "down", responseTimeMs: Date.now() - start, statusCode: null, errorMessage: describeFetchError(err, timeoutMs) }
   }
+}
+
+/** Turn Node's vague "fetch failed" into something a person can act on. */
+export function describeFetchError(err: unknown, timeoutMs = 10_000): string {
+  if (!(err instanceof Error)) return "Unknown error"
+  if (err.name === "TimeoutError" || err.name === "AbortError") return `No response within ${timeoutMs / 1000}s`
+  const cause = (err as Error & { cause?: { code?: string; message?: string } }).cause
+  const code = cause?.code ?? ""
+  const known: Record<string, string> = {
+    ENOTFOUND: "Domain doesn't resolve (DNS record missing or expired)",
+    EAI_AGAIN: "DNS lookup failed (temporary)",
+    ECONNREFUSED: "Server refused the connection (nothing listening)",
+    ECONNRESET: "Connection was reset by the server",
+    ETIMEDOUT: "Connection timed out",
+    EHOSTUNREACH: "Server is unreachable",
+    UND_ERR_CONNECT_TIMEOUT: "Connection timed out",
+    CERT_HAS_EXPIRED: "SSL certificate has expired",
+    ERR_TLS_CERT_ALTNAME_INVALID: "SSL certificate doesn't match this domain",
+    DEPTH_ZERO_SELF_SIGNED_CERT: "Self-signed SSL certificate",
+    UNABLE_TO_VERIFY_LEAF_SIGNATURE: "SSL certificate can't be verified",
+  }
+  if (known[code]) return `${known[code]} [${code}]`
+  if (code) return `${cause?.message ?? err.message} [${code}]`
+  return cause?.message ?? err.message
 }
 
 /** Checks every given service in parallel and stores the results. */
@@ -86,4 +108,41 @@ export async function runChecks(
       return { name: svc.name, ...result, insertError: error?.message ?? null }
     })
   )
+}
+
+/* ── Live mode: used when Supabase is missing or unreachable ───────────────── */
+
+
+let liveCache: { at: number; data: unknown[] } | null = null
+
+/** Checks the backup service list right now (cached for a minute), in the same shape as the database mode. */
+export async function liveSnapshot() {
+  if (liveCache && Date.now() - liveCache.at < 60_000) return liveCache.data
+  const checkedAt = new Date().toISOString()
+  const data = await Promise.all(
+    fallbackServices.map(async (svc) => {
+      const r = await checkService(svc.url)
+      const entry = {
+        status: r.status,
+        response_time_ms: r.responseTimeMs,
+        status_code: r.statusCode,
+        error_message: r.errorMessage,
+        checked_at: checkedAt,
+      }
+      return {
+        id: svc.url,
+        name: svc.name,
+        url: svc.url,
+        group_name: svc.group,
+        description: svc.description ?? null,
+        is_private: false,
+        type: svc.type ?? "website",
+        latest: entry,
+        history: [entry],
+        uptimePct: null,
+      }
+    })
+  )
+  liveCache = { at: Date.now(), data }
+  return data
 }

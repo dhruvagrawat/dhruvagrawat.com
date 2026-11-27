@@ -6,12 +6,15 @@ import HackathonsSection from "@/components/section/hackathons-section"
 import { SummitHero } from "@/components/summit/hero"
 import { Kicker, Rise, SmoothScroll, WordsReveal, CurtainImage } from "@/components/summit/motion"
 import { TrailNav } from "@/components/summit/trail-nav"
-import { SummitContact, ToolsTeaser, TrailGallery, WorkTrail } from "@/components/summit/sections"
+import { SummitContact, ToolsShelf, TrailGallery, WorkTrail } from "@/components/summit/sections"
+import { TOOLS } from "@/lib/tools"
 import Link from "next/link"
 import { allBlogs } from "@/content/blogs"
 import { allArticles } from "@/content/articles"
 import { allRecipes } from "@/content/recipes"
 import { personSchema, yearsExperience } from "@/lib/person"
+import { featuredProjects } from "@/content/projects"
+import { ProjectMetaLine, TechList, accentStyle } from "@/components/project/project-ui"
 
 export const metadata = {
   alternates: { canonical: "/" },
@@ -147,33 +150,49 @@ export default function Page() {
         {/* ───────────── Camp III · Projects ───────────── */}
         <Section id="projects" camp="Camp III" label="Projects" title="A few things I've built." italicLast>
           <ol className="grid gap-5">
-            {DATA.projects.map((p, i) => (
-              <li key={p.title}>
+            {featuredProjects.map((p, i) => (
+              <li key={p.slug} style={accentStyle(p)}>
                 <Rise delay={i * 0.06}>
-                  <article className="group grid gap-4 rounded-3xl border bg-card p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_60px_-30px_rgba(0,0,0,0.35)] sm:grid-cols-[5rem_1fr_auto] sm:items-start sm:p-8">
-                    <span className="font-display text-5xl leading-none text-primary/80">{String(i + 1).padStart(2, "0")}</span>
+                  <Link
+                    href={`/projects/${p.slug}`}
+                    className="group grid gap-4 overflow-hidden rounded-3xl border bg-card p-6 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--accent-project)]/40 hover:shadow-[0_24px_60px_-30px_rgba(0,0,0,0.35)] sm:grid-cols-[5rem_1fr_auto] sm:items-start sm:p-8"
+                  >
+                    <span className="font-display text-5xl leading-none text-[var(--accent-project)] opacity-80">{String(i + 1).padStart(2, "0")}</span>
                     <div>
-                      <h3 className="font-display text-3xl leading-tight">{p.title}</h3>
+                      <h3 className="flex items-center gap-2 font-display text-3xl leading-tight transition-colors group-hover:text-[var(--accent-project)]">
+                        {p.title}
+                        <ArrowUpRight className="size-5 opacity-0 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100" />
+                      </h3>
                       <p className="mt-2 max-w-2xl text-muted-foreground">{p.description}</p>
-                      <ul className="mt-4 flex flex-wrap gap-2" aria-label="Built with">
-                        {p.technologies.map((t) => (
-                          <li key={t} className="rounded-full border px-3 py-1 font-mono text-[11px] text-muted-foreground">
-                            {t}
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="mt-4">
+                        <TechList items={p.technologies} />
+                      </div>
                     </div>
-                    <time className="font-mono text-xs text-muted-foreground">{p.dates}</time>
-                  </article>
+                    <div className="flex flex-col items-start gap-4 sm:items-end">
+                      <ProjectMetaLine p={p} />
+                      {p.coverImage && (
+                        <img src={p.coverImage} alt="" loading="lazy" className="aspect-[16/10] w-full rounded-xl border object-cover sm:w-44" />
+                      )}
+                    </div>
+                  </Link>
                 </Rise>
               </li>
             ))}
           </ol>
           <Rise delay={0.2} className="mt-8">
-            <a href="/projects" className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+            <Link href="/projects" className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary">
               All projects <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
+            </Link>
           </Rise>
+        </Section>
+
+        {/* ───────────── Supply tent · free tools ───────────── */}
+        <Section id="tools" camp="Supply tent" label="Free tools" title="Small tools, free for everyone." italicLast>
+          <p className="-mt-6 mb-12 max-w-2xl text-lg text-muted-foreground">
+            {TOOLS.filter((t) => t.category !== "Services").length} quick tools I built and use myself. They run in your browser:
+            no sign-up, no ads, and your data stays on your device.
+          </p>
+          <ToolsShelf />
         </Section>
 
         {/* ───────────── Field notes · latest writing (internal links) ───────────── */}
@@ -230,26 +249,20 @@ export default function Page() {
             ))}
           </ul>
 
-          <div className="mx-auto mt-20 grid max-w-5xl gap-16 px-6 md:grid-cols-[1fr_1.4fr]">
-            <div>
-              <h3 className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Education</h3>
-              <ul className="space-y-6">
-                {DATA.education.map((e, i) => (
-                  <Rise key={e.school} delay={i * 0.06}>
-                    <li>
-                      <p className="font-display text-2xl leading-tight">{e.school}</p>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {e.degree} · <time>{e.start}</time>–<time>{e.end}</time>
-                      </p>
-                    </li>
+          <div className="mx-auto mt-20 max-w-5xl px-6">
+            <h3 className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Education</h3>
+            <ul className="grid gap-8 sm:grid-cols-2">
+              {DATA.education.map((e, i) => (
+                <li key={e.school}>
+                  <Rise delay={i * 0.06}>
+                    <p className="font-display text-2xl leading-tight">{e.school}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {e.degree} · <time>{e.start}</time>–<time>{e.end}</time>
+                    </p>
                   </Rise>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-6 font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Free tools I&apos;ve built</h3>
-              <ToolsTeaser />
-            </div>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {DATA.hackathons.length > 0 && (
